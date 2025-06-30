@@ -1,45 +1,31 @@
-using OpenChat.Common.Configurations;
+using Microsoft.Extensions.AI;
 using OpenChat.PlaygroundApp.Components;
+using OpenAI;
+using System.ClientModel;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
-var config = AppSettings.Parse(builder.Configuration, args);
-if (config.Help == true)
+// You will need to set the endpoint and key to your own values
+// You can do this using Visual Studio's "Manage User Secrets" UI, or on the command line:
+//   cd this-project-directory
+//   dotnet user-secrets set GitHubModels:Token YOUR-GITHUB-TOKEN
+var credential = new ApiKeyCredential(builder.Configuration["GitHubModels:Token"] ?? throw new InvalidOperationException("Missing configuration: GitHubModels:Token. See the README for details."));
+var openAIOptions = new OpenAIClientOptions()
 {
-    Console.WriteLine("Usage: dotnet run -- [options]");
-    return;
-}
-if (config.LLM.ProviderType == LLMProviderType.Undefined)
-{
-    Console.WriteLine("Usage: dotnet run -- [options]");
-    return;
-}
+    Endpoint = new Uri("https://models.inference.ai.azure.com")
+};
 
-builder.Services.AddSingleton(config);
+var ghModelsClient = new OpenAIClient(credential, openAIOptions);
+var chatClient = ghModelsClient.GetChatClient("gpt-4o-mini").AsIChatClient();
+var embeddingGenerator = ghModelsClient.GetEmbeddingClient("text-embedding-3-small").AsIEmbeddingGenerator();
 
-// Add services to the container.
-builder.AddServiceDefaults();
-
-builder.Services.AddRazorComponents()
-                .AddInteractiveServerComponents();
-
-// Add OpenAI
-if (config.LLM.ProviderType == LLMProviderType.OpenAI)
-{
-    builder.AddAzureOpenAIClient(config.LLM.ProviderType.ToString().ToLowerInvariant()).AddChatClient(config.OpenAI.DeploymentName);
-}
-
-// Add Ollama or Hugging Face
-if (config.LLM.ProviderType == LLMProviderType.Ollama || config.LLM.ProviderType == LLMProviderType.HuggingFace)
-{
-    builder.AddOllamaSharpChatClient(config.Ollama.DeploymentName);
-}
+builder.Services.AddChatClient(chatClient).UseFunctionInvocation().UseLogging();
+builder.Services.AddEmbeddingGenerator(embeddingGenerator);
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.MapDefaultEndpoints();
-
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
@@ -48,12 +34,10 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAntiforgery();
 
-app.MapStaticAssets();
-
+app.UseStaticFiles();
 app.MapRazorComponents<App>()
-   .AddInteractiveServerRenderMode();
+    .AddInteractiveServerRenderMode();
 
 app.Run();
