@@ -46,6 +46,18 @@ jobs:
         run: |
           $payload = Get-Content "${{ github.workspace }}/payload.json"
           $payload
+      
+      - name: Get mentees
+        shell: pwsh
+        run: |
+          $menteesPayload = '${{ secrets.MENTEES }}'
+          $menteesPayload | Out-File -FilePath ${{github.workspace}}/mentees.json -Force
+      
+      - name: Verify mentees payload
+        shell: pwsh
+        run: |
+          $payload = Get-Content "${{ github.workspace }}/mentees.json"
+          $payload
 
       - name: Install .NET SDK
         uses: actions/setup-dotnet@v4
@@ -69,6 +81,7 @@ jobs:
           dotnet run --project ./src/OssCaQuestChecker.IssueVerification.ConsoleApp -- \
             --input "${{ github.workspace }}/payload.json" \
             --output "${{ github.workspace }}/issue.json" \
+            --mentees "${{ github.workspace }}/mentees.json" \
             --due-date "${{ vars.DUE_DATE }}"
           
           popd
@@ -375,6 +388,22 @@ jobs:
           gh issue close ${{ steps.issue.outputs.issueNumber }} \
             -c "과제를 완료했습니다. 이슈를 닫습니다." \
             -R ${{ github.event.repository.full_name }}
+      
+      - name: Post to Discord - C# Certification
+        if: |
+          steps.issue.outputs.isValid == 'true' &&
+          steps.issue.outputs.questType == 'csharp-certification' &&
+          steps.check-quest-csharp-certification.outputs.questStatus == 'completed'
+        shell: pwsh
+        run: |
+          $mentees = Get-Content "${{ github.workspace }}/mentees.json" | ConvertFrom-Json
+          $mentee = $mentees | Where-Object { $_.github_username -eq "${{ steps.issue.outputs.githubId }}" }
+          $webhookUrl = "${{ secrets.DISCORD_WEBHOOK_URL }}"
+          $body = @{
+            content = "👋🏼 <@$($mentee.discord_userid)> 님! 🎉"
+          } | ConvertTo-Json
+          
+          Invoke-RestMethod -Uri $webhookUrl -Method Post -Body $body -ContentType "application/json"
 
       - name: Checkout quest repository - Quest 2 & 3
         if: |
