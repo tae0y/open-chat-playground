@@ -10,14 +10,15 @@ public class ChatHeaderUITests : PageTest
         await Page.GotoAsync("http://localhost:8080");
     }
 
-    [Fact]
-    public async Task Given_Root_Page_When_Loaded_Then_Header_Is_Visible()
+    [Theory]
+    [InlineData("OpenChat.PlaygroundApp")]
+    public async Task Given_Root_Page_When_Loaded_Then_Header_Should_Be_Visible(string expected)
     {
         // Act
         var title = await Page.Locator("h1").InnerTextAsync();
 
         // Assert
-        title.ShouldBe("OpenChat.PlaygroundApp");
+        title.ShouldBe(expected);
     }
 
     public override async Task DisposeAsync()
