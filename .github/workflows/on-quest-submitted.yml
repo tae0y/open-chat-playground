@@ -96,6 +96,7 @@ jobs:
           dotnet run --project ./src/OssCaQuestChecker.IssueVerification.ConsoleApp -- \
             --input "${{ github.workspace }}/payload.json" \
             --output "${{ github.workspace }}/issue.json" \
+            --mentees "${{ github.workspace }}/mentees.json" \
             --due-date "${{ vars.DUE_DATE }}" \
             --workflow-dispatch
 
