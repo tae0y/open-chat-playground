@@ -131,8 +131,11 @@ jobs:
           echo "englishName=$($result.body.englishName)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf-8 -Append
           echo "certId=$($result.body.certificationId)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf-8 -Append
 
-          # Quest 2 & 3
+          # Quest 2
           echo "githubRepository=$($result.body.gitHubRepository)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf-8 -Append
+
+          # Quest 3
+          echo "mslearnId=$($result.body.learnId)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf-8 -Append
 
           # Quest 4
           echo "youtubeLink=$($result.body.youTubeLink)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf-8 -Append
@@ -390,7 +393,7 @@ jobs:
             -c "과제를 완료했습니다. 이슈를 닫습니다." \
             -R ${{ github.event.repository.full_name }}
       
-      - name: Post to Discord - C# Certification
+      - name: Post to Discord - COMPLETED - C# Certification
         if: |
           steps.issue.outputs.isValid == 'true' &&
           steps.issue.outputs.questType == 'csharp-certification' &&
@@ -406,10 +409,10 @@ jobs:
           
           Invoke-RestMethod -Uri $webhookUrl -Method Post -Body $body -ContentType "application/json"
 
-      - name: Checkout quest repository - Quest 2 & 3
+      - name: Checkout quest repository - Quest 2
         if: |
           steps.issue.outputs.isValid == 'true' &&
-          (steps.issue.outputs.questType == 'connect-four' || steps.issue.outputs.questType == 'unit-test')
+          steps.issue.outputs.questType == 'connect-four'
         uses: actions/checkout@v4
         with:
           repository: ${{ steps.issue.outputs.githubRepository }}
@@ -432,6 +435,9 @@ jobs:
             "none"
           }
 
+          $isValidTargetFramework = ./quest-checker/gha-scripts/Check-TargetFramework.ps1 -CsprojPath $project.FullName -ExpectedTargetFramework "net9.0"
+
+          echo "isValidTargetFramework=$($isValidTargetFramework)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf-8 -Append
           echo "projectCount=$($projects.Count)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf-8 -Append
           echo "project=$project" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf-8 -Append
           echo "appUrl=$appUrl" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf-8 -Append
@@ -478,6 +484,52 @@ jobs:
 
           popd
 
+      - name: Add label - INVALID - Connect Four
+        if: |
+          steps.issue.outputs.isValid == 'true' &&
+          steps.issue.outputs.questType == 'connect-four' &&
+          steps.connect-four.outputs.projectCount == '1' &&
+          (steps.check-quest-connect-four.outputs.questStatus == 'invalid' || steps.connect-four.outputs.isValidTargetFramework == 'false')
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue edit ${{ steps.issue.outputs.issueNumber }} \
+          --add-label "invalid" \
+          -R ${{ github.event.repository.full_name }}
+
+      - name: Comment to issue - INVALID - Connect Four
+        if: |
+          steps.issue.outputs.isValid == 'true' &&
+          steps.issue.outputs.questType == 'connect-four' &&
+          steps.connect-four.outputs.projectCount == '1' &&
+          (steps.check-quest-connect-four.outputs.questStatus == 'invalid' || steps.connect-four.outputs.isValidTargetFramework == 'false')
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: "create-comment"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ steps.issue.outputs.issueNumber }}
+          body: |
+            👋🏼 @${{ steps.issue.outputs.githubId }} 님!
+
+            입력하신 값이 올바르지 않습니다. 😭
+
+            다시 한 번 확인해 주세요❗
+
+      - name: Close issue - INVALID - Connect Four
+        if: |
+          steps.issue.outputs.isValid == 'true' &&
+          steps.issue.outputs.questType == 'connect-four' &&
+          steps.connect-four.outputs.projectCount == '1' &&
+          (steps.check-quest-connect-four.outputs.questStatus == 'invalid' || steps.connect-four.outputs.isValidTargetFramework == 'false')
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue close ${{ steps.issue.outputs.issueNumber }} \
+            -c "입력 값이 올바르지 않습니다. 이슈를 닫습니다." \
+            -R ${{ github.event.repository.full_name }}
+
       - name: Add label - FAILED - Connect Four
         if: |
           steps.issue.outputs.isValid == 'true' &&
@@ -509,52 +561,6 @@ jobs:
             과제를 확인하는 중에 문제가 발생했습니다❗
 
             최대한 빨리 확인한 후 다시 알려드리겠습니다.
-
-      - name: Add label - INVALID - Connect Four
-        if: |
-          steps.issue.outputs.isValid == 'true' &&
-          steps.issue.outputs.questType == 'connect-four' &&
-          steps.connect-four.outputs.projectCount == '1' &&
-          steps.check-quest-connect-four.outputs.questStatus == 'invalid'
-        shell: bash
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh issue edit ${{ steps.issue.outputs.issueNumber }} \
-          --add-label "invalid" \
-          -R ${{ github.event.repository.full_name }}
-
-      - name: Comment to issue - INVALID - Connect Four
-        if: |
-          steps.issue.outputs.isValid == 'true' &&
-          steps.issue.outputs.questType == 'connect-four' &&
-          steps.connect-four.outputs.projectCount == '1' &&
-          steps.check-quest-connect-four.outputs.questStatus == 'invalid'
-        uses: actions-cool/issues-helper@v3
-        with:
-          actions: "create-comment"
-          token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ steps.issue.outputs.issueNumber }}
-          body: |
-            👋🏼 @${{ steps.issue.outputs.githubId }} 님!
-
-            입력하신 값이 올바르지 않습니다. 😭
-
-            다시 한 번 확인해 주세요❗
-
-      - name: Close issue - INVALID - Connect Four
-        if: |
-          steps.issue.outputs.isValid == 'true' &&
-          steps.issue.outputs.questType == 'connect-four' &&
-          steps.connect-four.outputs.projectCount == '1' &&
-          steps.check-quest-connect-four.outputs.questStatus == 'invalid'
-        shell: bash
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh issue close ${{ steps.issue.outputs.issueNumber }} \
-            -c "입력 값이 올바르지 않습니다. 이슈를 닫습니다." \
-            -R ${{ github.event.repository.full_name }}
 
       - name: Add label - NOT_COMPLETED - Connect Four
         if: |
@@ -648,6 +654,23 @@ jobs:
           gh issue close ${{ steps.issue.outputs.issueNumber }} \
             -c "과제를 완료했습니다. 이슈를 닫습니다." \
             -R ${{ github.event.repository.full_name }}
+      
+      - name: Post to Discord - COMPLETED - Connect Four
+        if: |
+          steps.issue.outputs.isValid == 'true' &&
+          steps.issue.outputs.questType == 'connect-four' &&
+          steps.connect-four.outputs.projectCount == '1' &&
+          steps.check-quest-connect-four.outputs.questStatus == 'completed'
+        shell: pwsh
+        run: |
+          $mentees = Get-Content "${{ github.workspace }}/mentees.json" | ConvertFrom-Json
+          $mentee = $mentees | Where-Object { $_.github_username -eq "${{ steps.issue.outputs.githubId }}" }
+          $webhookUrl = "${{ secrets.DISCORD_WEBHOOK_URL }}"
+          $body = @{
+            content = "👋🏼 <@$($mentee.discord_userid)> 님, ${{ steps.issue.outputs.title }} 과제를 성공적으로 제출하셨습니다! 🎉"
+          } | ConvertTo-Json
+          
+          Invoke-RestMethod -Uri $webhookUrl -Method Post -Body $body -ContentType "application/json"
 
       - name: Run project - Unit Test
         if: |
