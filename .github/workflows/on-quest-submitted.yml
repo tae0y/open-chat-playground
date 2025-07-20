@@ -409,7 +409,7 @@ jobs:
           
           Invoke-RestMethod -Uri $webhookUrl -Method Post -Body $body -ContentType "application/json"
 
-      - name: Checkout quest repository - Quest 2
+      - name: Checkout quest repository - Connect Four
         if: |
           steps.issue.outputs.isValid == 'true' &&
           steps.issue.outputs.questType == 'connect-four'
