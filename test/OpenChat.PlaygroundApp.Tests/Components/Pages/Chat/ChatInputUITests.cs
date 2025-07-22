@@ -8,7 +8,7 @@ public class ChatInputUITest : PageTest
     public override async Task InitializeAsync()
     {
         await base.InitializeAsync();
-        await Page.GotoAsync("http://localhost:8080");
+        await Page.GotoAsync(TestConstants.LocalhostUrl);
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
     }
 
