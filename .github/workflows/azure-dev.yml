@@ -17,6 +17,14 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
+      AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
+      GH_MODELS_TOKEN: ${{ secrets.GH_MODELS_TOKEN }}
+
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -62,3 +70,26 @@ jobs:
       shell: bash
       run: |
         dotnet test . -c Release --no-build --logger "trx" --collect:"XPlat Code Coverage" --filter "Category!=LLMRequired"
+
+    - name: Install azd
+      uses: Azure/setup-azd@v2
+
+    - name: Log in with Azure
+      shell: pwsh
+      run: |
+        azd auth login `
+          --client-id "$env:AZURE_CLIENT_ID" `
+          --federated-credential-provider "github" `
+          --tenant-id "$env:AZURE_TENANT_ID"
+
+    - name: Provision Infrastructure
+      shell: bash
+      env:
+        GitHubModels__Token: ${{ env.GH_MODELS_TOKEN }}
+      run: |
+        azd provision --no-prompt
+
+    - name: Deploy Application
+      shell: bash
+      run: |
+        azd deploy --no-prompt

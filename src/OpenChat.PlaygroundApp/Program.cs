@@ -18,11 +18,11 @@ builder.Services.AddRazorComponents()
 var credential = new ApiKeyCredential(builder.Configuration["GitHubModels:Token"] ?? throw new InvalidOperationException("Missing configuration: GitHubModels:Token. See the README for details."));
 var openAIOptions = new OpenAIClientOptions()
 {
-    Endpoint = new Uri("https://models.inference.ai.azure.com")
+    Endpoint = new Uri("https://models.github.ai/inference")
 };
 
 var ghModelsClient = new OpenAIClient(credential, openAIOptions);
-var chatClient = ghModelsClient.GetChatClient("gpt-4o").AsIChatClient();
+var chatClient = ghModelsClient.GetChatClient("openai/gpt-4o").AsIChatClient();
 
 builder.Services.AddChatClient(chatClient)
                 .UseFunctionInvocation()

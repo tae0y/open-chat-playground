@@ -35,7 +35,7 @@ This provides a web UI for AI chat playground that is able to connect virtually 
     gh repo fork aliencube/open-chat-playground --clone --default-branch-only
     ```
 
-### Run it locally
+### Run on Local Machine
 
 1. Get the repository root.
 
@@ -72,6 +72,45 @@ This provides a web UI for AI chat playground that is able to connect virtually 
     ```
 
 1. Open your web browser and navigate to `http://localhost:8080` and enter prompts.
+
+## Run Tests
+
+1. Get the repository root.
+
+    ```bash
+    # bash/zsh
+    REPOSITORY_ROOT=$(git rev-parse --show-toplevel)
+    ```
+
+    ```powershell
+    # PowerShell
+    $REPOSITORY_ROOT = git rev-parse --show-toplevel
+    ```
+
+1. Restore packages and install playwright.
+
+    ```bash
+    cd $REPOSITORY_ROOT && dotnet restore
+    pwsh $REPOSITORY_ROOT/test/OpenChat.PlaygroundApp.Tests/bin/Debug/net{YOUR_VERSION}/playwright.ps1 install
+    ```
+
+1. Run the app.
+
+    ```bash
+    dotnet run --project $REPOSITORY_ROOT/src/OpenChat.PlaygroundApp
+    ```
+
+1. Run tests.
+
+    ```bash
+    # With LLM provider
+    cd $REPOSITORY_ROOT && dotnet test
+    ```
+
+    ```bash
+    # Without LLM provider
+    cd $REPOSITORY_ROOT && dotnet test --filter "Category!=LLMRequired"
+    ```
 
 ### Run on Azure
 
@@ -121,39 +160,23 @@ This provides a web UI for AI chat playground that is able to connect virtually 
 
    > **NOTE**: You will be asked to provide Azure subscription and location for deployment.
 
-## Run Test
+## Configure GitHub Actions for CI/CD Pipeline
 
-1. Get the repository root.
-
-    ```bash
-    # bash/zsh
-    REPOSITORY_ROOT=$(git rev-parse --show-toplevel)
-    ```
-
-    ```powershell
-    # PowerShell
-    $REPOSITORY_ROOT = git rev-parse --show-toplevel
-    ```
-
-1. Restore packages and install playwright.
+1. Make sure you've logged in to Azure.
 
     ```bash
-    cd $REPOSITORY_ROOT && dotnet restore
-    pwsh $REPOSITORY_ROOT/test/OpenChat.PlaygroundApp.Tests/bin/Debug/net{YOUR_VERSION}/playwright.ps1 install
+    azd auth login --check-status
     ```
 
-1. Run the app.
+1. Run pipeline config.
 
     ```bash
-    dotnet run --project $REPOSITORY_ROOT/src/OpenChat.PlaygroundApp
+    azd pipeline config
     ```
 
-1. Run tests.
+1. Answer the question below:
 
-    ```bash
-    # With LLM provider
-    cd $REPOSITORY_ROOT && dotnet test
+   - `? Select how to authenticate the pipeline to Azure` 👉 `Federated Service Principal (SP + OIDC)`
+   - `? Would you like to commit and push your local changes to start the configured CI pipeline?` 👉 `No`
 
-    # Without LLM provider
-    cd $REPOSITORY_ROOT && dotnet test --filter "Category!=LLMRequired"
-    ```
+1. Once the configuration is done, push a new commit to GitHub to run the GitHub Actions workflow.
