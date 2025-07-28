@@ -206,6 +206,7 @@ jobs:
             -c "제출한 앱이 유효하지 않습니다. 이슈를 닫습니다." \
             -R ${{ github.event.repository.full_name }}
 
+      # C# Certification Quest
       - name: Verify quest - C# Certification
         if: |
           steps.issue.outputs.isValid == 'true' &&
@@ -409,7 +410,9 @@ jobs:
           } | ConvertTo-Json
           
           Invoke-RestMethod -Uri $webhookUrl -Method Post -Body $body -ContentType "application/json"
+      # C# Certification Quest
 
+      # Connect Four Quest
       - name: Checkout quest repository - Connect Four
         if: |
           steps.issue.outputs.isValid == 'true' &&
@@ -672,51 +675,40 @@ jobs:
           } | ConvertTo-Json
           
           Invoke-RestMethod -Uri $webhookUrl -Method Post -Body $body -ContentType "application/json"
+      # Connect Four Quest
 
-      - name: Run project - Unit Test
-        if: |
-          steps.issue.outputs.isValid == 'true' &&
-          steps.issue.outputs.issueType == 'unit-test'
-        shell: bash
-        run: |
-          pushd ./quest
-
-          dotnet restore
-          dotnet build /p:LangVersion=latest
-          dotnet test /p:LangVersion=latest --logger "trx;LogFileName=test-results.trx"
-
-          popd
-
+      # Unit Test Quest
       - name: Verify quest - Unit Test
         if: |
           steps.issue.outputs.isValid == 'true' &&
-          steps.issue.outputs.issueType == 'unit-test'
+          steps.issue.outputs.questType == 'unit-test'
         id: check-quest-unit-test
         shell: pwsh
         run: |
-          pushd ./quest
-
-          $files = Get-ChildItem *.trx -Recurse | Select-Object -Property FullName
-
-          popd
-
           pushd ./quest-checker
 
-          $result = ./gha-scripts/Check-UnitTestResults.ps1 -FilePaths $files.FullName
-          $questType = "${{ steps.issue.outputs.questType }}"
-          $questStatus = if ($result -eq $true) { "completed" } else { "not-completed" }
-          $message = if ($result -eq $true) { "Test passed" } else { "Test NOT passed" }
+          dotnet restore && dotnet build
 
-          echo "questType=$questType" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf-8 -Append
-          echo "questStatus=$questStatus" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf-8 -Append
-          echo "questMessage=$message" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf-8 -Append
+          $playwright = Get-ChildItem -File Microsoft.Playwright.dll -Path . -Recurse
+          $installer = "$($playwright[0].Directory.FullName)/playwright.ps1"
+          & "$installer" install
+
+          $result = dotnet run `
+            --project ./src/OssCaQuestChecker.MsLearn.ConsoleApp `
+            -- `
+            -t "${{ steps.issue.outputs.questType }}" `
+            -l "${{ steps.issue.outputs.mslearnId }}" | ConvertFrom-Json
+
+          echo "questType=$($result.questType)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf-8 -Append
+          echo "questStatus=$($result.questStatus)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf-8 -Append
+          echo "questMessage=$($result.message)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf-8 -Append
 
           popd
 
       - name: Add label - NOT_COMPLETED - Unit Test
         if: |
           steps.issue.outputs.isValid == 'true' &&
-          steps.issue.outputs.issueType == 'unit-test' &&
+          steps.issue.outputs.questType == 'unit-test' &&
           steps.check-quest-unit-test.outputs.questStatus == 'not-completed'
         shell: bash
         env:
@@ -729,7 +721,7 @@ jobs:
       - name: Comment to issue - NOT_COMPLETED - Unit Test
         if: |
           steps.issue.outputs.isValid == 'true' &&
-          steps.issue.outputs.issueType == 'unit-test' &&
+          steps.issue.outputs.questType == 'unit-test' &&
           steps.check-quest-unit-test.outputs.questStatus == 'not-completed'
         uses: actions-cool/issues-helper@v3
         with:
@@ -746,7 +738,7 @@ jobs:
       - name: Close issue - NOT_COMPLETED - Unit Test
         if: |
           steps.issue.outputs.isValid == 'true' &&
-          steps.issue.outputs.issueType == 'unit-test' &&
+          steps.issue.outputs.questType == 'unit-test' &&
           steps.check-quest-unit-test.outputs.questStatus == 'not-completed'
         shell: bash
         env:
@@ -759,7 +751,7 @@ jobs:
       - name: Add label - COMPLETED - Unit Test
         if: |
           steps.issue.outputs.isValid == 'true' &&
-          steps.issue.outputs.issueType == 'unit-test' &&
+          steps.issue.outputs.questType == 'unit-test' &&
           steps.check-quest-unit-test.outputs.questStatus == 'completed'
         shell: bash
         env:
@@ -772,7 +764,7 @@ jobs:
       - name: Comment to issue - COMPLETED - Unit Test
         if: |
           steps.issue.outputs.isValid == 'true' &&
-          steps.issue.outputs.issueType == 'unit-test' &&
+          steps.issue.outputs.questType == 'unit-test' &&
           steps.check-quest-unit-test.outputs.questStatus == 'completed'
         uses: actions-cool/issues-helper@v3
         with:
@@ -790,7 +782,7 @@ jobs:
       - name: Close issue - COMPLETED - Unit Test
         if: |
           steps.issue.outputs.isValid == 'true' &&
-          steps.issue.outputs.issueType == 'unit-test' &&
+          steps.issue.outputs.questType == 'unit-test' &&
           steps.check-quest-unit-test.outputs.questStatus == 'completed'
         shell: bash
         env:
@@ -799,3 +791,20 @@ jobs:
           gh issue close ${{ steps.issue.outputs.issueNumber }} \
             -c "과제를 완료했습니다. 이슈를 닫습니다." \
             -R ${{ github.event.repository.full_name }}
+      
+      - name: Post to Discord - COMPLETED - Unit Test
+        if: |
+          steps.issue.outputs.isValid == 'true' &&
+          steps.issue.outputs.questType == 'unit-test' &&
+          steps.check-quest-unit-test.outputs.questStatus == 'completed'
+        shell: pwsh
+        run: |
+          $mentees = Get-Content "${{ github.workspace }}/mentees.json" | ConvertFrom-Json
+          $mentee = $mentees | Where-Object { $_.github_username -eq "${{ steps.issue.outputs.githubId }}" }
+          $webhookUrl = "${{ secrets.DISCORD_WEBHOOK_URL }}"
+          $body = @{
+            content = "👋🏼 <@$($mentee.discord_userid)> 님, ${{ steps.issue.outputs.title }} 과제를 성공적으로 제출하셨습니다! 🎉"
+          } | ConvertTo-Json
+          
+          Invoke-RestMethod -Uri $webhookUrl -Method Post -Body $body -ContentType "application/json"
+      # Unit Test Quest
