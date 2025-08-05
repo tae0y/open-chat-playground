@@ -818,11 +818,11 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          $assignees = ${{ vars.ASSIGNEES }} -split ","
+          $assignees = "${{ vars.ASSIGNEES }}" -split ","
           $random = Get-Random -Minimum 0 -Maximum $assignees.Count
           $assignee = $assignees[$random]
 
-          gh issue edit ${{ steps.issue.outputs.issueNumber }} \
-            --add-assignee $assignee \
+          gh issue edit ${{ steps.issue.outputs.issueNumber }} `
+            --add-assignee $assignee `
             -R ${{ github.event.repository.full_name }}
       # GenAI for Beginners for .NET Quest
