@@ -156,7 +156,7 @@ public abstract class ArgumentOptions
         Console.WriteLine("  ** GitHub Models: **");
         Console.WriteLine("  --endpoint           The endpoint URL. Default to 'https://models.github.ai/inference'");
         Console.WriteLine("  --token              The GitHub PAT.");
-        Console.WriteLine("  --model              The model name. Default to 'openai/gpt-5-mini'");
+        Console.WriteLine("  --model              The model name. Default to 'openai/gpt-4o-mini'");
         Console.WriteLine();
         Console.WriteLine("  --help|-h            Show this help message.");
     }

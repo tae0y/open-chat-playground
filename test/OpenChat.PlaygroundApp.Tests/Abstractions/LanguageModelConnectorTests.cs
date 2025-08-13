@@ -10,7 +10,7 @@ public class LanguageModelConnectorTests
         ConnectorType connectorType = ConnectorType.GitHubModels,
         string? endpoint = "https://models.github.ai/inference",
         string? token = "test-token",
-        string? model = "openai/gpt-5-mini")
+        string? model = "openai/gpt-4o-mini")
 	{
 		return new AppSettings
 		{

@@ -92,7 +92,7 @@ public class GitHubModelsArgumentOptionsTests
 
 	[Trait("Category", "UnitTest")]
 	[Theory]
-	[InlineData("https://example.test/inference", "test-token", "openai/gpt-5-mini")]
+	[InlineData("https://example.test/inference", "test-token", "openai/gpt-4o-mini")]
 	public void Given_AllArguments_When_Parse_Invoked_Then_It_Should_Set_All(string endpoint, string token, string model)
 	{
 		var config = BuildConfigWithGitHubModels();
@@ -136,7 +136,7 @@ public class GitHubModelsArgumentOptionsTests
 
     [Trait("Category", "UnitTest")]
     [Theory]
-    [InlineData("https://models.github.ai/inference", "{{GITHUB_PAT}}", "openai/gpt-5-mini")]
+    [InlineData("https://models.github.ai/inference", "{{GITHUB_PAT}}", "openai/gpt-4o-mini")]
 	public void Given_ConfigValues_And_No_CLI_When_Parse_Invoked_Then_It_Should_Use_Config(string endpoint, string token, string model)
     {
         var config = BuildConfigWithGitHubModels(endpoint, token, model);
@@ -150,7 +150,7 @@ public class GitHubModelsArgumentOptionsTests
 
 	[Trait("Category", "UnitTest")]
 	[Theory]
-	[InlineData("https://models.github.ai/inference", "{{GITHUB_PAT}}", "openai/gpt-5-mini",
+	[InlineData("https://models.github.ai/inference", "{{GITHUB_PAT}}", "openai/gpt-4o-mini",
 		        "https://cli.example/inference", "cli-token", "openai/gpt-5-large")]
 	public void Given_ConfigValues_And_CLI_When_Parse_Invoked_Then_CLI_Should_Override_Config(
         string configEndpoint, string configToken, string configModel,
@@ -167,7 +167,7 @@ public class GitHubModelsArgumentOptionsTests
 
     [Trait("Category", "UnitTest")]
     [Theory]
-    [InlineData("https://models.github.ai/inference", "pat", "openai/gpt-5-mini")]
+    [InlineData("https://models.github.ai/inference", "pat", "openai/gpt-4o-mini")]
     public void Given_GitHubModels_With_KnownArguments_When_Parse_Invoked_Then_Help_ShouldBe_False(string endpoint, string token, string model)
     {
         var config = BuildConfigWithGitHubModels(Endpoint, Token, Model);

@@ -5,7 +5,7 @@ namespace OpenChat.PlaygroundApp.Tests.Connectors;
 
 public class GitHubModelsConnectorTests
 {
-	private static AppSettings BuildAppSettings(string? endpoint = "https://models.github.ai/inference", string? token = "test-token", string? model = "openai/gpt-5-mini")
+	private static AppSettings BuildAppSettings(string? endpoint = "https://models.github.ai/inference", string? token = "test-token", string? model = "openai/gpt-4o-mini")
 	{
 		return new AppSettings
 		{
