@@ -1,5 +1,6 @@
 using OpenChat.PlaygroundApp.Configurations;
 using OpenChat.PlaygroundApp.Connectors;
+using OpenChat.PlaygroundApp.Options;
 
 namespace OpenChat.PlaygroundApp.Abstractions;
 
@@ -8,6 +9,14 @@ namespace OpenChat.PlaygroundApp.Abstractions;
 /// </summary>
 public abstract class ArgumentOptions
 {
+    private static readonly (string Argument, bool IsSwitch)[] arguments =
+    [
+        // GitHub Models
+        ("--endpoint", false),
+        ("--token", false),
+        ("--model", false)
+    ];
+
     /// <summary>
     /// Gets or sets the connector type to use.
     /// </summary>
@@ -84,20 +93,40 @@ public abstract class ArgumentOptions
                 case "-c":
                     if (i + 1 < args.Length)
                     {
-                        if (Enum.TryParse<ConnectorType>(args[i + 1], ignoreCase: true, out var result))
+                        if (Enum.TryParse<ConnectorType>(args[++i], ignoreCase: true, out var result))
                         {
                             options.ConnectorType = result;
-                            i++;
                         }
                     }
                     break;
 
                 case "--help":
                 case "-h":
-                default:
                     options.Help = true;
                     break;
+
+                default:
+                    var argument = arguments.SingleOrDefault(p => p.Argument.Equals(args[i], StringComparison.InvariantCultureIgnoreCase));
+                    if (argument == default)
+                    {
+                        options.Help = true;
+                    }
+                    else if (argument.IsSwitch == false)
+                    {
+                        i++;
+                    }
+                    break;
             }
+        }
+
+        switch (options)
+        {
+            case GitHubModelsArgumentOptions github:
+                settings.GitHubModels ??= new GitHubModelsSettings();
+                settings.GitHubModels.Endpoint = github.Endpoint ?? settings.GitHubModels.Endpoint;
+                settings.GitHubModels.Token = github.Token ?? settings.GitHubModels.Token;
+                settings.GitHubModels.Model = github.Model ?? settings.GitHubModels.Model;
+                break;
         }
 
         settings.ConnectorType = options.ConnectorType;
