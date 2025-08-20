@@ -11,10 +11,22 @@ public abstract class ArgumentOptions
 {
     private static readonly (string Argument, bool IsSwitch)[] arguments =
     [
+        // Amazon Bedrock
+        // Azure AI Foundry
         // GitHub Models
         ("--endpoint", false),
         ("--token", false),
         ("--model", false)
+        // Google Vertex AI
+        // Docker Model Runner
+        // Foundry Local
+        // Hugging Face
+        // Ollama
+        // Anthropic
+        // LG
+        // Naver
+        // OpenAI
+        // Upstage
     ];
 
     /// <summary>
