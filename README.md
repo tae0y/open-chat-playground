@@ -1,6 +1,6 @@
-# <img src="./assets/icon-transparent.svg" alt="Icon for OpenChat Playground" width="32" /> AI Open Chat Playground
+# <img src="./assets/icon-transparent.svg" alt="Icon for OpenChat Playground" width="32" /> Open Chat Playground
 
-AI Open Chat Playground (OCP) is a web UI that is able to connect virtually any LLM from any platform.
+Open Chat Playground (OCP) is a web UI that is able to connect virtually any LLM from any platform.
 
 ## Prerequisites
 
