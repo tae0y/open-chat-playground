@@ -4,19 +4,19 @@ Open Chat Playground (OCP) is a web UI that is able to connect virtually any LLM
 
 ## Supported platforms
 
-- [ ] Amazon Bedrock
-- [ ] Azure AI Foundry
-- [x] GitHub Models
-- [ ] Google Vertex AI
-- [ ] Docker Model Runner
-- [ ] Foundry Local
-- [ ] Hugging Face
-- [ ] Ollama
-- [ ] Anthropic
-- [ ] Naver
-- [ ] LG
-- [ ] OpenAI
-- [ ] Upstage
+- [ ] [Amazon Bedrock](https://docs.aws.amazon.com/bedrock)
+- [ ] [Azure AI Foundry](https://learn.microsoft.com/azure/ai-foundry/what-is-azure-ai-foundry)
+- [x] [GitHub Models](https://docs.github.com/github-models/about-github-models)
+- [ ] [Google Vertex AI](https://cloud.google.com/vertex-ai/docs)
+- [ ] [Docker Model Runner](https://docs.docker.com/ai/model-runner)
+- [ ] [Foundry Local](https://learn.microsoft.com/azure/ai-foundry/foundry-local/what-is-foundry-local)
+- [ ] [Hugging Face](https://huggingface.co/docs)
+- [ ] [Ollama](https://github.com/ollama/ollama/tree/main/docs)
+- [ ] [Anthropic](https://docs.anthropic.com)
+- [ ] [Naver](https://api.ncloud-docs.com/docs/ai-naver-clovastudio-summary)
+- [ ] [LG](https://github.com/LG-AI-EXAONE)
+- [ ] [OpenAI](https://openai.com/api)
+- [ ] [Upstage](https://console.upstage.ai/docs/getting-started)
 
 ## Prerequisites
 
