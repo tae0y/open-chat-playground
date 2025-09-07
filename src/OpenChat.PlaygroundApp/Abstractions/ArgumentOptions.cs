@@ -32,6 +32,8 @@ public abstract class ArgumentOptions
         // Ollama
         // Anthropic
         // LG
+        (ConnectorType.LG, "--api-key", false),
+        (ConnectorType.LG, "--model", false),
         // Naver
         // OpenAI
         (ConnectorType.OpenAI, "--api-key", false),
@@ -179,6 +181,12 @@ public abstract class ArgumentOptions
                 settings.OpenAI ??= new OpenAISettings();
                 settings.OpenAI.ApiKey = openai.ApiKey ?? settings.OpenAI.ApiKey;
                 settings.OpenAI.Model = openai.Model ?? settings.OpenAI.Model;
+                break;
+
+            case LGArgumentOptions lg:
+                settings.LG ??= new LGSettings();
+                settings.LG.BaseUrl = lg.BaseUrl ?? settings.LG.BaseUrl;
+                settings.LG.Model = lg.Model ?? settings.LG.Model;
                 break;
 
             default:
@@ -357,7 +365,8 @@ public abstract class ArgumentOptions
         Console.WriteLine("  ** LG: **");
         Console.ForegroundColor = foregroundColor;
 
-        Console.WriteLine("  TBD");
+        Console.WriteLine("  --base-url           The endpoint URL. Default to 'http://localhost:11434'");
+        Console.WriteLine("  --model              The model name. Default to 'hf.co/LG/exaone-4.0-1.2b'");
         Console.WriteLine();
     }
 
