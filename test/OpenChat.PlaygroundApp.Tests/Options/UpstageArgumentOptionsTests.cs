@@ -71,5 +71,6 @@ public class UpstageArgumentOptionsTests
 
     // Given_EnvironmentVariables_Only_When_Parse_Invoked_Then_Help_Should_Be_False
 
-
+    // 이 단위 테스트는 먼저 UpstageArgumentOptions.Parse 메서드가 추가되어야 진행할 수 있음
+    // Command-Line Parse 이슈가 병합될 때까지 대기
 }
