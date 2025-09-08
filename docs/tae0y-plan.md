@@ -16,7 +16,7 @@
     원하는 출력결과:
     ### `maas`
     - [ ] Amazon Bedrock
-      - [ ] Command-Line Argument Parsing `#{issue num}` `@githubid`, `2025-09-03`
+      - [ ] **Command-Line Argument Parsing `#{issue num}` `@githubid`, `2025-09-03`**
         - [ ] {issue body, eg. The command-line arguments MUST be parsed to the model implemented in Command-Line Argument Options Modelling: Amazon Bedrock #319}
       - [ ] ...
 
@@ -47,25 +47,25 @@
 
 ### `maas`
 - [ ] Amazon Bedrock
-  - [ ] Command-Line Argument Parsing `#226` `@kevinlee94`, `2025-09-07`
+  - [ ] **Command-Line Argument Parsing `#226` `@kevinlee94`, `2025-09-07`**
     - [ ] The command-line arguments MUST be parsed to the model implemented in #319 .
-  - [ ] Connector Implementation & Inheritance `#228`, `2025-08-19`
+  - [ ] **Connector Implementation & Inheritance `#228`, `2025-08-19`**
     - [ ] Inherit `LanguageModelConnector`
     - [ ] Inject `AppSettings`
     - [ ] Override `GetChatClient`
-  - [ ] Environment Variables Testing `#227`, `2025-08-13`
+  - [ ] **Environment Variables Testing `#227`, `2025-08-13`**
     - [ ] Environment variables integration is a built-in feature. This task is to ensure the integration is working.
     - [ ] Add unit tests.
 - [ ] Google Vertex AI
-  - [ ] Connector Implementation & Inheritance `#237`, `2025-08-19`
+  - [ ] **Connector Implementation & Inheritance `#237`, `2025-08-19`**
     - [ ] Inherit `LanguageModelConnector`
     - [ ] Inject `AppSettings`
     - [ ] Override `GetChatClient`
-  - [ ] Environment Variables Testing `#236` `@hxcva1`, `2025-09-08`
+  - [ ] **Environment Variables Testing `#236` `@hxcva1`, `2025-09-08`**
     - [ ] Environment variables integration is a built-in feature. This task is to ensure the integration is working.
     - [ ] Add unit tests.
 - [ ] Azure AI Foundry
-  - [ ] Connector Implementation & Inheritance `#210` `@gngsn`, `2025-09-07`
+  - [ ] **Connector Implementation & Inheritance `#210` `@gngsn`, `2025-09-07`**
     - [ ] Inherit `LanguageModelConnector`
     - [ ] Inject `AppSettings`
     - [ ] Override `GetChatClient`
@@ -74,112 +74,112 @@
 
 ### `local`
 - [ ] Docker Model Runner
-  - [ ] Command-Line Argument Options Modelling `#329`, `2025-08-19`
+  - [ ] **Command-Line Argument Options Modelling `#329`, `2025-08-19`**
     - [ ] The command-line arguments MUST be defined to the model implemented in #276 .
     - [ ] The command-line arguments MAY include:
       - [ ] an endpoint
       - [ ] a model/deployment name
       - [ ] an API key
-  - [ ] Connector Implementation & Inheritance `#279`, `2025-09-01`
+  - [ ] **Connector Implementation & Inheritance `#279`, `2025-09-01`**
     - [ ] Inherit `LanguageModelConnector`
     - [ ] Inject `AppSettings`
     - [ ] Override `GetChatClient`
-  - [ ] Environment Variables Testing `#278`, `2025-08-14`
+  - [ ] **Environment Variables Testing `#278`, `2025-08-14`**
     - [ ] Environment variables integration is a built-in feature. This task is to ensure the integration is working.
     - [ ] Add unit tests.
-  - [ ] Command-Line Argument Parsing `#277`, `2025-08-19`
+  - [ ] **Command-Line Argument Parsing `#277`, `2025-08-19`**
     - [ ] The command-line arguments MUST be parsed to the model implemented in #329.
-  - [ ] Docker Model Runner Package Integration `#314`, `2025-08-14`
+  - [ ] **Docker Model Runner Package Integration `#314`, `2025-08-14`**
     - [ ] Add Docker Model Runner package.
 - [ ] Foundry Local
-  - [ ] Foundry Local Package Integration `#313`, `2025-08-14`
+  - [ ] **Foundry Local Package Integration `#313`, `2025-08-14`**
     - [ ] Add Foundry Local package.
-  - [ ] Connector Implementation & Inheritance `#214`, `2025-08-19`
+  - [ ] **Connector Implementation & Inheritance `#214`, `2025-08-19`**
     - [ ] Inherit `LanguageModelConnector`
     - [ ] Inject `AppSettings`
     - [ ] Override `GetChatClient`
-  - [ ] Environment Variables Testing `#213`, `2025-08-13`
+  - [ ] **Environment Variables Testing `#213`, `2025-08-13`**
     - [ ] Environment variables integration is a built-in feature. This task is to ensure the integration is working.
     - [ ] Add unit tests.
 - [ ] Ollama
-  - [ ] Ollama Package Integration `#311`, `2025-08-14`
+  - [ ] **Ollama Package Integration `#311`, `2025-08-14`**
     - [ ] Add Ollama package.
-  - [ ] Connector Implementation & Inheritance `#269`, `2025-08-19`
+  - [ ] **Connector Implementation & Inheritance `#269`, `2025-08-19`**
     - [ ] Inherit `LanguageModelConnector`
     - [ ] Inject `AppSettings`
     - [ ] Override `GetChatClient`
-  - [ ] Environment Variables Testing `#268`, `2025-08-13`
+  - [ ] **Environment Variables Testing `#268`, `2025-08-13`**
     - [ ] Environment variables integration is a built-in feature. This task is to ensure the integration is working.
     - [ ] Add unit tests.
-  - [ ] Command-Line Argument Parsing `#267` `@donghyeon639`, `2025-08-31`
+  - [ ] **Command-Line Argument Parsing `#267` `@donghyeon639`, `2025-08-31`**
     - [ ] The command-line arguments MUST be parsed to the model implemented in #338 .
-  - [ ] Ollama LLM Caching `#305`, `2025-09-07`
+  - [ ] **Ollama LLM Caching `#305`, `2025-09-07`**
     - [ ] When using LLM through Ollama, it should be persisted for future use.
-  - [ ] Serverless GPU for Ollama Models on Deployment to Azure `#306`, `2025-08-14`
+  - [ ] **Serverless GPU for Ollama Models on Deployment to Azure `#306`, `2025-08-14`**
     - [ ] When using Ollama as the local LLM container, it should use the Serverless GPU on Azure for deployment.
 
 ---
 
 ### `vendor`
 - [ ] Naver HyperCLOVA X
-  - [ ] Add NuGet package `#349`, `2025-08-19`
+  - [ ] **Add NuGet package `#349`, `2025-08-19`**
     - [ ] Add a NuGet package for Naver HyperCLOVA X that supports `Microsoft.Extensions.AI` to `.csproj`.
-  - [ ] `appsettings.json` Modelling `#348`, `2025-08-19`
+  - [ ] **`appsettings.json` Modelling `#348`, `2025-08-19`**
     - [ ] The section in `appsettings.json` MUST represents the API connection details of Naver HyperCLOVA X
-  - [ ] Command-Line Argument Options Modelling `#347`, `2025-08-19`
+  - [ ] **Command-Line Argument Options Modelling `#347`, `2025-08-19`**
     - [ ] The command-line arguments MUST be defined to the model implemented in #243 .
     - [ ] The command-line arguments MAY include:
       - [ ] an endpoint
       - [ ] a model/deployment name
       - [ ] an API key
-  - [ ] Model Class Implementation `#243`, `2025-09-03`
+  - [ ] **Model Class Implementation `#243`, `2025-09-03`**
     - [ ] The model class MUST represent the section in `appsettings.json`.
     - [ ] The class name MUST be `NaverSettings`.
-  - [ ] Command-Line Argument Parsing `#244`, `2025-08-19`
+  - [ ] **Command-Line Argument Parsing `#244`, `2025-08-19`**
     - [ ] The command-line arguments MUST be parsed to the model implemented in #347 .
-  - [ ] Environment Variables Testing `#245`, `2025-08-13`
+  - [ ] **Environment Variables Testing `#245`, `2025-08-13`**
     - [ ] Environment variables integration is a built-in feature. This task is to ensure the integration is working.
     - [ ] Add unit tests.
-  - [ ] Connector Implementation & Inheritance `#280`, `2025-08-19`
+  - [ ] **Connector Implementation & Inheritance `#280`, `2025-08-19`**
     - [ ] Inherit `LanguageModelConnector`
     - [ ] Inject `AppSettings`
     - [ ] Override `GetChatClient`
 - [ ] Anthropic Claude
-  - [ ] Connector Implementation & Inheritance `#261`, `2025-09-04`
+  - [ ] **Connector Implementation & Inheritance `#261`, `2025-09-04`**
     - [ ] Inherit `LanguageModelConnector`
     - [ ] Inject `AppSettings`
     - [ ] Override `GetChatClient`
-  - [ ] Command-Line Argument Parsing `#259` `@ummjevel`, `2025-09-07`
+  - [ ] **Command-Line Argument Parsing `#259` `@ummjevel`, `2025-09-07`**
     - [ ] The command-line arguments MUST be parsed to the model implemented in #341.
-  - [ ] Environment Variables Testing `#260`, `2025-08-13`
+  - [ ] **Environment Variables Testing `#260`, `2025-08-13`**
     - [ ] Environment variables integration is a built-in feature. This task is to ensure the integration is working.
     - [ ] Add unit tests.
 - [ ] LG AI EXAONE
-  - [ ] Connector Implementation & Inheritance `#253`, `2025-08-31`
+  - [ ] **Connector Implementation & Inheritance `#253`, `2025-08-31`**
     - [ ] Inherit `LanguageModelConnector`
     - [ ] Inject `AppSettings`
     - [ ] Override `GetChatClient`
-  - [ ] Command-Line Argument Parsing `#251` `@jh941213`, `2025-09-07`
+  - [ ] **Command-Line Argument Parsing `#251` `@jh941213`, `2025-09-07`**
     - [ ] The command-line arguments MUST be parsed to the model implemented in #344 .
-  - [ ] Environment Variables Testing `#252`, `2025-08-13`
+  - [ ] **Environment Variables Testing `#252`, `2025-08-13`**
     - [ ] Environment variables integration is a built-in feature. This task is to ensure the integration is working.
     - [ ] Add unit tests.
 - [ ] Upstage Solar
-  - [ ] Connector Implementation & Inheritance `#235`, `2025-08-19`
+  - [ ] **Connector Implementation & Inheritance `#235`, `2025-08-19`**
     - [ ] Inherit `LanguageModelConnector`
     - [ ] Inject `AppSettings`
     - [ ] Override `GetChatClient`
-  - [ ] Command-Line Argument Parsing `#231` `@gremh97`, `2025-09-04`
+  - [ ] **Command-Line Argument Parsing `#231` `@gremh97`, `2025-09-04`**
     - [ ] The command-line arguments MUST be parsed to the model implemented in #354 .
-  - [ ] Environment Variables Testing `#234`, `2025-08-13`
+  - [ ] **Environment Variables Testing `#234`, `2025-08-13`**
     - [ ] Environment variables integration is a built-in feature. This task is to ensure the integration is working.
     - [ ] Add unit tests.
 - [ ] OpenAI GPT
-  - [ ] Connector Implementation & Inheritance `#220` `@ummjevel`, `2025-09-05`
+  - [ ] **Connector Implementation & Inheritance `#220` `@ummjevel`, `2025-09-05`**
     - [ ] Inherit `LanguageModelConnector`
     - [ ] Inject `AppSettings`
     - [ ] Override `GetChatClient`
-  - [ ] Environment Variables Testing `#219` `@qoweh`, `2025-09-07`
+  - [ ] **Environment Variables Testing `#219` `@qoweh`, `2025-09-07`**
     - [ ] Environment variables integration is a built-in feature. This task is to ensure the integration is working.
     - [ ] Add unit tests.
 
