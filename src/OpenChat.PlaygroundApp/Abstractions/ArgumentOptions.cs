@@ -146,6 +146,9 @@ public abstract class ArgumentOptions
 
         switch (options)
         {
+            // case AmazonBedrockArgumentOptions amazonBedrock:
+            //     break;
+
             case AzureAIFoundryArgumentOptions azureAIFoundry:
                 settings.AzureAIFoundry ??= new AzureAIFoundrySettings();
                 settings.AzureAIFoundry.Endpoint = azureAIFoundry.Endpoint ?? settings.AzureAIFoundry.Endpoint;
@@ -159,6 +162,15 @@ public abstract class ArgumentOptions
                 settings.GitHubModels.Token = github.Token ?? settings.GitHubModels.Token;
                 settings.GitHubModels.Model = github.Model ?? settings.GitHubModels.Model;
                 break;
+            
+            case GoogleVertexAIArgumentOptions googleVertexAI:
+                settings.GoogleVertexAI ??= new GoogleVertexAISettings();
+                settings.GoogleVertexAI.ApiKey = googleVertexAI.ApiKey ?? settings.GoogleVertexAI.ApiKey;
+                settings.GoogleVertexAI.Model = googleVertexAI.Model ?? settings.GoogleVertexAI.Model;
+                break;
+
+            // case DockerModelRunnerArgumentOptions dockerModelRunner:
+            //     break;
 
             case FoundryLocalArgumentOptions foundryLocal:
                 settings.FoundryLocal ??= new FoundryLocalSettings();
@@ -170,12 +182,21 @@ public abstract class ArgumentOptions
                 settings.HuggingFace.BaseUrl = huggingFace.BaseUrl ?? settings.HuggingFace.BaseUrl;
                 settings.HuggingFace.Model = huggingFace.Model ?? settings.HuggingFace.Model;
                 break;
-                
-            case GoogleVertexAIArgumentOptions googleVertexAI:
-                settings.GoogleVertexAI ??= new GoogleVertexAISettings();
-                settings.GoogleVertexAI.ApiKey = googleVertexAI.ApiKey ?? settings.GoogleVertexAI.ApiKey;
-                settings.GoogleVertexAI.Model = googleVertexAI.Model ?? settings.GoogleVertexAI.Model;
+
+            // case OllamaArgumentOptions ollama:
+            //     break;
+
+            // case AnthropicArgumentOptions anthropic:
+            //     break;
+
+            case LGArgumentOptions lg:
+                settings.LG ??= new LGSettings();
+                settings.LG.BaseUrl = lg.BaseUrl ?? settings.LG.BaseUrl;
+                settings.LG.Model = lg.Model ?? settings.LG.Model;
                 break;
+
+            // case NaverArgumentOptions naver:
+            //     break;
 
             case OpenAIArgumentOptions openai:
                 settings.OpenAI ??= new OpenAISettings();
@@ -183,11 +204,8 @@ public abstract class ArgumentOptions
                 settings.OpenAI.Model = openai.Model ?? settings.OpenAI.Model;
                 break;
 
-            case LGArgumentOptions lg:
-                settings.LG ??= new LGSettings();
-                settings.LG.BaseUrl = lg.BaseUrl ?? settings.LG.BaseUrl;
-                settings.LG.Model = lg.Model ?? settings.LG.Model;
-                break;
+            // case UpstageArgumentOptions upstage:
+            //     break;
 
             default:
                 break;
