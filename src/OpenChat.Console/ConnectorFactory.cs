@@ -36,8 +36,8 @@ class ConnectorFactory
     /// </remarks>
     public static IChatClient CreateAzureOpenAIClient()
     {
-        var endpoint = "https://aifoundry-0308-resource.cognitiveservices.azure.com/";
-        var deploymentName = "gpt-4o-mini";
+        var endpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT") ?? "";
+        var deploymentName = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT_NAME") ?? "";
         if (string.IsNullOrEmpty(endpoint) || string.IsNullOrEmpty(deploymentName))
         {
             throw new InvalidOperationException("Azure OpenAI endpoint or deployment name is not set.");
@@ -57,8 +57,8 @@ class ConnectorFactory
         // Initialize OllamaApiClient with configuration
         var config = new OllamaApiClient.Configuration
         {
-            Uri = new Uri("http://localhost:11434"),
-            Model = "hf.co/LGAI-EXAONE/EXAONE-4.0-1.2B-GGUF"
+            Uri = new Uri(Environment.GetEnvironmentVariable("HUGGINGFACE_URI") ?? "http://localhost:11434"),
+            Model = Environment.GetEnvironmentVariable("HUGGINGFACE_MODEL") ?? "hf.co/LGAI-EXAONE/EXAONE-4.0-1.2B-GGUF"
         };
         var chatClient = new OllamaApiClient(config);
 
@@ -93,8 +93,8 @@ class ConnectorFactory
     /// <exception cref="InvalidOperationException"></exception>
     public static IChatClient CreateOpenAIClient()
     {
-        var model = "gpt-4o-mini";
-        var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+        var model = Environment.GetEnvironmentVariable("OPENAI_MODEL") ?? "gpt-4o-mini";
+        var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY") ?? "";
         if (string.IsNullOrEmpty(apiKey))
         {
             throw new InvalidOperationException("OPENAI_API_KEY environment variable is not set.");
@@ -113,8 +113,8 @@ class ConnectorFactory
     /// </remarks>
     public static IChatClient CreateUpstageSolarClient()
     {
-        var model = "solar-mini";
-        var apiKey = Environment.GetEnvironmentVariable("UPSTAGE_API_KEY");
+        var model = Environment.GetEnvironmentVariable("UPSTAGE_MODEL") ?? "solar-mini";
+        var apiKey = Environment.GetEnvironmentVariable("UPSTAGE_API_KEY") ?? "";
         var endpoint = "https://api.upstage.ai/v1";
         if (string.IsNullOrEmpty(apiKey) || string.IsNullOrEmpty(endpoint))
         {
