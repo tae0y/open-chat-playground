@@ -15,6 +15,42 @@ class ConnectorFactory
     }
 
     /// <summary>
+    /// Creates and configures an OpenAIClient.
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
+    public static async Task<IChatClient> CreateOpenAIClientAsync()
+    {
+        var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            throw new InvalidOperationException("OPENAI_API_KEY environment variable is not set.");
+        }
+        var chatClient = new OpenAIClient(apiKey);
+        return chatClient;
+    }
+
+    /// <summary>
+    /// Creates and configures an AzureOpenAIClient.
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
+    public static async Task<IChatClient> CreateAzureOpenAIClientAsync()
+    {
+        var apiKey = Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY");
+        var endpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT");
+        var deploymentName = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT_NAME");
+
+        if (string.IsNullOrEmpty(apiKey) || string.IsNullOrEmpty(endpoint) || string.IsNullOrEmpty(deploymentName))
+        {
+            throw new InvalidOperationException("One or more Azure OpenAI environment variables are not set.");
+        }
+
+        var chatClient = new AzureOpenAIClient(endpoint, apiKey, deploymentName);
+        return chatClient;
+    }
+
+    /// <summary>
     /// Creates and configures an OllamaApiClient for HuggingFace models.
     /// </summary>
     /// <returns></returns>
