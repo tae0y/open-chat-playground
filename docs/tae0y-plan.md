@@ -74,7 +74,7 @@
 
 ### `local`
 - [ ] Docker Model Runner
-  - [ ] **Command-Line Argument Options Modelling `#329`, `2025-08-19`**
+  - [ ] **Command-Line Argument Options Modelling `#329` `@DUDINGDDI`, `2025-09-08`**
     - [ ] The command-line arguments MUST be defined to the model implemented in #276 .
     - [ ] The command-line arguments MAY include:
       - [ ] an endpoint
@@ -108,11 +108,9 @@
     - [ ] Inherit `LanguageModelConnector`
     - [ ] Inject `AppSettings`
     - [ ] Override `GetChatClient`
-  - [ ] **Environment Variables Testing `#268`, `2025-08-13`**
+  - [ ] **Environment Variables Testing `#268` `@donghyeon639`, `2025-09-09`**
     - [ ] Environment variables integration is a built-in feature. This task is to ensure the integration is working.
     - [ ] Add unit tests.
-  - [ ] **Command-Line Argument Parsing `#267` `@donghyeon639`, `2025-08-31`**
-    - [ ] The command-line arguments MUST be parsed to the model implemented in #338 .
   - [ ] **Ollama LLM Caching `#305`, `2025-09-07`**
     - [ ] When using LLM through Ollama, it should be persisted for future use.
   - [ ] **Serverless GPU for Ollama Models on Deployment to Azure `#306`, `2025-08-14`**
@@ -169,7 +167,7 @@
     - [ ] Inherit `LanguageModelConnector`
     - [ ] Inject `AppSettings`
     - [ ] Override `GetChatClient`
-  - [ ] **Command-Line Argument Parsing `#231` `@gremh97`, `2025-09-04`**
+  - [ ] **Command-Line Argument Parsing `#231` `@gremh97`, `2025-09-08`**
     - [ ] The command-line arguments MUST be parsed to the model implemented in #354 .
   - [ ] **Environment Variables Testing `#234`, `2025-08-13`**
     - [ ] Environment variables integration is a built-in feature. This task is to ensure the integration is working.
@@ -182,4 +180,3 @@
   - [ ] **Environment Variables Testing `#219` `@qoweh`, `2025-09-07`**
     - [ ] Environment variables integration is a built-in feature. This task is to ensure the integration is working.
     - [ ] Add unit tests.
-
