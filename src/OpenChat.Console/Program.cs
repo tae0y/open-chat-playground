@@ -6,8 +6,9 @@ class Program
 {
     static async Task Main()
     {
-        var chatClient = await ConnectorFactory.CreateChatClient("HuggingFace");
+        DotNetEnv.Env.Load();
 
+        var chatClient = await ConnectorFactory.CreateChatClient("UpstageSolar");
         var messages = new ChatMessage(ChatRole.User, "이 천장 너머의 밤하늘은 무슨 색인가요? 왜 그런가요?");
         var chatOptions = new ChatOptions();
         var currentResponseCancellation = new CancellationTokenSource();

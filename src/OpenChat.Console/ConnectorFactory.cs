@@ -1,5 +1,13 @@
+using System.ClientModel;
+
+using Azure.AI.OpenAI;
+using Azure.Identity;
+
 using Microsoft.Extensions.AI;
 using OllamaSharp;
+
+using OpenAI;
+using OpenAI.Chat;
 
 namespace OpenChat.ConsoleApp;
 
@@ -10,24 +18,11 @@ class ConnectorFactory
         return clientType switch
         {
             "HuggingFace" => await CreateHuggingFaceClientAsync(),
+            "OpenAI" => CreateOpenAIClient(),
+            "AzureOpenAI" => CreateAzureOpenAIClient(),
+            "UpstageSolar" => CreateUpstageSolarClient(),
             _ => throw new ArgumentException("Invalid client type")
         };
-    }
-
-    /// <summary>
-    /// Creates and configures an OpenAIClient.
-    /// </summary>
-    /// <returns></returns>
-    /// <exception cref="InvalidOperationException"></exception>
-    public static async Task<IChatClient> CreateOpenAIClientAsync()
-    {
-        var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
-        if (string.IsNullOrEmpty(apiKey))
-        {
-            throw new InvalidOperationException("OPENAI_API_KEY environment variable is not set.");
-        }
-        var chatClient = new OpenAIClient(apiKey);
-        return chatClient;
     }
 
     /// <summary>
@@ -35,18 +30,21 @@ class ConnectorFactory
     /// </summary>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public static async Task<IChatClient> CreateAzureOpenAIClientAsync()
+    /// <remarks>
+    /// To use Azure OpenAI, ensure you login via Azure CLI to proper subscription.
+    /// You can deploy models via Azure Portal, Azure AI Foundry, and so on.
+    /// </remarks>
+    public static IChatClient CreateAzureOpenAIClient()
     {
-        var apiKey = Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY");
-        var endpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT");
-        var deploymentName = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT_NAME");
-
-        if (string.IsNullOrEmpty(apiKey) || string.IsNullOrEmpty(endpoint) || string.IsNullOrEmpty(deploymentName))
+        var endpoint = "https://aifoundry-0308-resource.cognitiveservices.azure.com/";
+        var deploymentName = "gpt-4o-mini";
+        if (string.IsNullOrEmpty(endpoint) || string.IsNullOrEmpty(deploymentName))
         {
-            throw new InvalidOperationException("One or more Azure OpenAI environment variables are not set.");
+            throw new InvalidOperationException("Azure OpenAI endpoint or deployment name is not set.");
         }
-
-        var chatClient = new AzureOpenAIClient(endpoint, apiKey, deploymentName);
+        IChatClient chatClient = new AzureOpenAIClient(new Uri(endpoint), new DefaultAzureCredential())
+                                    .GetChatClient(deploymentName)
+                                    .AsIChatClient();
         return chatClient;
     }
 
@@ -88,5 +86,55 @@ class ConnectorFactory
         return chatClient;
     }
 
+    /// <summary>
+    /// Creates and configures an OpenAIClient.
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
+    public static IChatClient CreateOpenAIClient()
+    {
+        var model = "gpt-4o-mini";
+        var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            throw new InvalidOperationException("OPENAI_API_KEY environment variable is not set.");
+        }
+        var chatClient = new OpenAI.Chat.ChatClient(model, apiKey).AsIChatClient();
+        return chatClient;
+    }
+
+    /// <summary>
+    /// Creates and configures an UpstageSolarClient.
+    /// </summary>
+    /// <returns></returns>
+    /// <remarks>
+    /// To use Upstage's API, ensure you have the UPSTAGE_API_KEY environment variable set with your API key.
+    /// You can obtain an API key by signing up on the Upstage platform (https://console.upstage.ai).
+    /// </remarks>
+    public static IChatClient CreateUpstageSolarClient()
+    {
+        var model = "solar-mini";
+        var apiKey = Environment.GetEnvironmentVariable("UPSTAGE_API_KEY");
+        var endpoint = "https://api.upstage.ai/v1";
+        if (string.IsNullOrEmpty(apiKey) || string.IsNullOrEmpty(endpoint))
+        {
+            throw new InvalidOperationException("UPSTAGE_API_KEY or Upstage endpoint is not set.");
+        }
+
+        var options = new OpenAIClientOptions()
+        {
+            Endpoint = new Uri(endpoint)
+        };
+
+        IChatClient client = new ChatClient(
+            model: model,
+            credential: new ApiKeyCredential(apiKey),
+            options: new OpenAIClientOptions()
+            {
+                Endpoint = new Uri(endpoint)
+            }
+        ).AsIChatClient();
+        return client;
+    }
 
 }
