@@ -99,7 +99,11 @@ class ConnectorFactory
         {
             throw new InvalidOperationException("OPENAI_API_KEY environment variable is not set.");
         }
-        var chatClient = new OpenAI.Chat.ChatClient(model, apiKey).AsIChatClient();
+
+        var chatClient = new OpenAI.Chat.ChatClient(
+            model,
+            apiKey
+        ).AsIChatClient();
         return chatClient;
     }
 
@@ -121,18 +125,16 @@ class ConnectorFactory
             throw new InvalidOperationException("UPSTAGE_API_KEY or Upstage endpoint is not set.");
         }
 
+        var credential = new ApiKeyCredential(apiKey);
         var options = new OpenAIClientOptions()
         {
             Endpoint = new Uri(endpoint)
         };
 
-        IChatClient client = new ChatClient(
+        IChatClient client = new OpenAI.Chat.ChatClient(
             model: model,
-            credential: new ApiKeyCredential(apiKey),
-            options: new OpenAIClientOptions()
-            {
-                Endpoint = new Uri(endpoint)
-            }
+            credential: credential,
+            options: options
         ).AsIChatClient();
         return client;
     }
