@@ -17,9 +17,9 @@ class ChatClientFactory
     {
         return clientType switch
         {
-            "HuggingFace" => await CreateHuggingFaceClientAsync(),
-            "OpenAI" => CreateOpenAIClient(),
             "AzureOpenAI" => CreateAzureOpenAIClient(),
+            "OpenAI" => CreateOpenAIClient(),
+            "LGExaone" => await CreateLGExaoneClientAsync(),
             "UpstageSolar" => CreateUpstageSolarClient(),
             "NaverHyperClova" => CreateNaverHyperClovaClient(),
             _ => throw new ArgumentException("Invalid client type")
@@ -53,13 +53,13 @@ class ChatClientFactory
     /// Creates and configures an OllamaApiClient for HuggingFace models.
     /// </summary>
     /// <returns></returns>
-    public static async Task<IChatClient> CreateHuggingFaceClientAsync()
+    public static async Task<IChatClient> CreateLGExaoneClientAsync()
     {
         // Initialize OllamaApiClient with configuration
         var config = new OllamaApiClient.Configuration
         {
-            Uri = new Uri(Environment.GetEnvironmentVariable("HUGGINGFACE_URI") ?? "http://localhost:11434"),
-            Model = Environment.GetEnvironmentVariable("HUGGINGFACE_MODEL") ?? "hf.co/LGAI-EXAONE/EXAONE-4.0-1.2B-GGUF"
+            Uri = new Uri(Environment.GetEnvironmentVariable("LGEXAONE_URI") ?? "http://localhost:11434"),
+            Model = Environment.GetEnvironmentVariable("LGEXAONE_MODEL") ?? "hf.co/LGAI-EXAONE/EXAONE-4.0-1.2B-GGUF"
         };
         var chatClient = new OllamaApiClient(config);
 
