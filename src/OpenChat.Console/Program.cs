@@ -19,7 +19,8 @@ class Program
     {
         DotNetEnv.Env.Load();
 
-        var modelTypes = new[] { "LGExaone", "OpenAI", "AzureOpenAI", "UpstageSolar", "NaverHyperClova" };
+        // AzureOpenAI, OpenAI, LGExaone(Ollama/HuggingFace), UpstageSolar(OpenAI), NaverHyperClova(OpenAI)
+        var modelTypes = new[] { "AzureOpenAI", "OpenAI", "LGExaone", "UpstageSolar", "NaverHyperClova" };
         //var modelTypes = new[] { "OpenAI" };
 
         foreach (var modelType in modelTypes)

@@ -17,6 +17,7 @@ class ChatClientFactory
     {
         return clientType switch
         {
+            // AzureOpenAI, OpenAI, LGExaone(Ollama/HuggingFace), UpstageSolar(OpenAI), NaverHyperClova(OpenAI)
             "AzureOpenAI" => CreateAzureOpenAIClient(),
             "OpenAI" => CreateOpenAIClient(),
             "LGExaone" => await CreateLGExaoneClientAsync(),
