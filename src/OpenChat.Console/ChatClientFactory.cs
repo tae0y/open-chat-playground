@@ -11,7 +11,7 @@ using OpenAI.Chat;
 
 namespace OpenChat.ConsoleApp;
 
-class ConnectorFactory
+class ChatClientFactory
 {
     public static async Task<IChatClient> CreateChatClient(string clientType)
     {
@@ -21,6 +21,7 @@ class ConnectorFactory
             "OpenAI" => CreateOpenAIClient(),
             "AzureOpenAI" => CreateAzureOpenAIClient(),
             "UpstageSolar" => CreateUpstageSolarClient(),
+            "NaverHyperClova" => CreateNaverHyperClovaClient(),
             _ => throw new ArgumentException("Invalid client type")
         };
     }
@@ -119,7 +120,7 @@ class ConnectorFactory
     {
         var model = Environment.GetEnvironmentVariable("UPSTAGE_MODEL") ?? "solar-mini";
         var apiKey = Environment.GetEnvironmentVariable("UPSTAGE_API_KEY") ?? "";
-        var endpoint = "https://api.upstage.ai/v1";
+        var endpoint = Environment.GetEnvironmentVariable("UPSTAGE_ENDPOINT") ?? "https://api.upstage.ai/v1";
         if (string.IsNullOrEmpty(apiKey) || string.IsNullOrEmpty(endpoint))
         {
             throw new InvalidOperationException("UPSTAGE_API_KEY or Upstage endpoint is not set.");
@@ -139,4 +140,35 @@ class ConnectorFactory
         return client;
     }
 
+
+    /// <summary>
+    /// Creates and configures an NaverHyperClovaClient.
+    /// </summary>
+    /// <returns></returns>
+    /// <remarks>
+    /// To use Naver HyperCLOVA, ensure you have the NAVER_CLIENT_ID and NAVER_CLIENT_SECRET environment variables set.
+    public static IChatClient CreateNaverHyperClovaClient()
+    {
+        var model = Environment.GetEnvironmentVariable("NAVER_MODEL") ?? "HCX-DASH-001";
+        var apiKey = Environment.GetEnvironmentVariable("NAVER_API_KEY") ?? "";
+        var endpoint = Environment.GetEnvironmentVariable("NAVER_ENDPOINT") ?? "https://clovastudio.stream.ntruss.com/v1/openai/";
+        Console.WriteLine($"Using Naver HyperCLOVA model: {model}, endpoint: {endpoint}");
+        if (string.IsNullOrEmpty(apiKey) || string.IsNullOrEmpty(endpoint))
+        {
+            throw new InvalidOperationException("NAVER_API_KEY or NAVER_ENDPOINT is not set.");
+        }
+
+        var credential = new ApiKeyCredential(apiKey);
+        var options = new OpenAIClientOptions()
+        {
+            Endpoint = new Uri(endpoint)
+        };
+
+        IChatClient client = new OpenAI.Chat.ChatClient(
+            model: model,
+            credential: credential,
+            options: options
+        ).AsIChatClient();
+        return client;
+    }
 }
