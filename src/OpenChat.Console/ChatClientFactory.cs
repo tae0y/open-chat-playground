@@ -4,6 +4,9 @@ using Azure.AI.OpenAI;
 using Azure.Identity;
 
 using Microsoft.Extensions.AI;
+
+using Mscc.GenerativeAI.Microsoft;
+
 using OllamaSharp;
 
 using OpenAI;
@@ -23,6 +26,7 @@ class ChatClientFactory
             "LGExaone" => await CreateLGExaoneClientAsync(),
             "UpstageSolar" => CreateUpstageSolarClient(),
             "NaverHyperClova" => CreateNaverHyperClovaClient(),
+            "Google" => CreateGoogleClient(),
             _ => throw new ArgumentException("Invalid client type")
         };
     }
@@ -171,5 +175,16 @@ class ChatClientFactory
             options: options
         ).AsIChatClient();
         return client;
+    }
+
+    /// <summary>
+    /// Creates and configures a Google PaLM2 Client.
+    /// </summary>
+    public static IChatClient CreateGoogleClient()
+    {
+        var apiKey = Environment.GetEnvironmentVariable("GOOGLE_API_KEY") ?? "";
+        var model = Environment.GetEnvironmentVariable("GOOGLE_MODEL") ?? "gemini-1.5-pro";
+        IChatClient chatClient = new GeminiChatClient(apiKey, model);
+        return chatClient;
     }
 }

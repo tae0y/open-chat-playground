@@ -20,8 +20,8 @@ class Program
         DotNetEnv.Env.Load();
 
         // AzureOpenAI, OpenAI, LGExaone(Ollama/HuggingFace), UpstageSolar(OpenAI), NaverHyperClova(OpenAI)
-        var modelTypes = new[] { "AzureOpenAI", "OpenAI", "LGExaone", "UpstageSolar", "NaverHyperClova" };
-        //var modelTypes = new[] { "OpenAI" };
+        //var modelTypes = new[] { "AzureOpenAI", "OpenAI", "LGExaone", "UpstageSolar", "NaverHyperClova" };
+        var modelTypes = new[] { "Google" };
 
         foreach (var modelType in modelTypes)
         {
@@ -41,7 +41,7 @@ class Program
                 IChatClient client = new ChatClientBuilder(chatClient)
                     .UseDistributedCache(cache) // Enable caching
                     .UseFunctionInvocation() // Enable function calling
-                    .UseOpenTelemetry(sourceName: sourceName, configure: c => c.EnableSensitiveData = true) // Enable OpenTelemetry tracing
+                    //.UseOpenTelemetry(sourceName: sourceName, configure: c => c.EnableSensitiveData = true) // Enable OpenTelemetry tracing
                     .Build();
                 Console.WriteLine($"{modelType} option enabled: Caching, Function Calling, OpenTelemetry");
 
@@ -71,6 +71,9 @@ class Program
             }
             catch (Exception ex)
             {
+                // Error initializing LGExaone client: hf.co/LGAI-EXAONE/EXAONE-4.0-1.2B-GGUF:latest does not support tools.
+                // Naver HyperClova tool calling not succeeded.
+                // Upstage Solar tool calling succeeded partially.
                 Console.WriteLine($"Error initializing {modelType} client: {ex.Message}");
             }
         }
