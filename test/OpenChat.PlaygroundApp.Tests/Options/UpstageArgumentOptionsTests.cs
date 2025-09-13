@@ -2,75 +2,298 @@ using Microsoft.Extensions.Configuration;
 
 using OpenChat.PlaygroundApp.Abstractions;
 using OpenChat.PlaygroundApp.Connectors;
-using OpenChat.PlaygroundApp.Options;
 
 namespace OpenChat.PlaygroundApp.Tests.Options;
 
 public class UpstageArgumentOptionsTests
 {
-    private const string BaseUrl = "https://api.upstage.ai/v1";
+    private const string BaseUrl = "https://test.upstage.ai/api/v1";
     private const string ApiKey = "upstage-api-key";
-    private const string Model = "solar-mini";
+    private const string Model = "upstage-model-name";
 
     private static IConfiguration BuildConfigWithUpstage(
-        string? envBaseUrl = BaseUrl,
-        string? envApiKey = ApiKey,
-        string? envModel = Model)
+        string? configBaseUrl = BaseUrl,
+        string? configApiKey = ApiKey,
+        string? configModel = Model)
     {
-        var envDict = new Dictionary<string, string?>
+        // Base configuration values
+        var configDict = new Dictionary<string, string?>
         {
             ["ConnectorType"] = ConnectorType.Upstage.ToString()
         };
 
-        if (string.IsNullOrWhiteSpace(envBaseUrl) == false)
+        if (string.IsNullOrWhiteSpace(configBaseUrl) == false)
         {
-            envDict["Upstage:Endpoint"] = envBaseUrl;
+            configDict["Upstage:BaseUrl"] = configBaseUrl;
         }
-        if (string.IsNullOrWhiteSpace(envApiKey) == false)
+        if (string.IsNullOrWhiteSpace(configApiKey) == false)
         {
-            envDict["Upstage:ApiKey"] = envApiKey;
+            configDict["Upstage:ApiKey"] = configApiKey;
         }
-        if (string.IsNullOrWhiteSpace(envModel) == false)
+        if (string.IsNullOrWhiteSpace(configModel) == false)
         {
-            envDict["Upstage:Model"] = envModel;
+            configDict["Upstage:Model"] = configModel;
         }
 
         return new ConfigurationBuilder()
-                   .AddInMemoryCollection(envDict!)  // Base configuration (lowest priority)
+                   .AddInMemoryCollection(configDict!)
                    .Build();
     }
 
     [Trait("Category", "UnitTest")]
-    [Theory]
-    [InlineData("https://api.upstage.ai/v1", "upstage-api-key", "solar-mini")]
-    public void Given_EnvironmentVariables_And_No_Config_When_Parse_Invoked_Then_It_Should_Use_EnvironmentVariables(
-        string envBaseUrl,
-        string envApiKey,
-        string envModel
-    )
+    [Fact]
+    public void Given_Nothing_When_Parse_Invoked_Then_It_Should_Set_Config()
     {
         // Arrange
-        var config = BuildConfigWithUpstage(envBaseUrl, envApiKey, envModel);
+        var config = BuildConfigWithUpstage();
+        var args = Array.Empty<string>();
 
         // Act
-        // var options = UpstageArgumentOptions.Parse(config);
+        var settings = ArgumentOptions.Parse(config, args);
 
         // Assert
-        // options.BaseUrl.Should().Be(envBaseUrl);
-        // options.ApiKey.Should().Be(envApiKey);
-        // options.Model.Should().Be(envModel);
+        settings.Upstage.ShouldNotBeNull();
+        settings.Upstage.BaseUrl.ShouldBe(BaseUrl);
+        settings.Upstage.ApiKey.ShouldBe(ApiKey);
+        settings.Upstage.Model.ShouldBe(Model);
     }
 
-    // Given_ConfigValues_And_EnvironmentVariables_When_Parse_Invoked_Then_It_Should_Use_EnvironmentVariables
+    [Trait("Category", "UnitTest")]
+    [Theory]
+    [InlineData("https://cli.upstage.ai/api/v1")]
+    public void Given_CLI_BaseUrl_When_Parse_Invoked_Then_It_Should_Use_CLI_BaseUrl(string cliBaseUrl)
+    {
+        // Arrange
+        var config = BuildConfigWithUpstage();
+        var args = new[] { "--base-url", cliBaseUrl };
 
-    // Given_ConfigValues_And_EnvironmentVariables_And_CLI_When_Parse_Invoked_Then_It_Should_Use_CLI
+        // Act
+        var settings = ArgumentOptions.Parse(config, args);
 
-    // Given_Partial_EnvironmentVariables_When_Parse_Invoked_Then_It_Should_Mix_Config_And_Environment
+        // Assert
+        settings.Upstage.ShouldNotBeNull();
+        settings.Upstage.BaseUrl.ShouldBe(cliBaseUrl);
+        settings.Upstage.ApiKey.ShouldBe(ApiKey);
+        settings.Upstage.Model.ShouldBe(Model);
+    }
 
-    // Given_Mixed_Priority_Sources_When_Parse_Invoked_Then_It_Should_Respect_Priority_Order
+    [Trait("Category", "UnitTest")]
+    [Theory]
+    [InlineData("cli-api-key")]
+    public void Given_CLI_ApiKey_When_Parse_Invoked_Then_It_Should_Use_CLI_ApiKey(string cliApiKey)
+    {
+        // Arrange
+        var config = BuildConfigWithUpstage();
+        var args = new[] { "--api-key", cliApiKey };
 
-    // Given_EnvironmentVariables_Only_When_Parse_Invoked_Then_Help_Should_Be_False
+        // Act
+        var settings = ArgumentOptions.Parse(config, args);
 
-    // 이 단위 테스트는 먼저 UpstageArgumentOptions.Parse 메서드가 추가되어야 진행할 수 있음
-    // Command-Line Parse 이슈가 병합될 때까지 대기
+        // Assert
+        settings.Upstage.ShouldNotBeNull();
+        settings.Upstage.BaseUrl.ShouldBe(BaseUrl);
+        settings.Upstage.ApiKey.ShouldBe(cliApiKey);
+        settings.Upstage.Model.ShouldBe(Model);
+    }
+
+    [Trait("Category", "UnitTest")]
+    [Theory]
+    [InlineData("cli-model")]
+    public void Given_CLI_Model_When_Parse_Invoked_Then_It_Should_Use_CLI_Model(string cliModel)
+    {
+        // Arrange
+        var config = BuildConfigWithUpstage();
+        var args = new[] { "--model", cliModel };
+
+        // Act
+        var settings = ArgumentOptions.Parse(config, args);
+
+        // Assert
+        settings.Upstage.ShouldNotBeNull();
+        settings.Upstage.BaseUrl.ShouldBe(BaseUrl);
+        settings.Upstage.ApiKey.ShouldBe(ApiKey);
+        settings.Upstage.Model.ShouldBe(cliModel);
+    }
+
+    [Trait("Category", "UnitTest")]
+    [Theory]
+    [InlineData("https://cli.upstage.ai/api/v1", "cli-api-key", "cli-model")]
+    public void Given_All_CLI_Arguments_When_Parse_Invoked_Then_It_Should_Use_CLI(string cliBaseUrl, string cliApiKey, string cliModel)
+    {
+        // Arrange
+        var config = BuildConfigWithUpstage();
+        var args = new[] { "--base-url", cliBaseUrl, "--api-key", cliApiKey, "--model", cliModel };
+
+        // Act
+        var settings = ArgumentOptions.Parse(config, args);
+
+        // Assert
+        settings.Upstage.ShouldNotBeNull();
+        settings.Upstage.BaseUrl.ShouldBe(cliBaseUrl);
+        settings.Upstage.ApiKey.ShouldBe(cliApiKey);
+        settings.Upstage.Model.ShouldBe(cliModel);
+    }
+
+    [Trait("Category", "UnitTest")]
+    [Theory]
+    [InlineData("--base-url")]
+    [InlineData("--api-key")]
+    [InlineData("--model")]
+    public void Given_CLI_ArgumentWithoutValue_When_Parse_Invoked_Then_It_Should_Use_Config(string argument)
+    {
+        // Arrange
+        var config = BuildConfigWithUpstage();
+        var args = new[] { argument };
+
+        // Act
+        var settings = ArgumentOptions.Parse(config, args);
+
+        // Assert
+        settings.Upstage.ShouldNotBeNull();
+        settings.Upstage.BaseUrl.ShouldBe(BaseUrl);
+        settings.Upstage.ApiKey.ShouldBe(ApiKey);
+        settings.Upstage.Model.ShouldBe(Model);
+    }
+
+    [Trait("Category", "UnitTest")]
+    [Theory]
+    [InlineData("--something", "else", "--another", "value")]
+    public void Given_Unrelated_CLI_Arguments_When_Parse_Invoked_Then_It_Should_Use_Config(params string[] args)
+    {
+        // Arrange
+        var config = BuildConfigWithUpstage();
+
+        // Act
+        var settings = ArgumentOptions.Parse(config, args);
+
+        // Assert
+        settings.Upstage.ShouldNotBeNull();
+        settings.Upstage.BaseUrl.ShouldBe(BaseUrl);
+        settings.Upstage.ApiKey.ShouldBe(ApiKey);
+        settings.Upstage.Model.ShouldBe(Model);
+    }
+
+    [Trait("Category", "UnitTest")]
+    [Theory]
+    [InlineData("--strange-model-name")]
+    public void Given_Upstage_With_ModelName_StartingWith_Dashes_When_Parse_Invoked_Then_It_Should_Treat_As_Value(string model)
+    {
+        // Arrange
+        var config = BuildConfigWithUpstage();
+        var args = new[] { "--model", model };
+
+        // Act
+        var settings = ArgumentOptions.Parse(config, args);
+
+        // Assert
+        settings.Upstage.ShouldNotBeNull();
+        settings.Upstage.Model.ShouldBe(model);
+    }
+
+    [Trait("Category", "UnitTest")]
+    [Theory]
+    [InlineData("https://config.upstage.ai/api/v1", "config-api-key", "config-model")]
+    public void Given_ConfigValues_And_No_CLI_When_Parse_Invoked_Then_It_Should_Use_Config(string configBaseUrl, string configApiKey, string configModel)
+    {
+        // Arrange
+        var config = BuildConfigWithUpstage(configBaseUrl, configApiKey, configModel);
+        var args = Array.Empty<string>();
+
+        // Act
+        var settings = ArgumentOptions.Parse(config, args);
+
+        // Assert
+        settings.Upstage.ShouldNotBeNull();
+        settings.Upstage.BaseUrl.ShouldBe(configBaseUrl);
+        settings.Upstage.ApiKey.ShouldBe(configApiKey);
+        settings.Upstage.Model.ShouldBe(configModel);
+    }
+
+    [Trait("Category", "UnitTest")]
+    [Theory]
+    [InlineData("https://config.upstage.ai/api/v1", "config-api-key", "config-model",
+                "https://cli.upstage.ai/api/v1", "cli-api-key", "cli-model")]
+    public void Given_ConfigValues_And_CLI_When_Parse_Invoked_Then_It_Should_Use_CLI(
+        string configBaseUrl, string configApiKey, string configModel,
+        string cliBaseUrl, string cliApiKey, string cliModel)
+    {
+        // Arrange
+        var config = BuildConfigWithUpstage(configBaseUrl, configApiKey, configModel);
+        var args = new[] { "--base-url", cliBaseUrl, "--api-key", cliApiKey, "--model", cliModel };
+
+        // Act
+        var settings = ArgumentOptions.Parse(config, args);
+
+        // Assert
+        settings.Upstage.ShouldNotBeNull();
+        settings.Upstage.BaseUrl.ShouldBe(cliBaseUrl);
+        settings.Upstage.ApiKey.ShouldBe(cliApiKey);
+        settings.Upstage.Model.ShouldBe(cliModel);
+    }
+
+    [Trait("Category", "UnitTest")]
+    [Theory]
+    [InlineData("https://cli.upstage.ai/api/v1", "cli-api-key", "cli-model")]
+    public void Given_Upstage_With_KnownArguments_When_Parse_Invoked_Then_Help_ShouldBe_False(string cliBaseUrl, string cliApiKey, string cliModel)
+    {
+        // Arrange
+        var config = BuildConfigWithUpstage(BaseUrl, ApiKey, Model);
+        var args = new[] { "--base-url", cliBaseUrl, "--api-key", cliApiKey, "--model", cliModel };
+
+        // Act
+        var settings = ArgumentOptions.Parse(config, args);
+
+        // Assert
+        settings.Help.ShouldBeFalse();
+    }
+
+    [Trait("Category", "UnitTest")]
+    [Theory]
+    [InlineData("--base-url")]
+    [InlineData("--api-key")]
+    [InlineData("--model")]
+    public void Given_Upstage_With_KnownArgument_WithoutValue_When_Parse_Invoked_Then_Help_ShouldBe_False(string argument)
+    {
+        // Arrange
+        var config = BuildConfigWithUpstage();
+        var args = new[] { argument };
+
+        // Act
+        var settings = ArgumentOptions.Parse(config, args);
+
+        // Assert
+        settings.Help.ShouldBeFalse();
+    }
+
+    [Trait("Category", "UnitTest")]
+    [Theory]
+    [InlineData("https://cli.upstage.ai/api/v1", "--unknown-flag")]
+    public void Given_Upstage_With_Known_And_Unknown_Argument_When_Parse_Invoked_Then_Help_ShouldBe_True(string cliBaseUrl, string argument)
+    {
+        // Arrange
+        var config = BuildConfigWithUpstage();
+        var args = new[] { "--base-url", cliBaseUrl, argument };
+
+        // Act
+        var settings = ArgumentOptions.Parse(config, args);
+
+        // Assert
+        settings.Help.ShouldBeTrue();
+    }
+
+    [Trait("Category", "UnitTest")]
+    [Theory]
+    [InlineData("https://cli.upstage.ai/api/v1", "cli-api-key", "cli-model")]
+    public void Given_CLI_Only_When_Parse_Invoked_Then_Help_Should_Be_False(string cliBaseUrl, string cliApiKey, string cliModel)
+    {
+        // Arrange
+        var config = BuildConfigWithUpstage();
+        var args = new[] { "--base-url", cliBaseUrl, "--api-key", cliApiKey, "--model", cliModel };
+
+        // Act
+        var settings = ArgumentOptions.Parse(config, args);
+
+        // Assert
+        settings.Help.ShouldBeFalse();
+    }
 }
