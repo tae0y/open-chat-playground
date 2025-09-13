@@ -36,7 +36,7 @@ public abstract class ArgumentOptions
         (ConnectorType.Anthropic, "--api-key", false),
         (ConnectorType.Anthropic, "--model", false),
         // LG
-        (ConnectorType.LG, "--api-key", false),
+        (ConnectorType.LG, "--base-url", false),
         (ConnectorType.LG, "--model", false),
         // Naver
         // OpenAI

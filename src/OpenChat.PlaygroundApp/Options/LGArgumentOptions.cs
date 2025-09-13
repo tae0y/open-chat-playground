@@ -18,10 +18,8 @@ public class LGArgumentOptions : ArgumentOptions
     /// </summary>
     public string? Model { get; set; }
 
-    /// <inheritdoc/>
     protected override void ParseOptions(IConfiguration config, string[] args)
     {
-
         var settings = new AppSettings();
         config.Bind(settings);
 
