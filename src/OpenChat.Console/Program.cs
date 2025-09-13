@@ -10,6 +10,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
 using OpenTelemetry.Trace;
+using System.Runtime.CompilerServices;
 
 namespace OpenChat.ConsoleApp;
 
@@ -20,9 +21,51 @@ class Program
         DotNetEnv.Env.Load();
 
         // AzureOpenAI, OpenAI, LGExaone(Ollama/HuggingFace), UpstageSolar(OpenAI), NaverHyperClova(OpenAI)
-        //var modelTypes = new[] { "AzureOpenAI", "OpenAI", "LGExaone", "UpstageSolar", "NaverHyperClova" };
-        var modelTypes = new[] { "Google" };
+        var modelTypes = new[] { "AzureOpenAI", "OpenAI", "LGExaone", "UpstageSolar", "NaverHyperClova" };
+        // var modelTypes = new[] { "Google" };
+        // testChatClient(modelTypes);
+        testEmbeddingGenerator(modelTypes);
 
+        
+    }
+
+    static async void testEmbeddingGenerator(string[] modelTypes)
+    {
+        foreach (var modelType in modelTypes)
+        {
+            try
+            {
+                Console.WriteLine($"\n\n\n------ Testing {modelType} Embedding Generator ------");
+
+                IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator = await EmbeddingGeneratorFactory.CreateEmbeddingClient(modelType);
+                Console.WriteLine($"{modelType} embedding generator created successfully.");
+
+                var sourceName = Guid.NewGuid().ToString();
+                var tracerProvider = OpenTelemetry.Sdk.CreateTracerProviderBuilder()
+                    .AddSource(sourceName)
+                    .AddConsoleExporter()
+                    .Build();
+                IDistributedCache cache = new MemoryDistributedCache(Options.Create(new MemoryDistributedCacheOptions()));
+                IEmbeddingGenerator<string, Embedding<float>> generator = new EmbeddingGeneratorBuilder<string, Embedding<float>>(embeddingGenerator)
+                    .UseDistributedCache(cache) // Enable caching
+                    .UseOpenTelemetry(sourceName: sourceName, configure: c => c.EnableSensitiveData = true) // Enable OpenTelemetry tracing
+                    .Build();
+                Console.WriteLine($"{modelType} option enabled: Caching, OpenTelemetry");
+
+                var texts = new[] { "The quick brown fox jumps over the lazy dog." };
+
+                var embedding = await generator.GenerateAsync(texts);
+                Console.WriteLine(string.Join(", ", embedding[0].Vector.ToArray()));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error initializing {modelType} embedding generator: {ex.Message}");
+            }
+        }
+    }
+
+    static async void testChatClient(string[] modelTypes)
+    {
         foreach (var modelType in modelTypes)
         {
             try
@@ -41,7 +84,7 @@ class Program
                 IChatClient client = new ChatClientBuilder(chatClient)
                     .UseDistributedCache(cache) // Enable caching
                     .UseFunctionInvocation() // Enable function calling
-                    //.UseOpenTelemetry(sourceName: sourceName, configure: c => c.EnableSensitiveData = true) // Enable OpenTelemetry tracing
+                                             //.UseOpenTelemetry(sourceName: sourceName, configure: c => c.EnableSensitiveData = true) // Enable OpenTelemetry tracing
                     .Build();
                 Console.WriteLine($"{modelType} option enabled: Caching, Function Calling, OpenTelemetry");
 
