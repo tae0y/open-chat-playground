@@ -25,4 +25,8 @@
     <PackageReference Include="System.Linq.Async" Version="6.*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OpenChat.ServiceDefaults\OpenChat.ServiceDefaults.csproj" />
+  </ItemGroup>
+
 </Project>

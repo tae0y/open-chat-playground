@@ -4,6 +4,7 @@ using OpenChat.PlaygroundApp.Abstractions;
 using OpenChat.PlaygroundApp.Components;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.AddServiceDefaults();
 
 var config = builder.Configuration;
 var settings = ArgumentOptions.Parse(config, args);
