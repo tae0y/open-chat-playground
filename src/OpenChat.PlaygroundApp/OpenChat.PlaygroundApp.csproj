@@ -20,8 +20,14 @@
     <PackageReference Include="Microsoft.AI.Foundry.Local" Version="0.*" />
     <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="9.*-*" />
     <PackageReference Include="Microsoft.Extensions.AI" Version="9.*-*" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.65.0" />
     <PackageReference Include="Mscc.GenerativeAI.Microsoft" Version="2.*" />
     <PackageReference Include="OllamaSharp" Version="5.*" />
+    <PackageReference Include="OpenTelemetry" Version="1.12.0" />
+    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.12.0" />
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.12.0" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.12.0" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Process" Version="1.12.0-beta.1" />
     <PackageReference Include="System.Linq.Async" Version="6.*" />
   </ItemGroup>
 

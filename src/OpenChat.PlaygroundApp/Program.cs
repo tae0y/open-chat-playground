@@ -25,17 +25,11 @@ builder.Services.AddRazorComponents()
 
 // Configure Language Model Client
 var chatClient = await LanguageModelConnector.CreateChatClientAsync(settings);
-var sourceName = Guid.NewGuid().ToString();
-var tracerProvider = OpenTelemetry.Sdk.CreateTracerProviderBuilder()
-                    .AddSource(sourceName)
-                    .AddConsoleExporter()
-                    .Build();
 IDistributedCache cache = new MemoryDistributedCache(Options.Create(new MemoryDistributedCacheOptions()));
 
 builder.Services.AddChatClient(chatClient)
                 .UseDistributedCache(cache)
                 .UseFunctionInvocation()
-                .UseOpenTelemetry(sourceName: sourceName, configure: c => c.EnableSensitiveData = true)
                 .UseLogging();
 
 var app = builder.Build();
