@@ -123,6 +123,7 @@ public class OllamaConnectorTests
     [Theory]
     [InlineData(null, typeof(ArgumentNullException), "null")]
     [InlineData("", typeof(UriFormatException), "empty")]
+    [InlineData("http://", typeof(UriFormatException), "Invalid URI")]
     public void Given_Missing_BaseUrl_When_GetChatClientAsync_Invoked_Then_It_Should_Throw(string? baseUrl, Type expected, string message)
     {
         // Arrange
