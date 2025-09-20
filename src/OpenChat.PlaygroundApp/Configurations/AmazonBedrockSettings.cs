@@ -25,4 +25,19 @@ public class AmazonBedrockSettings : LanguageModelSettings
     /// Gets or sets the model name for the Amazon Bedrock service.
     /// </summary>
     public string? Model { get; set; }
+
+    /// <summary>
+    /// Gets or sets the access key for the Amazon Bedrock service.
+    /// </summary>
+    public string? AccessKey { get; set; }
+
+    /// <summary>
+    /// Gets or sets the secret access key for the Amazon Bedrock service.
+    /// </summary>
+    public string? SecretAccessKey { get; set; }
+
+    /// <summary>
+    /// Gets or sets the session token for the Amazon Bedrock service.
+    /// </summary>
+    public string? ApiKey { get; set; }
 }

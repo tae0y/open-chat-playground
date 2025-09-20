@@ -1,6 +1,10 @@
 using OpenChat.PlaygroundApp.Abstractions;
 using OpenChat.PlaygroundApp.Configurations;
 
+using Microsoft.Extensions.AI;
+using Amazon.BedrockRuntime;
+using Amazon;
+
 namespace OpenChat.PlaygroundApp.Connectors;
 
 public class AmazonBedrockConnector(AppSettings settings) : LanguageModelConnector(settings.AmazonBedrock)
@@ -19,6 +23,18 @@ public class AmazonBedrockConnector(AppSettings settings) : LanguageModelConnect
 
     public override Task<IChatClient> GetChatClientAsync()
     {
-        throw new NotImplementedException();
+        var settings = this.Settings as AmazonBedrockSettings;
+
+        var client = new AmazonBedrockRuntimeClient(
+            settings!.AccessKey!,
+            settings!.SecretAccessKey!,
+            settings!.ApiKey!,
+            RegionEndpoint.GetBySystemName(settings!.Region!)
+        );
+        var chatClient = client.AsIChatClient(
+            settings!.Model!
+        );
+
+        return Task.FromResult(chatClient);
     }
 }
