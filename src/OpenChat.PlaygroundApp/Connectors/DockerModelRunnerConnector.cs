@@ -12,8 +12,8 @@ public class DockerModelRunnerConnector(AppSettings settings) : LanguageModelCon
         var settings = this.Settings as DockerModelRunnerSettings;
         if (settings is null)
             throw new InvalidOperationException("Missing configuration: DockerModelRunner.");
-        if (string.IsNullOrWhiteSpace(settings.Endpoint))
-            throw new InvalidOperationException("Missing configuration: DockerModelRunner:Endpoint.");
+        if (string.IsNullOrWhiteSpace(settings.BaseUrl))
+            throw new InvalidOperationException("Missing configuration: DockerModelRunner:BaseUrl.");
         if (string.IsNullOrWhiteSpace(settings.Model))
             throw new InvalidOperationException("Missing configuration: DockerModelRunner:Model.");
         return true;

@@ -9,7 +9,7 @@ public partial class AppSettings
 
 public class NaverSettings : LanguageModelSettings
 {
-    public string? Endpoint { get; set; }
+    public string? BaseUrl { get; set; }
     public string? ApiKey { get; set; }
     public string? Model { get; set; }
 }

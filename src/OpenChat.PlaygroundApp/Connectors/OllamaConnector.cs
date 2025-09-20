@@ -12,8 +12,8 @@ public class OllamaConnector(AppSettings settings) : LanguageModelConnector(sett
         var settings = this.Settings as OllamaSettings;
         if (settings is null)
             throw new InvalidOperationException("Missing configuration: Ollama.");
-        if (string.IsNullOrWhiteSpace(settings.Endpoint))
-            throw new InvalidOperationException("Missing configuration: Ollama:Endpoint.");
+        if (string.IsNullOrWhiteSpace(settings.BaseUrl))
+            throw new InvalidOperationException("Missing configuration: Ollama:BaseUrl.");
         if (string.IsNullOrWhiteSpace(settings.Model))
             throw new InvalidOperationException("Missing configuration: Ollama:Model.");
         return true;

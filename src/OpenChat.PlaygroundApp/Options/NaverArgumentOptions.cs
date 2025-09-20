@@ -3,12 +3,9 @@ using OpenChat.PlaygroundApp.Configurations;
 
 namespace OpenChat.PlaygroundApp.Options;
 
-/// <summary>
-/// This represents the argument options entity for Google Vertex AI.
-/// </summary>
-public class GoogleVertexAIArgumentOptions : ArgumentOptions
+public class NaverArgumentOptions : ArgumentOptions
 {
-    public string? Endpoint { get; set; }
+    public string? BaseUrl { get; set; }
     public string? ApiKey { get; set; }
     public string? Model { get; set; }
 
@@ -16,16 +13,16 @@ public class GoogleVertexAIArgumentOptions : ArgumentOptions
     {
         var settings = new AppSettings();
         config.Bind(settings);
-        var google = settings.GoogleVertexAI;
-        this.Endpoint ??= google?.Endpoint;
-        this.ApiKey ??= google?.ApiKey;
-        this.Model ??= google?.Model;
+        var naver = settings.Naver;
+        this.BaseUrl ??= naver?.BaseUrl;
+        this.ApiKey ??= naver?.ApiKey;
+        this.Model ??= naver?.Model;
         for (var i = 0; i < args.Length; i++)
         {
             switch (args[i])
             {
-                case "--endpoint":
-                    if (i + 1 < args.Length) this.Endpoint = args[++i];
+                case "--base-url":
+                    if (i + 1 < args.Length) this.BaseUrl = args[++i];
                     break;
                 case "--api-key":
                     if (i + 1 < args.Length) this.ApiKey = args[++i];

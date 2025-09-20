@@ -12,8 +12,8 @@ public class UpstageConnector(AppSettings settings) : LanguageModelConnector(set
         var settings = this.Settings as UpstageSettings;
         if (settings is null)
             throw new InvalidOperationException("Missing configuration: Upstage.");
-        if (string.IsNullOrWhiteSpace(settings.Endpoint))
-            throw new InvalidOperationException("Missing configuration: Upstage:Endpoint.");
+        if (string.IsNullOrWhiteSpace(settings.BaseUrl))
+            throw new InvalidOperationException("Missing configuration: Upstage:BaseUrl.");
         if (string.IsNullOrWhiteSpace(settings.ApiKey))
             throw new InvalidOperationException("Missing configuration: Upstage:ApiKey.");
         if (string.IsNullOrWhiteSpace(settings.Model))

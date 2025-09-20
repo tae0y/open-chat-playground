@@ -16,6 +16,7 @@ public partial class AppSettings
 /// </summary>
 public class AmazonBedrockSettings : LanguageModelSettings
 {
+    public string? Endpoint { get; set; }
     /// <summary>
     /// Gets or sets the AWS region for the Amazon Bedrock service.
     /// </summary>

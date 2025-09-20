@@ -12,8 +12,8 @@ public class NaverConnector(AppSettings settings) : LanguageModelConnector(setti
         var settings = this.Settings as NaverSettings;
         if (settings is null)
             throw new InvalidOperationException("Missing configuration: Naver.");
-        if (string.IsNullOrWhiteSpace(settings.Endpoint))
-            throw new InvalidOperationException("Missing configuration: Naver:Endpoint.");
+        if (string.IsNullOrWhiteSpace(settings.BaseUrl))
+            throw new InvalidOperationException("Missing configuration: Naver:BaseUrl.");
         if (string.IsNullOrWhiteSpace(settings.ApiKey))
             throw new InvalidOperationException("Missing configuration: Naver:ApiKey.");
         if (string.IsNullOrWhiteSpace(settings.Model))

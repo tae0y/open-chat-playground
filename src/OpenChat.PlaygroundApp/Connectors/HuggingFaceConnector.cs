@@ -12,8 +12,8 @@ public class HuggingFaceConnector(AppSettings settings) : LanguageModelConnector
         var settings = this.Settings as HuggingFaceSettings;
         if (settings is null)
             throw new InvalidOperationException("Missing configuration: HuggingFace.");
-        if (string.IsNullOrWhiteSpace(settings.Endpoint))
-            throw new InvalidOperationException("Missing configuration: HuggingFace:Endpoint.");
+        if (string.IsNullOrWhiteSpace(settings.BaseUrl))
+            throw new InvalidOperationException("Missing configuration: HuggingFace:BaseUrl.");
         if (string.IsNullOrWhiteSpace(settings.Model))
             throw new InvalidOperationException("Missing configuration: HuggingFace:Model.");
         return true;

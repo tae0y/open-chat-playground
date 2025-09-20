@@ -12,8 +12,8 @@ public class LGConnector(AppSettings settings) : LanguageModelConnector(settings
         var settings = this.Settings as LGSettings;
         if (settings is null)
             throw new InvalidOperationException("Missing configuration: LG.");
-        if (string.IsNullOrWhiteSpace(settings.Endpoint))
-            throw new InvalidOperationException("Missing configuration: LG:Endpoint.");
+        if (string.IsNullOrWhiteSpace(settings.BaseUrl))
+            throw new InvalidOperationException("Missing configuration: LG:BaseUrl.");
         if (string.IsNullOrWhiteSpace(settings.Model))
             throw new InvalidOperationException("Missing configuration: LG:Model.");
         return true;
