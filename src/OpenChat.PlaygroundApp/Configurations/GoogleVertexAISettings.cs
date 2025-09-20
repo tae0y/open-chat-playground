@@ -16,7 +16,6 @@ public partial class AppSettings
 /// </summary>
 public class GoogleVertexAISettings : LanguageModelSettings
 {
-    public string? Endpoint { get; set; }
     public string? ApiKey { get; set; }
     public string? Model { get; set; }
 }

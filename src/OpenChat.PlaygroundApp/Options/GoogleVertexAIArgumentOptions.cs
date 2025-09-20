@@ -17,16 +17,12 @@ public class GoogleVertexAIArgumentOptions : ArgumentOptions
         var settings = new AppSettings();
         config.Bind(settings);
         var google = settings.GoogleVertexAI;
-        this.Endpoint ??= google?.Endpoint;
         this.ApiKey ??= google?.ApiKey;
         this.Model ??= google?.Model;
         for (var i = 0; i < args.Length; i++)
         {
             switch (args[i])
             {
-                case "--endpoint":
-                    if (i + 1 < args.Length) this.Endpoint = args[++i];
-                    break;
                 case "--api-key":
                     if (i + 1 < args.Length) this.ApiKey = args[++i];
                     break;
