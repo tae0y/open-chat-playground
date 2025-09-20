@@ -2,6 +2,7 @@ using OpenChat.PlaygroundApp.Abstractions;
 using OpenChat.PlaygroundApp.Configurations;
 
 using Microsoft.Extensions.AI;
+using OllamaSharp;
 
 namespace OpenChat.PlaygroundApp.Connectors;
 
@@ -19,8 +20,17 @@ public class LGConnector(AppSettings settings) : LanguageModelConnector(settings
         return true;
     }
 
-    public override Task<IChatClient> GetChatClientAsync()
+    public override async Task<IChatClient> GetChatClientAsync()
     {
-        throw new NotImplementedException();
+        var settings = this.Settings as LGSettings;
+
+        var model = settings!.Model!;
+        var client = new OllamaApiClient(new Uri(settings.BaseUrl!))
+        {
+            SelectedModel = model
+        };
+        var chatClient = client as IChatClient;
+
+        return await Task.FromResult(chatClient).ConfigureAwait(false);
     }
 }
