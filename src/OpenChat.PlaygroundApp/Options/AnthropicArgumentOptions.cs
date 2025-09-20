@@ -8,7 +8,6 @@ namespace OpenChat.PlaygroundApp.Options;
 /// </summary>
 public class AnthropicArgumentOptions : ArgumentOptions
 {
-    public string? Endpoint { get; set; }
     public string? ApiKey { get; set; }
     public string? Model { get; set; }
 
@@ -17,16 +16,12 @@ public class AnthropicArgumentOptions : ArgumentOptions
         var settings = new AppSettings();
         config.Bind(settings);
         var anthropic = settings.Anthropic;
-        this.Endpoint ??= anthropic?.Endpoint;
         this.ApiKey ??= anthropic?.ApiKey;
         this.Model ??= anthropic?.Model;
         for (var i = 0; i < args.Length; i++)
         {
             switch (args[i])
             {
-                case "--endpoint":
-                    if (i + 1 < args.Length) this.Endpoint = args[++i];
-                    break;
                 case "--api-key":
                     if (i + 1 < args.Length) this.ApiKey = args[++i];
                     break;
