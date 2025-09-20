@@ -24,10 +24,6 @@ public class AnthropicConnector(AppSettings settings) : LanguageModelConnector(s
     {
         var settings = this.Settings as AnthropicSettings;
 
-        ChatOptions options = new ChatOptions()
-        {
-            ModelId = settings!.Model!,
-        };
         IChatClient chatClient = new ChatClientBuilder(
             new Anthropic.SDK.AnthropicClient(
                         apiKeys: new APIAuthentication(settings!.ApiKey!)
