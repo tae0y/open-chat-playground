@@ -2,6 +2,9 @@ using OpenChat.PlaygroundApp.Abstractions;
 using OpenChat.PlaygroundApp.Configurations;
 
 using Microsoft.Extensions.AI;
+using Microsoft.AI.Foundry.Local;
+using System.ClientModel;
+using OpenAI;
 
 namespace OpenChat.PlaygroundApp.Connectors;
 
@@ -12,15 +15,27 @@ public class FoundryLocalConnector(AppSettings settings) : LanguageModelConnecto
         var settings = this.Settings as FoundryLocalSettings;
         if (settings is null)
             throw new InvalidOperationException("Missing configuration: FoundryLocal.");
-        if (string.IsNullOrWhiteSpace(settings.Endpoint))
-            throw new InvalidOperationException("Missing configuration: FoundryLocal:Endpoint.");
-        if (string.IsNullOrWhiteSpace(settings.Model))
-            throw new InvalidOperationException("Missing configuration: FoundryLocal:Model.");
+        if (string.IsNullOrWhiteSpace(settings.Alias))
+            throw new InvalidOperationException("Missing configuration: FoundryLocal:Alias.");
         return true;
     }
 
-    public override Task<IChatClient> GetChatClientAsync()
+    public override async Task<IChatClient> GetChatClientAsync()
     {
-        throw new NotImplementedException();
+        var settings = this.Settings as FoundryLocalSettings;
+
+        var alias = settings!.Alias!;
+        var manager = await FoundryLocalManager.StartModelAsync(alias).ConfigureAwait(false);
+        var model = await manager.GetModelInfoAsync(alias).ConfigureAwait(false);
+        var credential = new ApiKeyCredential(manager.ApiKey);
+        var options = new OpenAIClientOptions
+        {
+            Endpoint = manager.Endpoint
+        };
+        var client = new OpenAIClient(credential, options);
+        var chatClient = client.GetChatClient(model!.ModelId)
+                               .AsIChatClient();
+
+        return chatClient;
     }
 }

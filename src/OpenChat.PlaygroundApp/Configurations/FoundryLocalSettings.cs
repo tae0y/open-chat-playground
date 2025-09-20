@@ -17,6 +17,4 @@ public partial class AppSettings
 public class FoundryLocalSettings : LanguageModelSettings
 {
     public string? Alias { get; set; }
-    public string? Endpoint { get; set; }
-    public string? Model { get; set; }
 }
