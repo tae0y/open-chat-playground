@@ -1,6 +1,8 @@
 using OpenChat.PlaygroundApp.Abstractions;
 using OpenChat.PlaygroundApp.Configurations;
 
+using Microsoft.Extensions.AI;
+
 namespace OpenChat.PlaygroundApp.Connectors;
 
 public class HuggingFaceConnector(AppSettings settings) : LanguageModelConnector(settings.HuggingFace)
