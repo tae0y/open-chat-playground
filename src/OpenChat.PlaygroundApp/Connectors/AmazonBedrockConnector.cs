@@ -26,10 +26,9 @@ public class AmazonBedrockConnector(AppSettings settings) : LanguageModelConnect
         var settings = this.Settings as AmazonBedrockSettings;
 
         var client = new AmazonBedrockRuntimeClient(
-            settings!.AccessKey!,
-            settings!.SecretAccessKey!,
-            settings!.ApiKey!,
-            RegionEndpoint.GetBySystemName(settings!.Region!)
+            awsAccessKeyId: settings!.AccessKey!,
+            awsSecretAccessKey: settings!.SecretAccessKey!,
+            region: RegionEndpoint.GetBySystemName(settings!.Region!)
         );
         var chatClient = client.AsIChatClient(
             settings!.Model!

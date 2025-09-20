@@ -22,7 +22,6 @@ if (settings.Help == true)
 builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-
 // Configure Language Model Client
 var chatClient = await LanguageModelConnector.CreateChatClientAsync(settings);
 IDistributedCache cache = new MemoryDistributedCache(Options.Create(new MemoryDistributedCacheOptions()));
