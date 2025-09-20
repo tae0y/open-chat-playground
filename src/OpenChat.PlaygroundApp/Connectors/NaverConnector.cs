@@ -2,6 +2,8 @@ using OpenChat.PlaygroundApp.Abstractions;
 using OpenChat.PlaygroundApp.Configurations;
 
 using Microsoft.Extensions.AI;
+using System.ClientModel;
+using OpenAI;
 
 namespace OpenChat.PlaygroundApp.Connectors;
 
@@ -21,8 +23,20 @@ public class NaverConnector(AppSettings settings) : LanguageModelConnector(setti
         return true;
     }
 
-    public override Task<IChatClient> GetChatClientAsync()
+    public override async Task<IChatClient> GetChatClientAsync()
     {
-        throw new NotImplementedException();
+        var settings = this.Settings as NaverSettings;
+
+        var credential = new ApiKeyCredential(settings!.ApiKey!);
+        var options = new OpenAIClientOptions()
+        {
+            Endpoint = new Uri(settings.BaseUrl!)
+        };
+
+        var client = new OpenAIClient(credential, options);
+        var chatClient = client.GetChatClient(settings.Model)
+                               .AsIChatClient();
+
+        return await Task.FromResult(chatClient).ConfigureAwait(false);
     }
 }
