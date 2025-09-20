@@ -21,7 +21,7 @@ public class AmazonBedrockConnector(AppSettings settings) : LanguageModelConnect
         return true;
     }
 
-    public override Task<IChatClient> GetChatClientAsync()
+    public override async Task<IChatClient> GetChatClientAsync()
     {
         var settings = this.Settings as AmazonBedrockSettings;
 
@@ -34,6 +34,6 @@ public class AmazonBedrockConnector(AppSettings settings) : LanguageModelConnect
             settings!.Model!
         );
 
-        return Task.FromResult(chatClient);
+        return await Task.FromResult(chatClient).ConfigureAwait(false);
     }
 }

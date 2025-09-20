@@ -36,6 +36,6 @@ public class FoundryLocalConnector(AppSettings settings) : LanguageModelConnecto
         var chatClient = client.GetChatClient(model!.ModelId)
                                .AsIChatClient();
 
-        return chatClient;
+        return await Task.FromResult(chatClient).ConfigureAwait(false);
     }
 }

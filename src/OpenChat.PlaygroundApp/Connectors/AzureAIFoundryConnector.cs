@@ -23,7 +23,7 @@ public class AzureAIFoundryConnector(AppSettings settings) : LanguageModelConnec
         return true;
     }
 
-    public override Task<IChatClient> GetChatClientAsync()
+    public override async Task<IChatClient> GetChatClientAsync()
     {
         var settings = this.Settings as AzureAIFoundrySettings;
         IChatClient chatClient = new AzureOpenAIClient(
@@ -33,6 +33,6 @@ public class AzureAIFoundryConnector(AppSettings settings) : LanguageModelConnec
                                 .GetChatClient(settings.DeploymentName!)
                                 .AsIChatClient();
 
-        return Task.FromResult(chatClient);
+        return await Task.FromResult(chatClient).ConfigureAwait(false);
     }
 }
