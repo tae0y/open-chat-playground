@@ -5,7 +5,7 @@ Open Chat Playground (OCP) is a web UI that is able to connect virtually any LLM
 ## Supported platforms
 
 - [x] [Amazon Bedrock](https://docs.aws.amazon.com/bedrock)
-- [ ] [Azure AI Foundry](https://learn.microsoft.com/azure/ai-foundry/what-is-azure-ai-foundry)
+- [x] [Azure AI Foundry](https://learn.microsoft.com/azure/ai-foundry/what-is-azure-ai-foundry)
 - [x] [GitHub Models](https://docs.github.com/github-models/about-github-models)
 - [ ] [Google Vertex AI](https://cloud.google.com/vertex-ai/docs)
 - [ ] [Docker Model Runner](https://docs.docker.com/ai/model-runner)

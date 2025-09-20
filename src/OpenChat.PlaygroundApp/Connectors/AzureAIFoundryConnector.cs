@@ -2,6 +2,8 @@ using OpenChat.PlaygroundApp.Abstractions;
 using OpenChat.PlaygroundApp.Configurations;
 
 using Microsoft.Extensions.AI;
+using Azure.AI.OpenAI;
+using System.ClientModel;
 
 namespace OpenChat.PlaygroundApp.Connectors;
 
@@ -23,6 +25,14 @@ public class AzureAIFoundryConnector(AppSettings settings) : LanguageModelConnec
 
     public override Task<IChatClient> GetChatClientAsync()
     {
-        throw new NotImplementedException();
+        var settings = this.Settings as AzureAIFoundrySettings;
+        IChatClient chatClient = new AzureOpenAIClient(
+                                    new Uri(settings!.Endpoint!),
+                                    new ApiKeyCredential(settings!.ApiKey!)
+                                )
+                                .GetChatClient(settings.DeploymentName!)
+                                .AsIChatClient();
+
+        return Task.FromResult(chatClient);
     }
 }
