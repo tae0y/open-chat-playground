@@ -20,6 +20,9 @@
       "ollamaModel": {
         "value": "${OLLAMA_MODEL}"
       },
+      "ollamaBaseUrl": {
+        "value": "${OLLAMA_BASE_URL}"
+      },
       "openchatPlaygroundappExists": {
         "value": "${SERVICE_OPENCHAT_PLAYGROUNDAPP_RESOURCE_EXISTS=false}"
       },

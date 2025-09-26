@@ -19,6 +19,7 @@ param githubModelsToken string = ''
 // Hugging Face
 // Ollama
 param ollamaModel string = ''
+param ollamaBaseUrl string = ''
 // Anthropic
 // LG
 // Naver
@@ -103,28 +104,39 @@ var envConnectorType = connectorType != '' ? [
 // Amazon Bedrock
 // Azure AI Foundry
 // GitHub Models
-var envGitHubModels = (connectorType == '' || connectorType == 'GitHubModels') ? concat(githubModelsModel != '' ? [
-  {
-    name: 'GitHubModels__Model'
-    value: githubModelsModel
-  }
-] : [], [
-  {
-    name: 'GitHubModels__Token'
-    secretRef: 'github-models-token'
-  }
-]) : []
+var envGitHubModels = (connectorType == '' || connectorType == 'GitHubModels') ? concat(
+  githubModelsModel != '' ? [
+    {
+      name: 'GitHubModels__Model'
+      value: githubModelsModel
+    }
+  ] : [],
+  githubModelsToken != '' ? [
+    {
+      name: 'GitHubModels__Token'
+      secretRef: 'github-models-token'
+    }
+  ] : []
+) : []
 // Google Vertex AI
 // Docker Model Runner
 // Foundry Local
 // Hugging Face
 // Ollama
-var envOllama = (connectorType == '' || connectorType == 'Ollama') ? (ollamaModel != '' ? [
-  {
-    name: 'Ollama__Model'
-    value: ollamaModel
-  }
-] : []) : []
+var envOllama = connectorType == 'Ollama' ? concat(
+  ollamaModel != '' ? [
+    {
+      name: 'Ollama__Model'
+      value: ollamaModel
+    }
+  ] : [],
+  ollamaBaseUrl != '' ? [
+    {
+      name: 'Ollama__BaseUrl'
+      value: ollamaBaseUrl
+    }
+  ] : []
+) : []
 // Anthropic
 // LG
 // Naver
@@ -140,12 +152,14 @@ module openchatPlaygroundapp 'br/public:avm/res/app/container-app:0.18.1' = {
       minReplicas: 1
       maxReplicas: 10
     }
-    secrets: [
-      {
-        name: 'github-models-token'
-        value: githubModelsToken
-      }
-    ]
+    secrets: concat([],
+      githubModelsToken != '' ? [
+        {
+          name: 'github-models-token'
+          value: githubModelsToken
+        }
+      ] : []
+    )
     containers: [
       {
         image: openchatPlaygroundappFetchLatestImage.outputs.?containers[?0].?image ?? 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'

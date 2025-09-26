@@ -24,6 +24,7 @@ param githubModelsToken string = ''
 // Hugging Face
 // Ollama
 param ollamaModel string = ''
+param ollamaBaseUrl string = ''
 // Anthropic
 // LG
 // Naver
@@ -66,6 +67,7 @@ module resources 'resources.bicep' = {
     githubModelsModel: githubModelsModel
     githubModelsToken: githubModelsToken
     ollamaModel: ollamaModel
+    ollamaBaseUrl: ollamaBaseUrl
     openchatPlaygroundappExists: openchatPlaygroundappExists
   }
 }
