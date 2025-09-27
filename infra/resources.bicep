@@ -105,8 +105,7 @@ var envConnectorType = connectorType != '' ? [
 // Amazon Bedrock
 // Azure AI Foundry
 // GitHub Models
-var envGitHubModels = (connectorType == '' || connectorType == 'GitHubModels') ? concat(
-  githubModelsModel != '' ? [
+var envGitHubModels = (connectorType == '' || connectorType == 'GitHubModels') ? concat(githubModelsModel != '' ? [
     {
       name: 'GitHubModels__Model'
       value: githubModelsModel
