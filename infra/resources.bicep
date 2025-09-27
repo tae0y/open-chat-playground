@@ -17,6 +17,7 @@ param githubModelsToken string = ''
 // Docker Model Runner
 // Foundry Local
 // Hugging Face
+param huggingFaceModel string = ''
 // Ollama
 param ollamaModel string = ''
 param ollamaBaseUrl string = ''
@@ -122,6 +123,12 @@ var envGitHubModels = (connectorType == '' || connectorType == 'GitHubModels') ?
 // Docker Model Runner
 // Foundry Local
 // Hugging Face
+var envHuggingFace = connectorType == 'HuggingFace' && huggingFaceModel != '' ? [
+  {
+    name: 'HuggingFace__Model'
+    value: huggingFaceModel
+  }
+] : []
 // Ollama
 var envOllama = connectorType == 'Ollama' ? concat(
   ollamaModel != '' ? [
@@ -183,6 +190,7 @@ module openchatPlaygroundapp 'br/public:avm/res/app/container-app:0.18.1' = {
           }],
           envConnectorType,
           envGitHubModels,
+          envHuggingFace,
           envOllama)
       }
     ]
