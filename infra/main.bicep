@@ -30,6 +30,9 @@ param ollamaBaseUrl string = ''
 // LG
 // Naver
 // OpenAI
+param openAIModel string = ''
+@secure()
+param openAIApiKey string = ''
 // Upstage
 
 param openchatPlaygroundappExists bool
@@ -70,6 +73,8 @@ module resources 'resources.bicep' = {
     huggingFaceModel: huggingFaceModel
     ollamaModel: ollamaModel
     ollamaBaseUrl: ollamaBaseUrl
+    openAIModel: openAIModel
+    openAIApiKey: openAIApiKey
     openchatPlaygroundappExists: openchatPlaygroundappExists
   }
 }
