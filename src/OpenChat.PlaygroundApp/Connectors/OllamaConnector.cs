@@ -1,4 +1,5 @@
 using Microsoft.Extensions.AI;
+
 using OllamaSharp;
 
 using OpenChat.PlaygroundApp.Abstractions;

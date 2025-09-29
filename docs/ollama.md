@@ -156,13 +156,13 @@ This approach runs OpenChat Playground in a container while connecting to Ollama
     azd env set CONNECTOR_TYPE "Ollama"
     
     # Use placeholder URL that will be replaced when Ollama is deployed in Azure
-    azd env set OLLAMA_BASE_URL "https://{{OLLAMA_PLACEHOLDER}}:11434"
+    azd env set OLLAMA_BASE_URL "https://{{OLLAMA_URL}}:11434"
     
     # Set a specific model
     azd env set OLLAMA_MODEL "llama3.2"
     ```
     
-    > **NOTE**: The `{{OLLAMA_PLACEHOLDER}}` will be replaced with the actual Ollama service URL when you deploy Ollama in Azure. This allows you to prepare the configuration before the Ollama service is available.
+    > **NOTE**: The `{{OLLAMA_URL}}` will be replaced with the actual Ollama service URL when you deploy Ollama in Azure. This allows you to prepare the configuration before the Ollama service is available.
 
 1. Run the following commands in order to provision and deploy the app.
 

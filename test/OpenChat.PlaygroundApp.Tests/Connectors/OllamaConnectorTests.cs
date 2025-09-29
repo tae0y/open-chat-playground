@@ -48,7 +48,7 @@ public class OllamaConnectorTests
 
         // Assert
         action.ShouldThrow<InvalidOperationException>()
-            .Message.ShouldContain("Ollama");
+               .Message.ShouldContain("Ollama");
     }
 
     [Trait("Category", "UnitTest")]
@@ -56,6 +56,9 @@ public class OllamaConnectorTests
     [InlineData(null, typeof(NullReferenceException), "Object reference not set to an instance of an object")]
     [InlineData("", typeof(InvalidOperationException), "Ollama:BaseUrl")]
     [InlineData("   ", typeof(InvalidOperationException), "Ollama:BaseUrl")]
+       [InlineData("\n", typeof(InvalidOperationException), "Ollama:BaseUrl")]
+       [InlineData("\r", typeof(InvalidOperationException), "Ollama:BaseUrl")]
+       [InlineData("\t", typeof(InvalidOperationException), "Ollama:BaseUrl")]
     public void Given_Invalid_BaseUrl_When_EnsureLanguageModelSettingsValid_Invoked_Then_It_Should_Throw(string? baseUrl, Type expectedType, string expectedMessage)
     {
         // Arrange
@@ -67,7 +70,7 @@ public class OllamaConnectorTests
 
         // Assert
         action.ShouldThrow(expectedType)
-            .Message.ShouldContain(expectedMessage);
+               .Message.ShouldContain(expectedMessage);
     }
 
     [Trait("Category", "UnitTest")]
@@ -86,7 +89,7 @@ public class OllamaConnectorTests
 
         // Assert
         action.ShouldThrow(expectedType)
-            .Message.ShouldContain(expectedMessage);
+               .Message.ShouldContain(expectedMessage);
     }
 
     [Trait("Category", "UnitTest")]
@@ -135,7 +138,7 @@ public class OllamaConnectorTests
 
         // Assert
         action.ShouldThrow(expected)
-            .Message.ShouldContain(message);
+               .Message.ShouldContain(message);
     }
 
     [Trait("Category", "UnitTest")]
