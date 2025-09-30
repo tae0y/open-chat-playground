@@ -48,7 +48,7 @@ public class OllamaConnectorTests
 
         // Assert
         action.ShouldThrow<InvalidOperationException>()
-               .Message.ShouldContain("Ollama");
+              .Message.ShouldContain("Ollama");
     }
 
     [Trait("Category", "UnitTest")]
@@ -69,7 +69,7 @@ public class OllamaConnectorTests
 
         // Assert
         action.ShouldThrow(expectedType)
-               .Message.ShouldContain(expectedMessage);
+              .Message.ShouldContain(expectedMessage);
     }
 
     [Trait("Category", "UnitTest")]
@@ -88,7 +88,7 @@ public class OllamaConnectorTests
 
         // Assert
         action.ShouldThrow(expectedType)
-               .Message.ShouldContain(expectedMessage);
+              .Message.ShouldContain(expectedMessage);
     }
 
     [Trait("Category", "UnitTest")]
@@ -137,7 +137,7 @@ public class OllamaConnectorTests
 
         // Assert
         action.ShouldThrow(expected)
-               .Message.ShouldContain(message);
+              .Message.ShouldContain(message);
     }
 
     [Trait("Category", "UnitTest")]

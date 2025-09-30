@@ -51,7 +51,7 @@ This page describes how to run OpenChat Playground (OCP) with Ollama integration
 
 1. Open your web browser, navigate to `http://localhost:5280`, and enter prompts.
 
-## Run in local container
+## Run on local container
 
 This approach runs OpenChat Playground in a container while connecting to Ollama running on the host machine.
 
@@ -66,13 +66,12 @@ This approach runs OpenChat Playground in a container while connecting to Ollama
     ```powershell
     # PowerShell (Windows)
     $env:OLLAMA_HOST = "0.0.0.0:11434"
-    
     # Start Ollama service
     ollama serve
     ```
 
     ```bash
-    # bash/zsh (Linux/macOS)
+    # bash/zsh 
     export OLLAMA_HOST=0.0.0.0:11434
     ollama serve
     ```
@@ -96,21 +95,54 @@ This approach runs OpenChat Playground in a container while connecting to Ollama
 1. Run the app.
 
     ```bash
-    # Using command-line arguments
+    # bash/zsh - from locally built container
     docker run -i --rm -p 8080:8080 \
       openchat-playground:latest \
       --connector-type Ollama \
       --base-url http://host.docker.internal:11434 \
-      --model llama3.2
+    ```
+
+    ```powershell
+    # PowerShell - from locally built container
+    docker run -i --rm -p 8080:8080 openchat-playground:latest `
+        --connector-type Ollama `
+        --base-url http://host.docker.internal:11434
     ```
 
     ```bash
-    # Alternative: Using environment variables
+    # bash/zsh - from GitHub Container Registry
+    docker run -i --rm -p 8080:8080 ghcr.io/aliencube/open-chat-playground/openchat-playground:latest \
+        --connector-type Ollama \
+        --base-url http://host.docker.internal:11434
+    ```
+    
+    ```powershell
+    # PowerShell - from GitHub Container Registry
+    docker run -i --rm -p 8080:8080 ghcr.io/aliencube/open-chat-playground/openchat-playground:latest `
+        --connector-type Ollama `
+        --base-url http://host.docker.internal:11434
+    ```
+   > **NOTE**: If you want to use other ollama models besides the basic model, first download the model using the command
+
+    ```bash
+    ollama pull qwen
+    ```
+
+    ```bash
+    # bash/zsh - from locally built container
     docker run -i --rm -p 8080:8080 \
-      -e ConnectorType=Ollama \
-      -e Ollama__BaseUrl=http://host.docker.internal:11434 \
-      -e Ollama__Model=llama3.2 \
-      openchat-playground:latest
+      openchat-playground:latest \
+      --connector-type Ollama \
+      --base-url http://host.docker.internal:11434 \
+      --model qwen
+    ```
+
+    ```powershell
+    # PowerShell - from locally built container (with a different model)
+    docker run -i --rm -p 8080:8080 openchat-playground:latest `
+        --connector-type Ollama `
+        --base-url http://host.docker.internal:11434 `
+        --model qwen
     ```
 
    > **NOTE**: Use `host.docker.internal:11434` to connect to Ollama running on the host machine from inside the container. Make sure `OLLAMA_HOST=0.0.0.0:11434` is set on the host.
@@ -162,7 +194,7 @@ This approach runs OpenChat Playground in a container while connecting to Ollama
     azd env set OLLAMA_MODEL "llama3.2"
     ```
     
-    > **NOTE**: The `{{OLLAMA_URL}}` will be replaced with the actual Ollama service URL when you deploy Ollama in Azure. This allows you to prepare the configuration before the Ollama service is available.
+    > **NOTE**: Replace {{OLLAMA_URL}} with the URL of your Ollama instance deployed on Azure. Automated deployment and URL configuration are currently in preparation.
 
 1. Run the following commands in order to provision and deploy the app.
 
