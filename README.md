@@ -79,7 +79,7 @@ Open Chat Playground (OCP) is a web UI that is able to connect virtually any LLM
 ### Run as API
 
 1. Run the app - either locally or remotely.
-1. Navigate to `{{APP_URL}}/openapi.json`.
+1. Navigate to `{{APP_URL}}/openapi.json` to see the OpenAPI doc. **NOTE**: the OpenAPI doc is only able to see on a local machine, not on a remote instance.
 1. Send a `POST` request to `{{APP_URL}}/api/chat/responses` with a request payload like:
 
     ```json
@@ -100,12 +100,20 @@ Open Chat Playground (OCP) is a web UI that is able to connect virtually any LLM
     ```jsonc
     [
       {
+        "role": "assistant",
         "message": "Because "
       },
       {
+        "role": "assistant",
         "message": "It's "
       },
       {
+        "role": "assistant",
+        "message": "... "
+      },
+      ...
+      {
+        "role": "assistant",
         "message": "... "
       }
     ]
