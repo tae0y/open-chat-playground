@@ -26,7 +26,10 @@
     "openAIApiKey": {
       "value": "${OPENAI_API_KEY}"
     },
-    "openchatPlaygroundappExists": {
+    "gpuProfileName": {
+      "value": "${GPU_PROFILE_NAME=NC8as-T4}"
+    },
+    "openchatPlaygroundAppExists": {
       "value": "${SERVICE_OPENCHAT_PLAYGROUNDAPP_RESOURCE_EXISTS=false}"
     },
     "principalId": {
