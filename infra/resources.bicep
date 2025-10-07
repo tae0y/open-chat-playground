@@ -352,7 +352,7 @@ module ollama 'br/public:avm/res/app/container-app:0.18.1' = if (useOllama == tr
     }
     environmentResourceId: containerAppsEnvironment.outputs.resourceId
     location: location
-        tags: union(tags, { 'azd-service-name': 'ollama' })
+    tags: union(tags, { 'azd-service-name': 'ollama' })
   }
 }
 
