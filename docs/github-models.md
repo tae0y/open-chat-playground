@@ -236,6 +236,10 @@ This page describes to run OpenChat Playground (OCP) with [GitHub Models](https:
 
    > **NOTE**: You will be asked to provide Azure subscription and location for deployment.
 
+   Once deployed, you will be able to see the deployed OCP app URL.
+
+1. Open your web browser, navigate to the OCP app URL, and enter prompts.
+
 1. Clean up all the resources.
 
     ```bash
