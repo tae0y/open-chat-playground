@@ -20,6 +20,12 @@
     "huggingFaceModel": {
       "value": "${HUGGING_FACE_MODEL=hf.co/Qwen/Qwen3-0.6B-GGUF}"
     },
+    "ollamaModel": {
+        "value": "${OLLAMA_MODEL}"
+    },
+    "ollamaBaseUrl": {
+        "value": "${OLLAMA_BASE_URL}"
+    },
     "openAIModel": {
       "value": "${OPENAI_MODEL=gpt-4.1-mini}"
     },
