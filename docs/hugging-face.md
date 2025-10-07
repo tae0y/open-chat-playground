@@ -220,7 +220,7 @@ This page describes how to run OpenChat Playground (OCP) with [Hugging Face mode
 
    Make sure to follow the exact format like `hf.co/{{org}}/{{model}}` and the model MUST include `GGUF`.
 
-1. As a default, the app uses a serverless GPU model with NVIDIA T4 (`NC8as-T4`). If you want to use NVIDIA A100, set the GPU profile name.
+1. As a default, the app uses a Serverless GPU with NVIDIA T4 (`NC8as-T4`). If you want to use NVIDIA A100, set the GPU profile.
 
     ```bash
     azd env set GPU_PROFILE_NAME "NC24-A100"
