@@ -216,7 +216,7 @@ This page describes to run OpenChat Playground (OCP) with [GitHub Models](https:
     azd env set GH_MODELS_TOKEN $TOKEN
     ```
 
-   Alternatively, if you want to run with a different model, say [Grok 3 mini](https://github.com/marketplace/models/azureml-xai/grok-3-mini), other than the default one, add it to azd environment variables.
+   The default model OCP uses is [GPT-4o mini](https://github.com/marketplace/models/azure-openai/gpt-4o-mini). If you want to run with a different model, say [Grok 3 mini](https://github.com/marketplace/models/azureml-xai/grok-3-mini), other than the default one, add it to azd environment variables.
 
     ```bash
     azd env set GH_MODELS_MODEL "xai/grok-3-mini"
