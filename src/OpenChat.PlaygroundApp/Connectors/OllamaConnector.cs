@@ -12,6 +12,7 @@ namespace OpenChat.PlaygroundApp.Connectors;
 /// </summary>
 public class OllamaConnector(AppSettings settings) : LanguageModelConnector(settings.Ollama)
 {
+    private readonly AppSettings _appSettings = settings ?? throw new ArgumentNullException(nameof(settings));
     /// <inheritdoc/>
     public override bool EnsureLanguageModelSettingsValid()
     {
@@ -48,7 +49,13 @@ public class OllamaConnector(AppSettings settings) : LanguageModelConnector(sett
         };
 
         var chatClient = new OllamaApiClient(config);
+        var pulls = chatClient.PullModelAsync(model);
+        await foreach (var pull in pulls)
+        {
+            Console.WriteLine($"Pull status: {pull!.Status}");
+        }
 
+        Console.WriteLine($"The {this._appSettings.ConnectorType} connector created with model: {settings.Model}");
         return await Task.FromResult(chatClient).ConfigureAwait(false);
     }
 }
