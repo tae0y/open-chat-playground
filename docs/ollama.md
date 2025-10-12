@@ -189,20 +189,19 @@ This approach runs OpenChat Playground in a container while connecting to Ollama
 
 1. Set Ollama configuration to azd environment variables.
     
-    **Azure-hosted Ollama**
+    **Azure-hosted Ollama (Automatic Deployment)**
 
     ```bash
     # Set connector type to Ollama
     azd env set CONNECTOR_TYPE "Ollama"
     
-    # Use placeholder URL that will be replaced when Ollama is deployed in Azure
-    azd env set OLLAMA_BASE_URL "https://{{OLLAMA_URL}}:11434"
-    
     # Set a specific model
     azd env set OLLAMA_MODEL "llama3.2"
+    
+    # BaseUrl is automatically configured - no need to set OLLAMA_BASE_URL
     ```
     
-    > **NOTE**: Replace {{OLLAMA_URL}} with the URL of your Ollama instance deployed on Azure. Automated deployment and URL configuration are currently in preparation.
+    > **NOTE**: When deploying to Azure, the Ollama server will be automatically provisioned and deployed as a container with GPU support. The BaseUrl will be automatically configured to connect to the deployed Ollama instance.
 
 1. Run the following commands in order to provision and deploy the app.
 

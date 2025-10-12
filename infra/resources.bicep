@@ -22,7 +22,6 @@ param githubModelsToken string = ''
 // Hugging Face
 param huggingFaceModel string = ''
 // Ollama
-param ollamaBaseUrl string = ''
 param ollamaModel string = ''
 // Anthropic
 // LG
@@ -221,18 +220,12 @@ var envHuggingFace = connectorType == 'HuggingFace' ? concat(huggingFaceModel !=
   }
 ] : []) : []
 // Ollama
-var envOllama = connectorType == 'Ollama' ? concat(ollamaBaseUrl != '' ? [
-    {
-      name: 'Ollama__BaseUrl'
-      value: ollamaBaseUrl
-    }
-  ] : [],
-  ollamaModel != '' ? [
-    {
-      name: 'Ollama__Model'
-      value: ollamaModel
-    }
-  ] : []) : []
+var envOllama = connectorType == 'Ollama' ? concat(ollamaModel != '' ? [
+  {
+    name: 'Ollama__Model'
+    value: ollamaModel
+  }
+] : []) : []
 // Anthropic
 // LG
 var envLG = connectorType == 'LG' ? concat(lgModel != '' ? [

@@ -27,7 +27,6 @@ param githubModelsToken string = ''
 // Hugging Face
 param huggingFaceModel string = ''
 // Ollama
-param ollamaBaseUrl string = ''
 param ollamaModel string = ''
 // Anthropic
 // LG
@@ -85,7 +84,6 @@ module resources 'resources.bicep' = {
     githubModelsModel: githubModelsModel
     githubModelsToken: githubModelsToken
     huggingFaceModel: huggingFaceModel
-    ollamaBaseUrl: ollamaBaseUrl
     ollamaModel: ollamaModel
     lgModel: lgModel
     openAIModel: openAIModel
