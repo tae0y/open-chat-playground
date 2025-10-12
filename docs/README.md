@@ -1,6 +1,8 @@
 # Getting Started with LLM
 
--   [GitHub Models](github-models.md)
--   [Hugging Face](hugging-face.md)
--   [Ollama](ollama.md)
--   [OpenAI](openai.md)
+- [Azure AI Foundry](azure-ai-foundry.md)
+- [GitHub Models](github-models.md)
+- [Hugging Face](hugging-face.md)
+- [Ollama](ollama.md)
+- [LG](lg.md)
+- [OpenAI](openai.md)
