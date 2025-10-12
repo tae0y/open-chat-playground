@@ -31,6 +31,7 @@ public class ApiClientTests : IDisposable
         this._handler?.Dispose();
     }
 
+    [Trait("Category", "UnitTest")]
     [Fact]
     public void Constructor_ShouldThrowArgumentNullException_WhenHttpClientIsNull()
     {
@@ -41,6 +42,7 @@ public class ApiClientTests : IDisposable
         action.ShouldThrow<ArgumentNullException>();
     }
 
+    [Trait("Category", "UnitTest")]
     [Fact]
     public async Task InvokeStreamAsync_ShouldSendPostRequestToCorrectEndpoint()
     {
@@ -66,6 +68,7 @@ public class ApiClientTests : IDisposable
         this._handler.LastRequest.RequestUri?.ToString().ShouldEndWith("api/chat/responses");
     }
 
+    [Trait("Category", "UnitTest")]
     [Fact]
     public async Task InvokeStreamAsync_ShouldSendCorrectRequestBody()
     {
@@ -99,6 +102,7 @@ public class ApiClientTests : IDisposable
         sent[1].Message.ShouldBe("Hi!");
     }
 
+    [Trait("Category", "UnitTest")]
     [Fact]
     public async Task InvokeStreamAsync_ShouldReturnAsyncEnumerableOfChatMessages()
     {
@@ -136,6 +140,7 @@ public class ApiClientTests : IDisposable
         messages[1].Message.ShouldBe("How can I help you today?");
     }
 
+    [Trait("Category", "UnitTest")]
     [Fact]
     public async Task InvokeStreamAsync_ShouldHandleEmptyResponseStream()
     {
@@ -163,6 +168,7 @@ public class ApiClientTests : IDisposable
         messages.ShouldBeEmpty();
     }
 
+    [Trait("Category", "UnitTest")]
     [Theory]
     [InlineData(HttpStatusCode.BadRequest)]
     [InlineData(HttpStatusCode.Unauthorized)]
@@ -185,6 +191,7 @@ public class ApiClientTests : IDisposable
         func.ShouldThrow<HttpRequestException>();
     }
 
+    [Trait("Category", "UnitTest")]
     [Fact]
     public async Task InvokeStreamAsync_ShouldHandleNullMessages()
     {
@@ -205,6 +212,7 @@ public class ApiClientTests : IDisposable
         this._handler.LastRequestContent.ShouldBe("null");
     }
 
+    [Trait("Category", "UnitTest")]
     [Fact]
     public async Task InvokeStreamAsync_ShouldHandleEmptyMessagesList()
     {
