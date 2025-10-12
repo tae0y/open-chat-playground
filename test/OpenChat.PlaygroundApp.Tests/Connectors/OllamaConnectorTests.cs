@@ -106,7 +106,7 @@ public class OllamaConnectorTests
         result.ShouldBeTrue();
     }
 
-    [Trait("Category", "UnitTest")]
+    [Trait("Category", "IntegrationTest")]
     [Fact]
     public async Task Given_Valid_Settings_When_GetChatClientAsync_Invoked_Then_It_Should_Return_ChatClient()
     {
@@ -140,7 +140,7 @@ public class OllamaConnectorTests
               .Message.ShouldContain(message);
     }
 
-    [Trait("Category", "UnitTest")]
+    [Trait("Category", "IntegrationTest")]
     [Fact]
     public async Task Given_Valid_AppSettings_When_CreateChatClientAsync_Invoked_Then_It_Should_Return_ChatClient()
     {
