@@ -18,7 +18,7 @@ Open Chat Playground (OCP) is a web UI that is able to connect virtually any LLM
 - [ ] [Naver](https://api.ncloud-docs.com/docs/ai-naver-clovastudio-summary)
 - [x] [LG](https://github.com/LG-AI-EXAONE)
 - [x] [OpenAI](https://openai.com/api)
-- [ ] [Upstage](https://console.upstage.ai/docs/getting-started)
+- [x] [Upstage](https://console.upstage.ai/docs/getting-started)
 
 ## Prerequisites
 
@@ -66,6 +66,7 @@ Open Chat Playground (OCP) is a web UI that is able to connect virtually any LLM
 - [Use Ollama](./docs/ollama.md#run-on-local-machine)
 - [Use LG](./docs/lg.md#run-on-local-machine)
 - [Use OpenAI](./docs/openai.md#run-on-local-machine)
+- [Use Upstage](./docs/upstage.md#run-on-local-machine)
 
 ### Run in local container
 
@@ -75,6 +76,7 @@ Open Chat Playground (OCP) is a web UI that is able to connect virtually any LLM
 - [Use Ollama](./docs/ollama.md#run-on-local-container)
 - [Use LG](./docs/lg.md#run-in-local-container)
 - [Use OpenAI](./docs/openai.md#run-in-local-container)
+- [Use Upstage](./docs/upstage.md#run-in-local-container)
 
 ### Run on Azure
 
@@ -84,6 +86,7 @@ Open Chat Playground (OCP) is a web UI that is able to connect virtually any LLM
 - [Use Ollama](./docs/ollama.md#run-on-azure)
 - [Use LG](./docs/lg.md#run-on-azure)
 - [Use OpenAI](./docs/openai.md#run-on-azure)
+- [Use Upstage](./docs/upstage.md#run-on-azure)
 
 ### Run as API
 
