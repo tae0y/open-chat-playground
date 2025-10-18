@@ -119,8 +119,7 @@ This approach runs OpenChat Playground in a container while connecting to Ollama
 
     ```bash
     # bash/zsh - from GitHub Container Registry
-    docker run -i --rm -p 8080:8080 ghcr.io/aliencube/open-chat-playground/openchat-playground:latest
-    \
+    docker run -i --rm -p 8080:8080 ghcr.io/aliencube/open-chat-playground/openchat-playground:latest\
         --connector-type Ollama \
         --base-url http://host.docker.internal:11434
     ```

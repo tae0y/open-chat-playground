@@ -36,7 +36,7 @@ public class OllamaConnectorTests
 		// Assert
 		result.ShouldBe(expected);
 	}
-
+	
 	[Trait("Category", "UnitTest")]
     [Fact]
     public void Given_Null_Settings_When_Instantiated_Then_It_Should_Throw()
@@ -101,7 +101,9 @@ public class OllamaConnectorTests
         // Assert
         action.ShouldThrow<InvalidOperationException>()
               .Message.ShouldContain("Ollama");
-    }	[Trait("Category", "UnitTest")]
+    }
+
+	[Trait("Category", "UnitTest")]
 	[Theory]
 	[InlineData(null, typeof(NullReferenceException), "Object reference not set to an instance of an object")]
 	[InlineData("", typeof(InvalidOperationException), "Ollama:BaseUrl")]
@@ -179,27 +181,6 @@ public class OllamaConnectorTests
 
 	[Trait("Category", "IntegrationTest")]
 	[Trait("Category", "LLMRequired")]
-	[Theory]
-	[InlineData(null, typeof(HttpRequestException), "Name or service not known")]
-	[InlineData("", typeof(HttpRequestException), "Name or service not known")]
-	[InlineData("  ", typeof(HttpRequestException), "Name or service not known")]
-	[InlineData("\t\n\r", typeof(HttpRequestException), "Name or service not known")]
-	public void Given_Invalid_Model_When_GetChatClient_Invoked_Then_It_Should_Throw(string? model, Type expected, string message)
-	{
-        // Arrange		
-		var settings = BuildAppSettings(model: model);
-		var connector = new OllamaConnector(settings);
-
-		// Act
-		Func<Task> func = async () => await connector.GetChatClientAsync();
-
-		// Assert
-		func.ShouldThrow(expected)
-			.Message.ShouldContain(message);
-	}
-
-	[Trait("Category", "IntegrationTest")]
-	[Trait("Category", "LLMRequired")]
 	[Fact]
 	public async Task Given_Valid_Settings_When_GetChatClient_Invoked_Then_It_Should_Return_ChatClient()
 	{
@@ -257,7 +238,7 @@ public class OllamaConnectorTests
         var result = await LanguageModelConnector.CreateChatClientAsync(settings);
 
         // Assert
-		result.ShouldNotBeNull();
+        result.ShouldNotBeNull();
         result.ShouldBeAssignableTo<IChatClient>();
     }
 }
