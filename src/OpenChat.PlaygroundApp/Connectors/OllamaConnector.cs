@@ -51,35 +51,13 @@ public class OllamaConnector(AppSettings settings) : LanguageModelConnector(sett
         };
 
         var chatClient = new OllamaApiClient(config);
-        
-        // Only attempt to pull model if not in test environment
-        if (!IsTestEnvironment())
-        {
-            try
-            {
-                var pulls = chatClient.PullModelAsync(model);
-                await foreach (var pull in pulls)
-                {
-                    Console.WriteLine($"Pull status: {pull!.Status}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Warning: Could not pull model {model}: {ex.Message}");
-                // Continue anyway - model might already exist
-            }
-        }
-
-        Console.WriteLine($"The {this._appSettings.ConnectorType} connector created with model: {settings.Model}");
+        var pulls = chatClient.PullModelAsync(model); 
+        await foreach (var pull in pulls) 
+        { 
+            Console.WriteLine($"Pull status: {pull!.Status}"); 
+        } 
+  
+        Console.WriteLine($"The {this._appSettings.ConnectorType} connector created with model: {settings.Model}"); 
         return await Task.FromResult(chatClient).ConfigureAwait(false);
-    }
-
-    private static bool IsTestEnvironment()
-    {
-        // Check if running in test environment
-        return Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true" ||
-               Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Testing" ||
-               System.Diagnostics.Debugger.IsAttached ||
-               AppDomain.CurrentDomain.GetAssemblies().Any(assembly => assembly.FullName?.Contains("xunit") == true);
     }
 }

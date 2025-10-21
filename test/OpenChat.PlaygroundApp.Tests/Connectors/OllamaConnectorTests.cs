@@ -8,8 +8,8 @@ namespace OpenChat.PlaygroundApp.Tests.Connectors;
 
 public class OllamaConnectorTests
 {
-	private const string BaseUrl = "https://test.ollama";
-	private const string Model = "test-model";
+	private const string BaseUrl = "http://localhost:11434";
+	private const string Model = "llama3.2";
 
 	private static AppSettings BuildAppSettings(string? baseUrl = BaseUrl, string? model = Model)
 	{
@@ -163,6 +163,7 @@ public class OllamaConnectorTests
 	[InlineData(null, typeof(ArgumentNullException), "null")]
 	[InlineData("", typeof(UriFormatException), "empty")]
 	[InlineData("   ", typeof(UriFormatException), "Invalid URI: The format of the URI could not be determined.")]
+	[InlineData("\t\n\r", typeof(UriFormatException), "Invalid URI:")]
 	[InlineData("invalid-uri-format", typeof(UriFormatException), "Invalid URI: The format of the URI could not be determined.")]
 	[InlineData("not-a-url", typeof(UriFormatException), "Invalid URI: The format of the URI could not be determined.")]
 	public void Given_Invalid_BaseUrl_When_GetChatClient_Invoked_Then_It_Should_Throw(string? baseUrl, Type expected, string message)
@@ -178,6 +179,23 @@ public class OllamaConnectorTests
 		func.ShouldThrow(expected)
 			.Message.ShouldContain(message);
 	}
+	
+	[Trait("Category", "UnitTest")]
+    [Theory]
+    [InlineData(null, typeof(NullReferenceException), "Object reference not set to an instance of an object")]
+    public void Given_Null_Model_When_GetChatClient_Invoked_Then_It_Should_Throw(string? model, Type expected, string message)
+    {
+        // Arrange        
+        var settings = BuildAppSettings(model: model);
+        var connector = new HuggingFaceConnector(settings);
+
+        // Act
+        Func<Task> func = async () => await connector.GetChatClientAsync();
+
+        // Assert
+        func.ShouldThrow(expected)
+            .Message.ShouldContain(message);
+    }
 
 	[Trait("Category", "IntegrationTest")]
 	[Trait("Category", "LLMRequired")]
