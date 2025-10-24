@@ -38,7 +38,7 @@ public class FoundryLocalConnector(AppSettings settings) : LanguageModelConnecto
     public override async Task<IChatClient> GetChatClientAsync()
     {
         var settings = this.Settings as FoundryLocalSettings;
-        var alias = settings!.Alias!;
+        var alias = settings!.Alias!.Trim() ?? throw new InvalidOperationException("Missing configuration: FoundryLocal:Alias.");
 
         var manager = await FoundryLocalManager.StartModelAsync(aliasOrModelId: alias).ConfigureAwait(false);
         var model = await manager.GetModelInfoAsync(aliasOrModelId: alias).ConfigureAwait(false);
@@ -53,7 +53,7 @@ public class FoundryLocalConnector(AppSettings settings) : LanguageModelConnecto
         var chatClient = client.GetChatClient(model?.ModelId)
                                .AsIChatClient();
 
-        Console.WriteLine($"The {this._appSettings.ConnectorType} connector created with model: {settings.Alias}");
+        Console.WriteLine($"The {this._appSettings.ConnectorType} connector created with model: {alias}");
 
         return chatClient;
     }

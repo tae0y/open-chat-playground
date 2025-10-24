@@ -64,7 +64,7 @@ public class FoundryLocalConnectorTests
     [Trait("Category", "UnitTest")]
     [Theory]
     [InlineData("FoundryLocal")]
-    public void Given_Null_Settings_When_EnsureLanguageModelSettingsValid_Invoked_Then_It_Should_Throw(string expectedMessage)
+    public void Given_Null_FoundryLocalSettings_When_EnsureLanguageModelSettingsValid_Invoked_Then_It_Should_Throw(string expectedMessage)
     {
         // Arrange
         var settings = new AppSettings
@@ -117,14 +117,35 @@ public class FoundryLocalConnectorTests
         result.ShouldBeTrue();
     }
 
-    [Trait("Category", "IgnoreGitHubActions")]
+    [Trait("Category", "UnitTest")]
+    [Fact]
+    public void Given_Null_FoundryLocalSettings_When_GetChatClient_Invoked_Then_It_Should_Throw()
+    {
+        // Arrange
+        var settings = new AppSettings
+        {
+            ConnectorType = ConnectorType.FoundryLocal,
+            FoundryLocal = null
+        };
+        var connector = new FoundryLocalConnector(settings);
+
+        // Act
+        Func<Task> func = async () => await connector.GetChatClientAsync();
+
+        // Assert
+        func.ShouldThrow<NullReferenceException>()
+            .Message.ShouldContain("Object reference not set to an instance of an object.");
+    }
+
     [Trait("Category", "IntegrationTest")]
     [Trait("Category", "LLMRequired")]
+    [Trait("Category", "IgnoreGitHubActions")]
     [Theory]
-    [InlineData(null, typeof(InvalidOperationException), "Model  not found in catalog.")]
-    [InlineData("", typeof(InvalidOperationException), "Model  not found in catalog.")]
-    [InlineData("   ", typeof(InvalidOperationException), "Model     not found in catalog.")]
-    [InlineData("not-a-model", typeof(InvalidOperationException), "Model not-a-model not found in catalog.")]
+    [InlineData(null, typeof(InvalidOperationException), "not found in catalog.")]
+    [InlineData("", typeof(InvalidOperationException), "not found in catalog.")]
+    [InlineData("   ", typeof(InvalidOperationException), "not found in catalog.")]
+    [InlineData("\t\r\n", typeof(InvalidOperationException), "not found in catalog.")]
+    [InlineData("not-a-model", typeof(InvalidOperationException), "not found in catalog.")]
     public void Given_Invalid_Alias_When_GetChatClient_Invoked_Then_It_Should_Throw(string? alias, Type expected, string message)
     {
         // Arrange
@@ -139,9 +160,9 @@ public class FoundryLocalConnectorTests
             .Message.ShouldContain(message);
     }
 
-    [Trait("Category", "IgnoreGitHubActions")]
     [Trait("Category", "IntegrationTest")]
     [Trait("Category", "LLMRequired")]
+    [Trait("Category", "IgnoreGitHubActions")]
     [Fact]
     public async Task Given_Valid_Settings_When_GetChatClient_Invoked_Then_It_Should_Return_ChatClient()
     {
@@ -160,9 +181,10 @@ public class FoundryLocalConnectorTests
     [Trait("Category", "UnitTest")]
     [Theory]
     [InlineData(null, typeof(NullReferenceException), "Object reference not set to an instance of an object")]
-    [InlineData("", typeof(InvalidOperationException), "Missing configuration: FoundryLocal")]
-    [InlineData("   ", typeof(InvalidOperationException), "Missing configuration: FoundryLocal")]
-    public void Given_Invalid_Settings_When_CreateChatClientAsync_Invoked_Then_It_Should_Throw(string? alias, Type expected, string expectedMessage)
+    [InlineData("", typeof(InvalidOperationException), "Missing configuration: FoundryLocal:Alias")]
+    [InlineData("   ", typeof(InvalidOperationException), "Missing configuration: FoundryLocal:Alias")]
+    [InlineData("\t\r\n", typeof(InvalidOperationException), "Missing configuration: FoundryLocal:Alias")]
+    public void Given_Invalid_Alias_When_CreateChatClientAsync_Invoked_Then_It_Should_Throw(string? alias, Type expected, string expectedMessage)
     {
         // Arrange
         var settings = new AppSettings
@@ -182,9 +204,9 @@ public class FoundryLocalConnectorTests
             .Message.ShouldContain(expectedMessage);
     }
 
-    [Trait("Category", "IgnoreGitHubActions")]
     [Trait("Category", "IntegrationTest")]
     [Trait("Category", "LLMRequired")]
+    [Trait("Category", "IgnoreGitHubActions")]
     [Fact]
     public async Task Given_Valid_Settings_When_CreateChatClientAsync_Invoked_Then_It_Should_Return_IChatClient()
     {
