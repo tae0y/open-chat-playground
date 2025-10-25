@@ -5,8 +5,6 @@ using OllamaSharp;
 using OpenChat.PlaygroundApp.Abstractions;
 using OpenChat.PlaygroundApp.Configurations;
 
-using System.Linq;
-
 namespace OpenChat.PlaygroundApp.Connectors;
 
 /// <summary>
@@ -15,11 +13,11 @@ namespace OpenChat.PlaygroundApp.Connectors;
 public class OllamaConnector(AppSettings settings) : LanguageModelConnector(settings.Ollama)
 {
     private readonly AppSettings _appSettings = settings ?? throw new ArgumentNullException(nameof(settings));
+
     /// <inheritdoc/>
     public override bool EnsureLanguageModelSettingsValid()
     {
-        var settings = this.Settings as OllamaSettings;
-        if (settings is null)
+        if (this.Settings is not OllamaSettings settings)
         {
             throw new InvalidOperationException("Missing configuration: Ollama.");
         }
@@ -41,8 +39,13 @@ public class OllamaConnector(AppSettings settings) : LanguageModelConnector(sett
     public override async Task<IChatClient> GetChatClientAsync()
     {
         var settings = this.Settings as OllamaSettings;
-        var baseUrl = settings!.BaseUrl!;
-        var model = settings!.Model!;
+
+        var baseUrl = settings!.BaseUrl!.Trim() ?? throw new InvalidOperationException("Missing configuration: Ollama:BaseUrl.");
+        if (Uri.IsWellFormedUriString(baseUrl, UriKind.Absolute) == false)
+        {
+            throw new UriFormatException($"Invalid URI: The Ollama base URL '{baseUrl}' is not a valid URI.");
+        }
+        var model = settings!.Model!.Trim() ?? throw new InvalidOperationException("Missing configuration: Ollama:Model.");
 
         var config = new OllamaApiClient.Configuration
         {
@@ -51,13 +54,15 @@ public class OllamaConnector(AppSettings settings) : LanguageModelConnector(sett
         };
 
         var chatClient = new OllamaApiClient(config);
+
         var pulls = chatClient.PullModelAsync(model); 
         await foreach (var pull in pulls) 
         { 
             Console.WriteLine($"Pull status: {pull!.Status}"); 
         } 
   
-        Console.WriteLine($"The {this._appSettings.ConnectorType} connector created with model: {settings.Model}"); 
-        return await Task.FromResult(chatClient).ConfigureAwait(false);
+        Console.WriteLine($"The {this._appSettings.ConnectorType} connector created with model: {model}"); 
+
+        return chatClient;
     }
 }

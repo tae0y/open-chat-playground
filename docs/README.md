@@ -6,7 +6,7 @@
 - [Docker Model Runner](./docker-model-runner.md)
 - [Foundry Local](./foundry-local.md)
 - [Hugging Face](./hugging-face.md)
-- [Ollama](ollama.md)
+- [Ollama](./ollama.md)
 - [LG](./lg.md)
 - [OpenAI](./openai.md)
 - [Upstage](./upstage.md)

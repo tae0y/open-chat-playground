@@ -1,5 +1,7 @@
 using Microsoft.Extensions.AI;
 
+using OllamaSharp.Models.Exceptions;
+
 using OpenChat.PlaygroundApp.Abstractions;
 using OpenChat.PlaygroundApp.Configurations;
 using OpenChat.PlaygroundApp.Connectors;
@@ -8,36 +10,36 @@ namespace OpenChat.PlaygroundApp.Tests.Connectors;
 
 public class OllamaConnectorTests
 {
-	private const string BaseUrl = "http://localhost:11434";
-	private const string Model = "llama3.2";
+    private const string BaseUrl = "http://localhost:11434";
+    private const string Model = "llama3.2";
 
-	private static AppSettings BuildAppSettings(string? baseUrl = BaseUrl, string? model = Model)
-	{
-		return new AppSettings
-		{
-			ConnectorType = ConnectorType.Ollama,
-			Ollama = new OllamaSettings
-			{
-				BaseUrl = baseUrl,
-				Model = model
-			}
-		};
-	}
+    private static AppSettings BuildAppSettings(string? baseUrl = BaseUrl, string? model = Model)
+    {
+        return new AppSettings
+        {
+            ConnectorType = ConnectorType.Ollama,
+            Ollama = new OllamaSettings
+            {
+                BaseUrl = baseUrl,
+                Model = model
+            }
+        };
+    }
 
-	[Trait("Category", "UnitTest")]
-	[Theory]
-	[InlineData(typeof(LanguageModelConnector), typeof(OllamaConnector), true)]
-	[InlineData(typeof(OllamaConnector), typeof(LanguageModelConnector), false)]
-	public void Given_BaseType_Then_It_Should_Be_AssignableFrom_DerivedType(Type baseType, Type derivedType, bool expected)
-	{
-		// Act
-		var result = baseType.IsAssignableFrom(derivedType);
+    [Trait("Category", "UnitTest")]
+    [Theory]
+    [InlineData(typeof(LanguageModelConnector), typeof(OllamaConnector), true)]
+    [InlineData(typeof(OllamaConnector), typeof(LanguageModelConnector), false)]
+    public void Given_BaseType_Then_It_Should_Be_AssignableFrom_DerivedType(Type baseType, Type derivedType, bool expected)
+    {
+        // Act
+        var result = baseType.IsAssignableFrom(derivedType);
 
-		// Assert
-		result.ShouldBe(expected);
-	}
-	
-	[Trait("Category", "UnitTest")]
+        // Assert
+        result.ShouldBe(expected);
+    }
+    
+    [Trait("Category", "UnitTest")]
     [Fact]
     public void Given_Null_Settings_When_Instantiated_Then_It_Should_Throw()
     {
@@ -50,44 +52,23 @@ public class OllamaConnectorTests
     }
 
     [Trait("Category", "UnitTest")]
-    [InlineData("Ollama")]
-    [Theory]
-	public void Given_Settings_Is_Null_When_EnsureLanguageModelSettingsValid_Invoked_Then_It_Should_Throw(string expectedMessage)
-	{
-		// Arrange
-		var settings = new AppSettings
-		{
-			ConnectorType = ConnectorType.Ollama,
-			Ollama = null
-		};
-		var connector = new OllamaConnector(settings);
+    [Fact]
+    public void Given_Settings_When_Instantiated_Then_It_Should_Return()
+    {
+        // Arrange
+        var settings = BuildAppSettings();
 
-		// Act
-		Action action = () => connector.EnsureLanguageModelSettingsValid();
+        // Act
+        var result = new OllamaConnector(settings);
 
-		// Assert
-		action.ShouldThrow<InvalidOperationException>()
-		      .Message.ShouldContain(expectedMessage);
-	}
-
-	[Trait("Category", "UnitTest")]
-	[Fact]
-	public void Given_Settings_When_Instantiated_Then_It_Should_Return()
-	{
-		// Arrange
-		var settings = BuildAppSettings();
-
-		// Act
-		var result = new OllamaConnector(settings);
-
-		// Assert
-		result.ShouldNotBeNull();
-	}
+        // Assert
+        result.ShouldNotBeNull();
+    }
 
     [Trait("Category", "UnitTest")]
     [InlineData("Ollama")]
     [Theory]
-    public void Given_Null_Settings_When_EnsureLanguageModelSettingsValid_Invoked_Then_It_Should_Throw(string expectedMessage)
+    public void Given_Null_OllamaSettings_When_EnsureLanguageModelSettingsValid_Invoked_Then_It_Should_Throw(string expectedMessage)
     {
         // Arrange
         var settings = new AppSettings
@@ -105,84 +86,83 @@ public class OllamaConnectorTests
               .Message.ShouldContain(expectedMessage);
     }
 
-	[Trait("Category", "UnitTest")]
-	[Theory]
-	[InlineData(null, typeof(NullReferenceException), "Object reference not set to an instance of an object")]
-	[InlineData("", typeof(InvalidOperationException), "Ollama:BaseUrl")]
-	[InlineData("   ", typeof(InvalidOperationException), "Ollama:BaseUrl")]
-	[InlineData("\t\n\r", typeof(InvalidOperationException), "Ollama:BaseUrl")]
-	public void Given_Invalid_BaseUrl_When_EnsureLanguageModelSettingsValid_Invoked_Then_It_Should_Throw(string? baseUrl, Type expectedType, string expectedMessage)
-	{
-		// Arrange
-		var settings = BuildAppSettings(baseUrl: baseUrl);
-		var connector = new OllamaConnector(settings);
-
-		// Act
-		Action action = () => connector.EnsureLanguageModelSettingsValid();
-
-		// Assert
-		action.ShouldThrow(expectedType)
-		      .Message.ShouldContain(expectedMessage);
-	}
-
-	[Trait("Category", "UnitTest")]
-	[Theory]
-	[InlineData(null, typeof(NullReferenceException), "Object reference not set to an instance of an object")]
-	[InlineData("", typeof(InvalidOperationException), "Ollama:Model")]
-	[InlineData("   ", typeof(InvalidOperationException), "Ollama:Model")]
-	[InlineData("\t\n\r", typeof(InvalidOperationException), "Ollama:Model")]
-	public void Given_Invalid_Model_When_EnsureLanguageModelSettingsValid_Invoked_Then_It_Should_Throw(string? model, Type expectedType, string expectedMessage)
-	{
-		// Arrange
-		var settings = BuildAppSettings(model: model);
+    [Trait("Category", "UnitTest")]
+    [Theory]
+    [InlineData(null, typeof(NullReferenceException), "Object reference not set to an instance of an object")]
+    [InlineData("", typeof(InvalidOperationException), "Ollama:BaseUrl")]
+    [InlineData("   ", typeof(InvalidOperationException), "Ollama:BaseUrl")]
+    [InlineData("\t\n\r", typeof(InvalidOperationException), "Ollama:BaseUrl")]
+    public void Given_Invalid_BaseUrl_When_EnsureLanguageModelSettingsValid_Invoked_Then_It_Should_Throw(string? baseUrl, Type expectedType, string expectedMessage)
+    {
+        // Arrange
+        var settings = BuildAppSettings(baseUrl: baseUrl);
         var connector = new OllamaConnector(settings);
 
-		// Act
-		Action action = () => connector.EnsureLanguageModelSettingsValid();
+        // Act
+        Action action = () => connector.EnsureLanguageModelSettingsValid();
 
-		// Assert
-		action.ShouldThrow(expectedType)
-		      .Message.ShouldContain(expectedMessage);
-	}
+        // Assert
+        action.ShouldThrow(expectedType)
+              .Message.ShouldContain(expectedMessage);
+    }
 
-	[Trait("Category", "UnitTest")]
-	[Fact]
-	public void Given_Valid_Settings_When_EnsureLanguageModelSettingsValid_Invoked_Then_It_Should_Return_True()
-	{
-		// Arrange
-		var settings = BuildAppSettings();
-		var connector = new OllamaConnector(settings);
+    [Trait("Category", "UnitTest")]
+    [Theory]
+    [InlineData(null, typeof(NullReferenceException), "Object reference not set to an instance of an object")]
+    [InlineData("", typeof(InvalidOperationException), "Ollama:Model")]
+    [InlineData("   ", typeof(InvalidOperationException), "Ollama:Model")]
+    [InlineData("\t\n\r", typeof(InvalidOperationException), "Ollama:Model")]
+    public void Given_Invalid_Model_When_EnsureLanguageModelSettingsValid_Invoked_Then_It_Should_Throw(string? model, Type expectedType, string expectedMessage)
+    {
+        // Arrange
+        var settings = BuildAppSettings(model: model);
+        var connector = new OllamaConnector(settings);
 
-		// Act
-		var result = connector.EnsureLanguageModelSettingsValid();
+        // Act
+        Action action = () => connector.EnsureLanguageModelSettingsValid();
 
-		// Assert
-		result.ShouldBeTrue();
-	}
+        // Assert
+        action.ShouldThrow(expectedType)
+              .Message.ShouldContain(expectedMessage);
+    }
 
-	[Trait("Category", "UnitTest")]
-	[Theory]
-	[InlineData(null, typeof(ArgumentNullException), "null")]
-	[InlineData("", typeof(UriFormatException), "empty")]
-	[InlineData("   ", typeof(UriFormatException), "Invalid URI: The format of the URI could not be determined.")]
-	[InlineData("\t\n\r", typeof(UriFormatException), "Invalid URI:")]
-	[InlineData("invalid-uri-format", typeof(UriFormatException), "Invalid URI: The format of the URI could not be determined.")]
-	[InlineData("not-a-url", typeof(UriFormatException), "Invalid URI: The format of the URI could not be determined.")]
-	public void Given_Invalid_BaseUrl_When_GetChatClientAsync_Invoked_Then_It_Should_Throw(string? baseUrl, Type expected, string message)
-	{
-		// Arrange
-		var settings = BuildAppSettings(baseUrl: baseUrl);
-		var connector = new OllamaConnector(settings);
+    [Trait("Category", "UnitTest")]
+    [Fact]
+    public void Given_Valid_Settings_When_EnsureLanguageModelSettingsValid_Invoked_Then_It_Should_Return_True()
+    {
+        // Arrange
+        var settings = BuildAppSettings();
+        var connector = new OllamaConnector(settings);
 
-		// Act
-		Func<Task> func = async () => await connector.GetChatClientAsync();
+        // Act
+        var result = connector.EnsureLanguageModelSettingsValid();
 
-		// Assert
-		func.ShouldThrow(expected)
-			.Message.ShouldContain(message);
-	}
-	
-	[Trait("Category", "UnitTest")]
+        // Assert
+        result.ShouldBeTrue();
+    }
+
+    [Trait("Category", "UnitTest")]
+    [Theory]
+    [InlineData(null, typeof(NullReferenceException), "Object reference not set to an instance of an object")]
+    [InlineData("", typeof(UriFormatException), "Invalid URI:")]
+    [InlineData("   ", typeof(UriFormatException), "Invalid URI:")]
+    [InlineData("\t\n\r", typeof(UriFormatException), "Invalid URI:")]
+    [InlineData("invalid-uri-format", typeof(UriFormatException), "Invalid URI:")]
+    public void Given_Invalid_BaseUrl_When_GetChatClientAsync_Invoked_Then_It_Should_Throw(string? baseUrl, Type expected, string message)
+    {
+        // Arrange
+        var settings = BuildAppSettings(baseUrl: baseUrl);
+        var connector = new OllamaConnector(settings);
+
+        // Act
+        Func<Task> func = async () => await connector.GetChatClientAsync();
+
+        // Assert
+        func.ShouldThrow(expected)
+            .Message.ShouldContain(message);
+    }
+    
+    [Trait("Category", "UnitTest")]
     [Theory]
     [InlineData(null, typeof(NullReferenceException), "Object reference not set to an instance of an object")]
     public void Given_Null_Model_When_GetChatClientAsync_Invoked_Then_It_Should_Throw(string? model, Type expected, string message)
@@ -190,6 +170,26 @@ public class OllamaConnectorTests
         // Arrange        
         var settings = BuildAppSettings(model: model);
         var connector = new HuggingFaceConnector(settings);
+
+        // Act
+        Func<Task> func = async () => await connector.GetChatClientAsync();
+
+        // Assert
+        func.ShouldThrow(expected)
+            .Message.ShouldContain(message);
+    }
+
+    [Trait("Category", "IntegrationTest")]
+    [Trait("Category", "LLMRequired")]
+    [Theory]
+    [InlineData("", typeof(OllamaException), "invalid model name")]
+    [InlineData("   ", typeof(OllamaException), "invalid model name")]
+    [InlineData("\t\r\n", typeof(OllamaException), "invalid model name")]
+    public void Given_Invalid_Model_When_GetChatClient_Invoked_Then_It_Should_Throw(string? model, Type expected, string message)
+    {
+        // Arrange        
+        var settings = BuildAppSettings(model: model);
+        var connector = new OllamaConnector(settings);
 
         // Act
         Func<Task> func = async () => await connector.GetChatClientAsync();
@@ -219,7 +219,7 @@ public class OllamaConnectorTests
     [Trait("Category", "UnitTest")]
     [InlineData(typeof(InvalidOperationException), "Ollama")]
     [Theory]
-    public async Task Given_Null_Settings_When_CreateChatClientAsync_Invoked_Then_It_Should_Throw(Type expected, string expectedMessage)
+    public void Given_Null_OllamaSettings_When_CreateChatClientAsync_Invoked_Then_It_Should_Throw(Type expected, string expectedMessage)
     {
         // Arrange
         var settings = new AppSettings
@@ -235,16 +235,17 @@ public class OllamaConnectorTests
         func.ShouldThrow(expected)
             .Message.ShouldContain(expectedMessage);
     }
-	
-	[Trait("Category", "UnitTest")]
+    
+    [Trait("Category", "UnitTest")]
     [Theory]
-	[InlineData(null, null, typeof(NullReferenceException), "Object reference not set to an instance of an object")]
-	[InlineData(null, Model, typeof(NullReferenceException), "Object reference not set to an instance of an object")]
-	[InlineData("", Model, typeof(InvalidOperationException), "Missing configuration: Ollama")]
-	[InlineData("   ", Model, typeof(InvalidOperationException), "Missing configuration: Ollama")]
-	[InlineData(BaseUrl, null, typeof(NullReferenceException), "Object reference not set to an instance of an object")]
-	[InlineData(BaseUrl, "", typeof(InvalidOperationException), "Missing configuration: Ollama")]
-	[InlineData(BaseUrl, "  ", typeof(InvalidOperationException), "Missing configuration: Ollama")]
+    [InlineData(null, Model, typeof(NullReferenceException), "Object reference not set to an instance of an object")]
+    [InlineData("", Model, typeof(InvalidOperationException), "Missing configuration: Ollama")]
+    [InlineData("   ", Model, typeof(InvalidOperationException), "Missing configuration: Ollama")]
+    [InlineData("\t\r\n", Model, typeof(InvalidOperationException), "Missing configuration: Ollama")]
+    [InlineData(BaseUrl, null, typeof(NullReferenceException), "Object reference not set to an instance of an object")]
+    [InlineData(BaseUrl, "", typeof(InvalidOperationException), "Missing configuration: Ollama")]
+    [InlineData(BaseUrl, "  ", typeof(InvalidOperationException), "Missing configuration: Ollama")]
+    [InlineData(BaseUrl, "\t\r\n", typeof(InvalidOperationException), "Missing configuration: Ollama")]
     public void Given_Invalid_Settings_When_CreateChatClientAsync_Invoked_Then_It_Should_Throw(string? baseUrl, string? model, Type expected, string expectedMessage)
     {
         // Arrange
@@ -266,8 +267,8 @@ public class OllamaConnectorTests
             .Message.ShouldContain(expectedMessage);
     }
 
-	[Trait("Category", "IntegrationTest")]
-	[Trait("Category", "LLMRequired")]
+    [Trait("Category", "IntegrationTest")]
+    [Trait("Category", "LLMRequired")]
     [Fact]
     public async Task Given_Valid_Settings_When_CreateChatClientAsync_Invoked_Then_It_Should_Return_IChatClient()
     {

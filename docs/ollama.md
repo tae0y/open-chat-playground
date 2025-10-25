@@ -18,31 +18,31 @@ This page describes how to run OpenChat Playground (OCP) with [Ollama](https://o
 
 ## Run on local machine
 
-1. Make sure Ollama is installed and running on your local machine. If not, install Ollama from [ollama.com](https://ollama.com/) and start the service.
+1. Make sure Ollama is installed and running on your local machine. If not, install Ollama from [ollama.com](https://ollama.com/search) and start the service.
 
     ```bash
     ollama serve
     ```
 
-1. Pull the model you want to use. The default model OCP uses is "llama3.2"
+1. Pull the model you want to use. The default model OCP uses is [llama3.2](https://ollama.com/library/llama3.2).
 
     ```bash
     ollama pull llama3.2
     ```
-    
-    Alternatively, if you want to run with a different model, say [qwen](https://ollama.com/library/qwen) other than the default one, download it first by running the following command.
+
+   Alternatively, if you want to run with a different model, say [qwen3](https://ollama.com/library/qwen3) other than the default one, download it first by running the following command.
 
     ```bash
-    ollama pull qwen
+    ollama pull qwen3
     ```
 
-2. Make sure you are at the repository root.
+1. Make sure you are at the repository root.
 
     ```bash
     cd $REPOSITORY_ROOT
     ```
 
-3. Run the app.
+1. Run the app.
 
     ```bash
     # bash/zsh
@@ -56,44 +56,42 @@ This page describes how to run OpenChat Playground (OCP) with [Ollama](https://o
         --connector-type Ollama
     ```
 
-    Alternatively, if you want to run with a different model, say [qwen](https://ollama.com/library/qwen) other than the default one, download it first by running the following command.
+   Alternatively, if you want to run with a different model, say [qwen3](https://ollama.com/library/qwen3), make sure you've already downloaded the model by running the `ollama pull qwen3` command.
 
     ```bash
     # bash/zsh
     dotnet run --project $REPOSITORY_ROOT/src/OpenChat.PlaygroundApp -- \
         --connector-type Ollama \
-        --model qwen
+        --model qwen3
     ```
 
     ```powershell
     # PowerShell
     dotnet run --project $REPOSITORY_ROOT\src\OpenChat.PlaygroundApp -- `
         --connector-type Ollama `
-        --model qwen
+        --model qwen3
     ```
 
-4. Open your web browser, navigate to `http://localhost:5280`, and enter prompts.
+1. Open your web browser, navigate to `http://localhost:5280`, and enter prompts.
 
 ## Run on local container
 
-This approach runs OpenChat Playground in a container while connecting to Ollama running on the host machine.
-
-1. Configure Ollama to accept connections from containers.
+1. Make sure the Ollama server is up and running.
 
     ```bash
     ollama serve
     ```
 
-1. Pull the model you want to use, and verify Ollama is accessible
+1. Download the Ollama model. The default model OCP uses is [llama3.2](https://ollama.com/library/llama3.2).
 
     ```bash
     ollama pull llama3.2
-    curl http://localhost:11434/api/version
     ```
-    
-    ```powershell
-    ollama pull llama3.2
-    Invoke-RestMethod -Uri http://localhost:11434/api/version
+
+   Alternatively, if you want to run with a different model, say [qwen3](https://ollama.com/library/qwen3), other than the default one, download it first by running the following command.
+
+    ```bash
+    ollama pull qwen3
     ```
 
 1. Make sure you are at the repository root.
@@ -126,11 +124,11 @@ This approach runs OpenChat Playground in a container while connecting to Ollama
 
     ```bash
     # bash/zsh - from GitHub Container Registry
-    docker run -i --rm -p 8080:8080 ghcr.io/aliencube/open-chat-playground/openchat-playground:latest\
+    docker run -i --rm -p 8080:8080 ghcr.io/aliencube/open-chat-playground/openchat-playground:latest \
         --connector-type Ollama \
         --base-url http://host.docker.internal:11434
     ```
-    
+
     ```powershell
     # PowerShell - from GitHub Container Registry
     docker run -i --rm -p 8080:8080 ghcr.io/aliencube/open-chat-playground/openchat-playground:latest `
@@ -138,10 +136,10 @@ This approach runs OpenChat Playground in a container while connecting to Ollama
         --base-url http://host.docker.internal:11434
     ```
 
-    Alternatively, if you want to run with a different model, say [qwen](https://ollama.com/library/qwen), make sure you've already downloaded the model by running the `ollama pull qwen` command.
+   Alternatively, if you want to run with a different model, say [qwen3](https://ollama.com/library/qwen), make sure you've already downloaded the model by running the `ollama pull qwen3` command.
 
     ```bash
-    ollama pull qwen
+    ollama pull qwen3
     ```
 
     ```bash
@@ -149,7 +147,7 @@ This approach runs OpenChat Playground in a container while connecting to Ollama
     docker run -i --rm -p 8080:8080 openchat-playground:latest \
         --connector-type Ollama \
         --base-url http://host.docker.internal:11434 \
-        --model qwen
+        --model qwen3
     ```
 
     ```powershell
@@ -157,23 +155,23 @@ This approach runs OpenChat Playground in a container while connecting to Ollama
     docker run -i --rm -p 8080:8080 openchat-playground:latest `
         --connector-type Ollama `
         --base-url http://host.docker.internal:11434 `
-        --model qwen
+        --model qwen3
     ```
 
     ```bash
     # bash/zsh - from GitHub Container Registry
-    docker run -i --rm -p 8080:8080 ghcr.io/aliencube/open-chat-playground/openchat-playground:latest\
+    docker run -i --rm -p 8080:8080 ghcr.io/aliencube/open-chat-playground/openchat-playground:latest \
         --connector-type Ollama \
         --base-url http://host.docker.internal:11434 \
-        --model qwen
+        --model qwen3
     ```
-    
+
     ```powershell
     # PowerShell - from GitHub Container Registry
     docker run -i --rm -p 8080:8080 ghcr.io/aliencube/open-chat-playground/openchat-playground:latest `
         --connector-type Ollama `
         --base-url http://host.docker.internal:11434 `
-        --model qwen
+        --model qwen3
     ```
 
    > **NOTE**: Use `host.docker.internal:11434` to connect to Ollama running on the host machine from inside the container.
@@ -216,13 +214,13 @@ This approach runs OpenChat Playground in a container while connecting to Ollama
     azd env set CONNECTOR_TYPE "Ollama"
     ```
 
-   The default model OCP uses is [llama3.2](https://ollama.com/library/llama3.2). If you want to run with a different model, say [qwen](https://ollama.com/library/qwen) other than the default one, add it to azd environment variables.
+   The default model OCP uses is [llama3.2](https://ollama.com/library/llama3.2). If you want to run with a different model, say [qwen3](https://ollama.com/library/qwen3) other than the default one, add it to azd environment variables.
 
     ```bash
-    azd env set OLLAMA_MODEL "qwen"
+    azd env set OLLAMA_MODEL "qwen3"
     ```
 
-2. As a default, the app uses a Serverless GPU with NVIDIA T4 (`NC8as-T4`). If you want to use NVIDIA A100, set the GPU profile.
+1. As a default, the app uses a Serverless GPU with NVIDIA T4 (`NC8as-T4`). If you want to use NVIDIA A100, set the GPU profile.
 
     ```bash
     azd env set GPU_PROFILE_NAME "NC24-A100"
@@ -230,7 +228,7 @@ This approach runs OpenChat Playground in a container while connecting to Ollama
 
    If you want to know more about Serverless GPU, visit [Using serverless GPUs in Azure Container Apps](https://learn.microsoft.com/azure/container-apps/gpu-serverless-overview#use-serverless-gpus).
 
-3. Run the following commands in order to provision and deploy the app.
+1. Run the following commands in order to provision and deploy the app.
 
     ```bash
     azd up
@@ -241,9 +239,9 @@ This approach runs OpenChat Playground in a container while connecting to Ollama
 
    Once deployed, you will be able to see the deployed OCP app URL.
 
-4. Open your web browser, navigate to the OCP app URL, and enter prompts.
+1. Open your web browser, navigate to the OCP app URL, and enter prompts.
 
-5. Clean up all the resources.
+1. Clean up all the resources.
 
     ```bash
     azd down --force --purge
