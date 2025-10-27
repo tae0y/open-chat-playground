@@ -18,7 +18,7 @@ This page describes how to run OpenChat Playground (OCP) with [Docker Model Runn
 
 ## Run on local machine
 
-1. Make sure the Docker Model Runner is up and ready to accept requests with the following command.
+1. Make sure the Docker Model Runner is up and running, and ready to accept requests with the following command.
 
     ```bash
     docker model status
@@ -76,7 +76,7 @@ This page describes how to run OpenChat Playground (OCP) with [Docker Model Runn
 
 ## Run in local container
 
-1. Make sure the Docker Model Runner is up and ready to accept requests with the following command.
+1. Make sure the Docker Model Runner is up and running, and ready to accept requests with the following command.
 
     ```bash
     docker model status
