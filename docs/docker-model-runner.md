@@ -27,16 +27,18 @@ This page describes how to run OpenChat Playground (OCP) with [Docker Model Runn
    It should say `Docker Model Runner is running`.
 
     ```bash
+    # bash/zsh
     curl http://localhost:12434
     ```
 
     ```powershell
+    # {owershell
     Invoke-WebRequest http://localhost:12434
     ```
 
     It should say `The Service is running`
 
-    > If it says `Connection refused`, turn on "Enable host-side TCP support" option in Docker Desktop Settings.
+    > If it says `Connection refused`, turn on "Enable host-side TCP support" option in [Docker Desktop Settings](https://docs.docker.com/ai/model-runner/get-started/#docker-desktop).
 
 1. Download the model. The default model OCP uses is [ai/smollm2](https://hub.docker.com/r/ai/smollm2).
 
@@ -74,13 +76,27 @@ This page describes how to run OpenChat Playground (OCP) with [Docker Model Runn
 
 ## Run in local container
 
-1. Make sure the Docker Model Runner is up and running with the following command.
+1. Make sure the Docker Model Runner is up and ready to accept requests with the following command.
 
     ```bash
     docker model status
     ```
 
    It should say `Docker Model Runner is running`.
+
+    ```bash
+    # bash/zsh
+    curl http://localhost:12434
+    ```
+
+    ```powershell
+    # {owershell
+    Invoke-WebRequest http://localhost:12434
+    ```
+
+    It should say `The Service is running`
+
+    > If it says `Connection refused`, turn on "Enable host-side TCP support" option in [Docker Desktop Settings](https://docs.docker.com/ai/model-runner/get-started/#docker-desktop).
 
 1. Download the model. The default model OCP uses is [ai/smollm2](https://hub.docker.com/r/ai/smollm2).
 
