@@ -1,6 +1,6 @@
 # OpenChat Playground with Foundry Local
 
-This page describes how to run OpenChat Playground (OCP) with Foundry Local models integration.
+This page describes how to run OpenChat Playground (OCP) with [Foundry Local](https://learn.microsoft.com/azure/ai-foundry/foundry-local/what-is-foundry-local) integration.
 
 ## Get the repository root
 
@@ -18,7 +18,7 @@ This page describes how to run OpenChat Playground (OCP) with Foundry Local mode
 
 ## Run on local machine
 
-1. Make sure the Foundry Local server is up and running.
+1. Make sure the Foundry Local server is up and running with the following command.
 
     ```bash
     foundry service start

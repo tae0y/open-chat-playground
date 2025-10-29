@@ -10,5 +10,6 @@
 - [Ollama](./ollama.md)
 - [Anthropic](./anthropic.md)
 - [LG](./lg.md)
+- ~~Naver~~
 - [OpenAI](./openai.md)
 - [Upstage](./upstage.md)

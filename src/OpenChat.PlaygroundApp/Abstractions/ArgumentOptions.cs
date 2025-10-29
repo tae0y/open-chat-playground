@@ -363,10 +363,10 @@ public abstract class ArgumentOptions
         Console.WriteLine("  ** Amazon Bedrock: **");
         Console.ForegroundColor = foregroundColor;
 
-        Console.WriteLine($"  {ArgumentOptionConstants.AmazonBedrock.AccessKeyId}     The AWSCredentials Access Key ID.");
-        Console.WriteLine($"  {ArgumentOptionConstants.AmazonBedrock.SecretAccessKey} The AWSCredentials Secret Access Key.");
-        Console.WriteLine($"  {ArgumentOptionConstants.AmazonBedrock.Region}            The AWS region.");
-        Console.WriteLine($"  {ArgumentOptionConstants.AmazonBedrock.ModelId}          The model ID. Default to 'anthropic.claude-sonnet-4-20250514-v1:0'");
+        Console.WriteLine($"  {ArgumentOptionConstants.AmazonBedrock.AccessKeyId}      The AWSCredentials Access Key ID.");
+        Console.WriteLine($"  {ArgumentOptionConstants.AmazonBedrock.SecretAccessKey}  The AWSCredentials Secret Access Key.");
+        Console.WriteLine($"  {ArgumentOptionConstants.AmazonBedrock.Region}             The AWS region.");
+        Console.WriteLine($"  {ArgumentOptionConstants.AmazonBedrock.ModelId}           The model ID. Default to 'anthropic.claude-sonnet-4-20250514-v1:0'");
         Console.WriteLine();
     }
 
@@ -426,7 +426,7 @@ public abstract class ArgumentOptions
         Console.WriteLine("  ** Foundry Local: **");
         Console.ForegroundColor = foregroundColor;
 
-        Console.WriteLine("  TBD");
+        Console.WriteLine($"  {ArgumentOptionConstants.FoundryLocal.Alias}              The alias name. Default to 'phi-4-mini'");
         Console.WriteLine();
     }
 
@@ -474,7 +474,8 @@ public abstract class ArgumentOptions
         Console.WriteLine("  ** LG: **");
         Console.ForegroundColor = foregroundColor;
 
-        Console.WriteLine("  TBD");
+        Console.WriteLine($"  {ArgumentOptionConstants.LG.BaseUrl}           The endpoint URL. Default to 'http://localhost:11434'");
+        Console.WriteLine($"  {ArgumentOptionConstants.LG.Model}              The model name. Default to 'hf.co/LGAI-EXAONE/EXAONE-4.0-1.2B-GGUF'");
         Console.WriteLine();
     }
 
