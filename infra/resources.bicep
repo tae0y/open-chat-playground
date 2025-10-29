@@ -23,6 +23,9 @@ param azureAIFoundryDeploymentName string = ''
 param githubModelsToken string = ''
 param githubModelsModel string = ''
 // Google Vertex AI
+@secure()
+param googleVertexAIModel string = ''
+param googleVertexAIApiKey string = ''
 // Docker Model Runner - NOT SUPPORTED
 // Foundry Local - NOT SUPPORTED
 // Hugging Face
@@ -246,6 +249,17 @@ var envGitHubModels = (connectorType == '' || connectorType == 'GitHubModels') ?
   }
 ] : []) : []
 // Google Vertex AI
+var envGoogleVertexAI = connectorType == 'GoogleVertexAI' ? concat(googleVertexAIModel != '' ? [
+  {
+    name: 'GoogleVertexAI__Model'
+    value: googleVertexAIModel
+  }
+] : [], googleVertexAIApiKey != '' ? [
+  {
+    name: 'GoogleVertexAI__ApiKey'
+    secretRef: 'google-vertex-ai-api-key'
+  }
+] : []) : []
 // Docker Model Runner - NOT SUPPORTED
 // Foundry Local - NOT SUPPORTED
 // Hugging Face
@@ -348,6 +362,11 @@ module openchatPlaygroundApp 'br/public:avm/res/app/container-app:0.18.1' = {
         name: 'github-models-token'
         value: githubModelsToken
       }
+    ] : [], googleVertexAIApiKey != '' ? [
+      {
+        name: 'google-vertex-ai-api-key'
+        value: googleVertexAIApiKey
+      }
     ] : [], anthropicApiKey != '' ? [
       {
         name: 'anthropic-api-key'
@@ -390,6 +409,7 @@ module openchatPlaygroundApp 'br/public:avm/res/app/container-app:0.18.1' = {
         envAmazonBedrock,
         envAzureAIFoundry,
         envGitHubModels,
+        envGoogleVertexAI,
         envHuggingFace,
         envOllama,
         envAnthropic,

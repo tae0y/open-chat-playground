@@ -38,6 +38,12 @@
     "githubModelsModel": {
       "value": "${GH_MODELS_MODEL=openai/gpt-4o-mini}"
     },
+    "googleVertexAIModel": {
+      "value": "${GOOGLE_VERTEX_AI_MODEL}"
+    },
+    "googleVertexAIApiKey": {
+      "value": "${GOOGLE_VERTEX_AI_API_KEY}"
+    },
     "huggingFaceModel": {
       "value": "${HUGGING_FACE_MODEL=hf.co/Qwen/Qwen3-0.6B-GGUF}"
     },
