@@ -162,7 +162,7 @@ public class GoogleVertexAIConnectorTests
     [InlineData("", typeof(ArgumentException), "apiKey")]
     [InlineData("   ", typeof(ArgumentException), "apiKey")]
     [InlineData("\t\r\n", typeof(ArgumentException), "apiKey")]
-    public async Task Given_Invalid_ApiKey_When_GetChatClientAsync_Invoked_Then_It_Should_Throw(string? apiKey, Type expected, string message)
+    public void Given_Invalid_ApiKey_When_GetChatClientAsync_Invoked_Then_It_Should_Throw(string? apiKey, Type expected, string message)
     {
         // Arrange
         var settings = BuildAppSettings(apiKey: apiKey);
@@ -179,7 +179,7 @@ public class GoogleVertexAIConnectorTests
     [Trait("Category", "UnitTest")]
     [Theory]
     [InlineData(null, typeof(NullReferenceException), "Object reference not set to an instance of an object.")]
-    public async Task Given_Invalid_Model_When_GetChatClientAsync_Invoked_Then_It_Should_Throw(string? model, Type expected, string message)
+    public void Given_Invalid_Model_When_GetChatClientAsync_Invoked_Then_It_Should_Throw(string? model, Type expected, string message)
     {
         // Arrange
         var settings = BuildAppSettings(model: model);
@@ -226,8 +226,8 @@ public class GoogleVertexAIConnectorTests
             ConnectorType = ConnectorType.GoogleVertexAI,
             GoogleVertexAI = new GoogleVertexAISettings
             {
-                ApiKey = null,
-                Model = "test-model"
+                ApiKey = apiKey,
+                Model = model
             }
         };
 
