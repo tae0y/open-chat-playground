@@ -32,7 +32,7 @@ This page describes how to run OpenChat Playground (OCP) with [Docker Model Runn
     ```
 
     ```powershell
-    # {owershell
+    # Powershell
     Invoke-WebRequest http://localhost:12434
     ```
 
@@ -90,7 +90,7 @@ This page describes how to run OpenChat Playground (OCP) with [Docker Model Runn
     ```
 
     ```powershell
-    # {owershell
+    # Powershell
     Invoke-WebRequest http://localhost:12434
     ```
 
