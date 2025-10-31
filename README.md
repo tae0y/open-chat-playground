@@ -63,7 +63,7 @@ Open Chat Playground (OCP) is a web UI that is able to connect virtually any LLM
 - [Use Amazon Bedrock](./docs/amazon-bedrock.md#run-on-local-machine)
 - [Use Azure AI Foundry](./docs/azure-ai-foundry.md#run-on-local-machine)
 - [Use GitHub Models](./docs/github-models.md#run-on-local-machine)
-- [Google Vertex AI](./docs/google-vertex-ai.md#run-on-local-machine)
+- [Use Google Vertex AI](./docs/google-vertex-ai.md#run-on-local-machine)
 - [Use Docker Model Runner](./docs/docker-model-runner.md#run-on-local-machine)
 - [Use Foundry Local](./docs/foundry-local.md#run-on-local-machine)
 - [Use Hugging Face](./docs/hugging-face.md#run-on-local-machine)
@@ -78,7 +78,7 @@ Open Chat Playground (OCP) is a web UI that is able to connect virtually any LLM
 - [Use Amazon Bedrock](./docs/amazon-bedrock.md#run-in-local-container)
 - [Use Azure AI Foundry](./docs/azure-ai-foundry.md#run-in-local-container)
 - [Use GitHub Models](./docs/github-models.md#run-in-local-container)
-- [Google Vertex AI](./docs/google-vertex-ai.md#run-on-local-container)
+- [Use Google Vertex AI](./docs/google-vertex-ai.md#run-on-local-container)
 - [Use Docker Model Runner](./docs/docker-model-runner.md#run-in-local-container)
 - ~~Use Foundry Local~~ 👉 NOT SUPPORTED
 - [Use Hugging Face](./docs/hugging-face.md#run-in-local-container)
@@ -94,7 +94,7 @@ Open Chat Playground (OCP) is a web UI that is able to connect virtually any LLM
 - [Use Amazon Bedrock](./docs/amazon-bedrock.md#run-on-azure)
 - [Use Azure AI Foundry](./docs/azure-ai-foundry.md#run-on-azure)
 - [Use GitHub Models](./docs/github-models.md#run-on-azure)
-- [Google Vertex AI](./docs/google-vertex-ai.md#run-on-azure)
+- [Use Google Vertex AI](./docs/google-vertex-ai.md#run-on-azure)
 - ~~Use Docker Model Runner~~ 👉 NOT SUPPORTED
 - ~~Use Foundry Local~~ 👉 NOT SUPPORTED
 - [Use Hugging Face](./docs/hugging-face.md#run-on-azure)

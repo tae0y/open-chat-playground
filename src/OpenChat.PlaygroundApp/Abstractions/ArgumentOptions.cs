@@ -403,7 +403,8 @@ public abstract class ArgumentOptions
         Console.WriteLine("  ** Google Vertex AI: **");
         Console.ForegroundColor = foregroundColor;
 
-        Console.WriteLine("  TBD");
+        Console.WriteLine($"  {ArgumentOptionConstants.GoogleVertexAI.ApiKey}            The Google Vertex AI API key.");
+        Console.WriteLine($"  {ArgumentOptionConstants.GoogleVertexAI.Model}              The model name. Default to 'gemini-2.5-flash-lite'");
         Console.WriteLine();
     }
 
