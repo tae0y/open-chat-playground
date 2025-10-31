@@ -70,16 +70,13 @@ jobs:
     - name: Run Ollama server
       shell: bash
       run: |
-        ollama run hf.co/Qwen/Qwen3-0.6B-GGUF &
+        ollama run qwen3 &
 
     - name: Run app in background
       shell: bash
       run: |
-        dotnet user-secrets --project ./src/OpenChat.PlaygroundApp \
-            set GitHubModels:Token "temporary-dummy-token"
-
         dotnet run --project ./src/OpenChat.PlaygroundApp -- \
-            --connector-type HuggingFace &
+            --connector-type Ollama &
 
         sleep 30
 
