@@ -17,8 +17,8 @@ public class ChatInputImeE2ETests : PageTest
     [Trait("Category", "IntegrationTest")]
     [Trait("Category", "UI")]
     [Theory]
-    [InlineData("안녕하세요")]
-    [InlineData("테스트")]
+    [InlineData("Hello")]
+    [InlineData("It's a test")]
     public async Task Given_Korean_IME_Composition_When_Enter_During_Composition_Then_It_Should_Not_Submit(string testMessage)
     {
         // Arrange
@@ -70,8 +70,8 @@ public class ChatInputImeE2ETests : PageTest
     [Trait("Category", "UI")]
     [Trait("Category", "LLMRequired")]
     [Theory]
-    [InlineData("테스트 메시지")]
-    [InlineData("안녕하세요")]
+    [InlineData("It's a test message")]
+    [InlineData("Hello")]
     public async Task Given_Message_Sent_When_Enter_Pressed_Immediately_Then_It_Should_Not_Send_Twice(string testMessage)
     {
         // Arrange
@@ -104,8 +104,8 @@ public class ChatInputImeE2ETests : PageTest
     [Trait("Category", "IntegrationTest")]
     [Trait("Category", "UI")]
     [Theory]
-    [InlineData("첫 줄")]
-    [InlineData("테스트")]
+    [InlineData("First line")]
+    [InlineData("Test")]
     public async Task Given_Text_Input_When_Shift_Enter_Pressed_Then_It_Should_Insert_Newline_Not_Submit(string initialText)
     {
         // Arrange

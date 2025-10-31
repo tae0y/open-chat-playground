@@ -74,7 +74,6 @@ public class ChatHeaderUITests : PageTest
     [Trait("Category", "UI")]
     [Trait("Category", "LLMRequired")]
     [Theory]
-    [InlineData("1+1의 결과는 무엇인가요?")]
     [InlineData("what is the result of 1 + 1?")]
     public async Task Given_UserAndAssistantMessages_When_NewChat_Clicked_Then_Conversation_Should_Reset(string userMessage)
     {

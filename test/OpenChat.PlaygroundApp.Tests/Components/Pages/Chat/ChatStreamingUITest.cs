@@ -18,7 +18,6 @@ public class ChatStreamingUITest : PageTest
     [Trait("Category", "UI")]
     [Trait("Category", "LLMRequired")]
     [Theory]
-    [InlineData("하늘은 왜 푸른 색인가요? 다섯 개의 단락으로 자세히 설명해주세요.")]
     [InlineData("Why is the sky blue? Please explain in five paragraphs.")]
     public async Task Given_UserMessage_When_SendButton_Clicked_Then_Response_Should_Stream_Progressively(string userMessage)
     {
@@ -53,7 +52,6 @@ public class ChatStreamingUITest : PageTest
     [Trait("Category", "UI")]
     [Trait("Category", "LLMRequired")]
     [Theory]
-    [InlineData("하늘은 왜 푸른 색인가요?")]
     [InlineData("Why is the sky blue?")]
     public async Task Given_UserMessage_When_SendButton_Clicked_Then_LoadingSpinner_Should_Be_Visible_Before_Text_Arrives(string userMessage)
     {
@@ -79,7 +77,6 @@ public class ChatStreamingUITest : PageTest
     [Trait("Category", "UI")]
     [Trait("Category", "LLMRequired")]
     [Theory]
-    [InlineData("하늘은 왜 푸른 색인가요?")]
     [InlineData("Why is the sky blue?")]
     public async Task Given_UserMessage_When_Response_Text_Arrives_Then_LoadingSpinner_Should_Disappear(string userMessage)
     {

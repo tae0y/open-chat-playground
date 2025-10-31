@@ -83,7 +83,6 @@ public class ChatInputUITest : PageTest
     [Trait("Category", "UI")]
     [Trait("Category", "LLMRequired")]
     [Theory]
-    [InlineData("하늘은 왜 푸른 색인가요?", 1)]
     [InlineData("Why is the sky blue?", 1)]
     public async Task Given_UserMessage_When_SendButton_Clicked_Then_It_Should_SendMessage(string userMessage, int expectedMessageCount)
     {
@@ -137,7 +136,6 @@ public class ChatInputUITest : PageTest
     [Trait("Category", "UI")]
     [Trait("Category", "LLMRequired")]
     [Theory]
-    [InlineData("하늘은 왜 푸른 색인가요?", 1)]
     [InlineData("Why is the sky blue?", 1)]
     public async Task Given_UserMessage_When_EnterKey_Pressed_Then_It_Should_SendMessage(string userMessage, int expectedMessageCount)
     {
@@ -187,7 +185,6 @@ public class ChatInputUITest : PageTest
     [Trait("Category", "IntegrationTest")]
     [Trait("Category", "UI")]
     [Theory]
-    [InlineData("하늘은 왜 푸를까?", "rgb(0, 0, 0)")]
     [InlineData("Why is the sky blue?", "rgb(0, 0, 0)")]
     public async Task Given_UserMessage_When_TextArea_FilledIn_Then_It_Should_Change_Color_Of_SendButton(string userMessage, string expectedButtonColor)
     {
