@@ -1,6 +1,7 @@
 name: Azure Dev - Build Only
 
 on:
+  workflow_dispatch:
   push:
     branches:
     - 'feat/*'
