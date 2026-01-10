@@ -9,14 +9,16 @@ namespace OpenChat.PlaygroundApp.Tests.Connectors;
 public class FoundryLocalConnectorTests
 {
     private const string Alias = "phi-4-mini";
+    private const string ServiceUrl = "http://localhost:55588";
 
-    private static AppSettings BuildAppSettings(string? alias = Alias)
+    private static AppSettings BuildAppSettings(string? serviceUrl = ServiceUrl, string? alias = Alias)
     {
         return new AppSettings
         {
             ConnectorType = ConnectorType.FoundryLocal,
             FoundryLocal = new FoundryLocalSettings
             {
+                ServiceUrl = serviceUrl,
                 Alias = alias
             }
         };
@@ -84,6 +86,26 @@ public class FoundryLocalConnectorTests
 
     [Trait("Category", "UnitTest")]
     [Theory]
+    [InlineData(null, typeof(InvalidOperationException), "FoundryLocal:ServiceUrl")]
+    [InlineData("", typeof(InvalidOperationException), "FoundryLocal:ServiceUrl")]
+    [InlineData("   ", typeof(InvalidOperationException), "FoundryLocal:ServiceUrl")]
+    [InlineData("\t\n\r", typeof(InvalidOperationException), "FoundryLocal:ServiceUrl")]
+    public void Given_Invalid_ServiceUrl_When_EnsureLanguageModelSettingsValid_Invoked_Then_It_Should_Throw(string? serviceUrl, Type expectedType, string expectedMessage)
+    {
+        // Arrange
+        var settings = BuildAppSettings(serviceUrl: serviceUrl);
+        var connector = new FoundryLocalConnector(settings);
+
+        // Act
+        Action action = () => connector.EnsureLanguageModelSettingsValid();
+
+        // Assert
+        action.ShouldThrow(expectedType)
+              .Message.ShouldContain(expectedMessage);
+    }
+
+    [Trait("Category", "UnitTest")]
+    [Theory]
     [InlineData(null, typeof(NullReferenceException), "Object reference not set to an instance of an object")]
     [InlineData("", typeof(InvalidOperationException), "FoundryLocal:Alias")]
     [InlineData("   ", typeof(InvalidOperationException), "FoundryLocal:Alias")]
@@ -115,6 +137,25 @@ public class FoundryLocalConnectorTests
 
         // Assert
         result.ShouldBeTrue();
+    }
+
+    [Trait("Category", "UnitTest")]
+    [Theory]
+    [InlineData("invalid-uri", typeof(UriFormatException), "Invalid URI")]
+    [InlineData("not-a-url", typeof(UriFormatException), "Invalid URI")]
+    [InlineData("http://", typeof(UriFormatException), "Invalid URI")]
+    public void Given_Invalid_ServiceUrl_Format_When_GetChatClient_Invoked_Then_It_Should_Throw(string serviceUrl, Type expected, string message)
+    {
+        // Arrange
+        var settings = BuildAppSettings(serviceUrl: serviceUrl);
+        var connector = new FoundryLocalConnector(settings);
+
+        // Act
+        Func<Task> func = async () => await connector.GetChatClientAsync();
+
+        // Assert
+        func.ShouldThrow(expected)
+            .Message.ShouldContain(message);
     }
 
     [Trait("Category", "UnitTest")]
@@ -209,6 +250,7 @@ public class FoundryLocalConnectorTests
             ConnectorType = ConnectorType.FoundryLocal,
             FoundryLocal = new FoundryLocalSettings
             {
+                ServiceUrl = ServiceUrl,
                 Alias = alias
             }
         };

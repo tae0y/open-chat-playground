@@ -26,6 +26,11 @@ public class FoundryLocalConnector(AppSettings settings) : LanguageModelConnecto
             throw new InvalidOperationException("Missing configuration: FoundryLocal.");
         }
 
+        if (string.IsNullOrWhiteSpace(settings.ServiceUrl?.Trim()) == true)
+        {
+            throw new InvalidOperationException("Missing configuration: FoundryLocal:ServiceUrl.");
+        }
+
         if (string.IsNullOrWhiteSpace(settings.Alias!.Trim()))
         {
             throw new InvalidOperationException("Missing configuration: FoundryLocal:Alias.");
@@ -38,10 +43,15 @@ public class FoundryLocalConnector(AppSettings settings) : LanguageModelConnecto
     public override async Task<IChatClient> GetChatClientAsync()
     {
         var settings = this.Settings as FoundryLocalSettings;
+
+        var serviceUrl = settings!.ServiceUrl!.Trim() ?? throw new InvalidOperationException("Missing configuration: FoundryLocal:ServiceUrl.");
+        if (!Uri.IsWellFormedUriString(serviceUrl, UriKind.Absolute))
+        {
+            throw new UriFormatException($"Invalid URI: The FoundryLocal endpoint '{serviceUrl}' is not a valid URI.");
+        }
         var alias = settings!.Alias!.Trim() ?? throw new InvalidOperationException("Missing configuration: FoundryLocal:Alias.");
 
         // Initialize FoundryLocalManager singleton (v0.8.0+)
-        var serviceUrl = "http://127.0.0.1:55588";
         var config = new Configuration
         {
             AppName = "OpenChat.PlaygroundApp",
