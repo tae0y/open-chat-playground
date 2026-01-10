@@ -2,6 +2,7 @@ using System.ClientModel;
 
 using Microsoft.AI.Foundry.Local;
 using Microsoft.Extensions.AI;
+using Microsoft.Extensions.Logging.Abstractions;
 
 using OpenAI;
 
@@ -54,7 +55,7 @@ public class FoundryLocalConnector(AppSettings settings) : LanguageModelConnecto
         // Initialize FoundryLocalManager singleton (v0.8.0+)
         var config = new Configuration
         {
-            AppName = "OpenChat.PlaygroundApp",
+            AppName = "OpenChat-PlaygroundApp",
             LogLevel = Microsoft.AI.Foundry.Local.LogLevel.Information,
             Web = new Configuration.WebService
             {
@@ -62,7 +63,7 @@ public class FoundryLocalConnector(AppSettings settings) : LanguageModelConnecto
             }
         };
 
-        await FoundryLocalManager.CreateAsync(config, logger: null!).ConfigureAwait(false);
+        await FoundryLocalManager.CreateAsync(config, NullLogger.Instance).ConfigureAwait(false);
         var manager = FoundryLocalManager.Instance;
 
         // Get catalog and model
