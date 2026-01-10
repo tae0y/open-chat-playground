@@ -44,7 +44,7 @@ This page describes how to run OpenChat Playground (OCP) with [Foundry Local](ht
     cd $REPOSITORY_ROOT
     ```
 
-1. Run the app.
+1. Run the app. The default service URL OCP uses is `http://localhost:55588`.
 
     ```bash
     # bash/zsh
@@ -58,7 +58,23 @@ This page describes how to run OpenChat Playground (OCP) with [Foundry Local](ht
         --connector-type FoundryLocal
     ```
 
-   Alternatively, if you want to run with a different model, say `qwen2.5-7b`, make sure you've already downloaded the model by running the `foundry model download qwen2.5-7b` command.
+   Alternatively, if you want to run with a different service URL, you can specify it as an argument:
+
+    ```bash
+    # bash/zsh
+    dotnet run --project $REPOSITORY_ROOT/src/OpenChat.PlaygroundApp -- \
+        --connector-type FoundryLocal \
+        --service-url http://localhost:55588
+    ```
+
+    ```powershell
+    # PowerShell
+    dotnet run --project $REPOSITORY_ROOT\src\OpenChat.PlaygroundApp -- `
+        --connector-type FoundryLocal `
+        --service-url http://localhost:55588
+    ```
+
+   If you want to run with a different model, say `qwen2.5-7b`, make sure you've already downloaded the model by running the `foundry model download qwen2.5-7b` command.
 
     ```bash
     # bash/zsh
@@ -71,6 +87,24 @@ This page describes how to run OpenChat Playground (OCP) with [Foundry Local](ht
     # PowerShell
     dotnet run --project $REPOSITORY_ROOT\src\OpenChat.PlaygroundApp -- `
         --connector-type FoundryLocal `
+        --alias qwen2.5-7b
+    ```
+
+   You can also combine both service URL and model alias:
+
+    ```bash
+    # bash/zsh
+    dotnet run --project $REPOSITORY_ROOT/src/OpenChat.PlaygroundApp -- \
+        --connector-type FoundryLocal \
+        --service-url http://localhost:55588 \
+        --alias qwen2.5-7b
+    ```
+
+    ```powershell
+    # PowerShell
+    dotnet run --project $REPOSITORY_ROOT\src\OpenChat.PlaygroundApp -- `
+        --connector-type FoundryLocal `
+        --service-url http://localhost:55588 `
         --alias qwen2.5-7b
     ```
 

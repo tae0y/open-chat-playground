@@ -131,6 +131,11 @@ public static class ArgumentOptionConstants
     public static class FoundryLocal
     {
         /// <summary>
+        /// Defines the constant for '--service-url'.
+        /// </summary>
+        public const string ServiceUrl = "--service-url";
+
+        /// <summary>
         /// Defines the constant for '--alias'.
         /// </summary>
         public const string Alias = "--alias";
