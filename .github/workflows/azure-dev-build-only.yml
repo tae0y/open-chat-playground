@@ -31,7 +31,7 @@ jobs:
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 9.x
+        dotnet-version: 10.x
 
     - name: Setup Ollama
       uses: ai-action/setup-ollama@v1
@@ -87,3 +87,10 @@ jobs:
         dotnet test ./test/OpenChat.PlaygroundApp.Tests \
             --no-build --logger "trx" --collect:"XPlat Code Coverage" \
             --filter "Category=IntegrationTest & Category!=IgnoreGitHubActions & Category!=LLMRequired"
+
+    - name: Run LLMRequired integration tests
+      shell: bash
+      run: |
+        dotnet test ./test/OpenChat.PlaygroundApp.Tests \
+            --no-build --logger "trx" --collect:"XPlat Code Coverage" \
+            --filter "Category=IntegrationTest & Category!=IgnoreGitHubActions & Category=LLMRequired"
