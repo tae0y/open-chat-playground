@@ -40,18 +40,42 @@ public class FoundryLocalConnector(AppSettings settings) : LanguageModelConnecto
         var settings = this.Settings as FoundryLocalSettings;
         var alias = settings!.Alias!.Trim() ?? throw new InvalidOperationException("Missing configuration: FoundryLocal:Alias.");
 
-        var manager = await FoundryLocalManager.StartModelAsync(aliasOrModelId: alias).ConfigureAwait(false);
-        var model = await manager.GetModelInfoAsync(aliasOrModelId: alias).ConfigureAwait(false);
+        // Initialize FoundryLocalManager singleton (v0.8.0+)
+        var serviceUrl = "http://127.0.0.1:55588";
+        var config = new Configuration
+        {
+            AppName = "OpenChat.PlaygroundApp",
+            LogLevel = Microsoft.AI.Foundry.Local.LogLevel.Information,
+            Web = new Configuration.WebService
+            {
+                Urls = serviceUrl
+            }
+        };
 
-        var credential = new ApiKeyCredential(manager.ApiKey);
+        await FoundryLocalManager.CreateAsync(config, logger: null!).ConfigureAwait(false);
+        var manager = FoundryLocalManager.Instance;
+
+        // Get catalog and model
+        var catalog = await manager.GetCatalogAsync().ConfigureAwait(false);
+        var model = await catalog.GetModelAsync(alias).ConfigureAwait(false)
+            ?? throw new InvalidOperationException($"Model not found: '{alias}'. Please ensure the model exists in the Foundry Local catalog. You can list available models using: foundry model list");
+
+        // Download and load model
+        await model.DownloadAsync().ConfigureAwait(false);
+        await model.LoadAsync().ConfigureAwait(false);
+
+        // Start web service to enable OpenAI SDK compatibility
+        await manager.StartWebServiceAsync().ConfigureAwait(false);
+
+        // Use OpenAI SDK to create IChatClient
+        var credential = new ApiKeyCredential("notneeded");
         var options = new OpenAIClientOptions()
         {
-            Endpoint = manager.Endpoint,
+            Endpoint = new Uri(serviceUrl + "/v1"),
         };
 
         var client = new OpenAIClient(credential, options);
-        var chatClient = client.GetChatClient(model?.ModelId)
-                               .AsIChatClient();
+        var chatClient = client.GetChatClient(model.Id).AsIChatClient();
 
         Console.WriteLine($"The {this._appSettings.ConnectorType} connector created with model: {alias}");
 

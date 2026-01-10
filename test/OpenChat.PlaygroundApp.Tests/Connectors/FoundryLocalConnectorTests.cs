@@ -159,10 +159,10 @@ public class FoundryLocalConnectorTests
     [Trait("Category", "IgnoreGitHubActions")]
     [Theory]
     [InlineData(null, typeof(NullReferenceException), "Object reference not set to an instance of an object")]
-    [InlineData("", typeof(InvalidOperationException), "not found in catalog")]
-    [InlineData("   ", typeof(InvalidOperationException), "not found in catalog")]
-    [InlineData("\t\r\n", typeof(InvalidOperationException), "not found in catalog")]
-    [InlineData("not-a-model", typeof(InvalidOperationException), "not found in catalog")]
+    [InlineData("", typeof(InvalidOperationException), "Model not found")]
+    [InlineData("   ", typeof(InvalidOperationException), "Model not found")]
+    [InlineData("\t\r\n", typeof(InvalidOperationException), "Model not found")]
+    [InlineData("not-a-model", typeof(InvalidOperationException), "Model not found")]
     public void Given_Invalid_Alias_When_GetChatClient_Invoked_Then_It_Should_Throw(string? alias, Type expected, string message)
     {
         // Arrange
