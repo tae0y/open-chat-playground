@@ -32,6 +32,7 @@ public abstract class ArgumentOptions
         (ConnectorType.DockerModelRunner, ArgumentOptionConstants.DockerModelRunner.BaseUrl, false),
         (ConnectorType.DockerModelRunner, ArgumentOptionConstants.DockerModelRunner.Model, false),
         // Foundry Local
+        (ConnectorType.FoundryLocal, ArgumentOptionConstants.FoundryLocal.ServiceUrl, false),
         (ConnectorType.FoundryLocal, ArgumentOptionConstants.FoundryLocal.Alias, false),
         // Hugging Face
         (ConnectorType.HuggingFace, ArgumentOptionConstants.HuggingFace.BaseUrl, false),
@@ -213,6 +214,7 @@ public abstract class ArgumentOptions
 
             case FoundryLocalArgumentOptions foundryLocal:
                 settings.FoundryLocal ??= new FoundryLocalSettings();
+                settings.FoundryLocal.ServiceUrl = foundryLocal.ServiceUrl ?? settings.FoundryLocal.ServiceUrl;
                 settings.FoundryLocal.Alias = foundryLocal.Alias ?? settings.FoundryLocal.Alias;
 
                 settings.Model = foundryLocal.Alias ?? settings.FoundryLocal.Alias;
@@ -427,6 +429,7 @@ public abstract class ArgumentOptions
         Console.WriteLine("  ** Foundry Local: **");
         Console.ForegroundColor = foregroundColor;
 
+        Console.WriteLine($"  {ArgumentOptionConstants.FoundryLocal.ServiceUrl}        The service URL. Default to 'http://localhost:55588'");
         Console.WriteLine($"  {ArgumentOptionConstants.FoundryLocal.Alias}              The alias name. Default to 'phi-4-mini'");
         Console.WriteLine();
     }

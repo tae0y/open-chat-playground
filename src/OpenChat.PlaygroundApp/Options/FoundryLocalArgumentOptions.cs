@@ -10,6 +10,11 @@ namespace OpenChat.PlaygroundApp.Options;
 public class FoundryLocalArgumentOptions : ArgumentOptions
 {
     /// <summary>
+    /// Gets or sets the service URL of Foundry Local.
+    /// </summary>
+    public string? ServiceUrl { get; set; }
+
+    /// <summary>
     /// Gets or sets the alias of Foundry Local.
     /// </summary>
     public string? Alias { get; set; }
@@ -22,12 +27,20 @@ public class FoundryLocalArgumentOptions : ArgumentOptions
 
         var foundryLocal = settings.FoundryLocal;
 
+        this.ServiceUrl ??= foundryLocal?.ServiceUrl;
         this.Alias ??= foundryLocal?.Alias;
 
         for (var i = 0; i < args.Length; i++)
         {
             switch (args[i])
             {
+                case ArgumentOptionConstants.FoundryLocal.ServiceUrl:
+                    if (i + 1 < args.Length)
+                    {
+                        this.ServiceUrl = args[++i];
+                    }
+                    break;
+
                 case ArgumentOptionConstants.FoundryLocal.Alias:
                     if (i + 1 < args.Length)
                     {

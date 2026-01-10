@@ -17,6 +17,11 @@ public partial class AppSettings
 public class FoundryLocalSettings : LanguageModelSettings
 {
     /// <summary>
+    /// Gets or sets the service URL of FoundryLocal.
+    /// </summary>
+    public string? ServiceUrl { get; set; }
+
+    /// <summary>
     /// Gets or sets the alias of FoundryLocal.
     /// </summary>
     public string? Alias { get; set; }
