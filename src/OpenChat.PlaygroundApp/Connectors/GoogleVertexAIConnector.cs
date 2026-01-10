@@ -1,6 +1,7 @@
 using System.ClientModel;
 
 using Microsoft.Extensions.AI;
+using Microsoft.Extensions.Logging.Abstractions;
 
 using Mscc.GenerativeAI.Microsoft;
 
@@ -45,7 +46,7 @@ public class GoogleVertexAIConnector(AppSettings settings) : LanguageModelConnec
         var apiKey = settings!.ApiKey!.Trim() ?? throw new InvalidOperationException("Missing configuration: GoogleVertexAI:ApiKey.");
         var model = settings!.Model!.Trim() ?? throw new InvalidOperationException("Missing configuration: GoogleVertexAI:Model.");
 
-        var chatClient = new GeminiChatClient(apiKey, model, logger: null);
+        var chatClient = new GeminiChatClient(apiKey, model, logger: NullLogger.Instance);
 
         Console.WriteLine($"The {this._appSettings.ConnectorType} connector created with model: {model}");
 
