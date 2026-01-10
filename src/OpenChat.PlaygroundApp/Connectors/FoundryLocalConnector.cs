@@ -79,7 +79,7 @@ public class FoundryLocalConnector(AppSettings settings) : LanguageModelConnecto
         await manager.StartWebServiceAsync().ConfigureAwait(false);
 
         // Use OpenAI SDK to create IChatClient
-        var credential = new ApiKeyCredential("notneeded");
+        var credential = new ApiKeyCredential("local-service-no-auth");
         var options = new OpenAIClientOptions()
         {
             Endpoint = new Uri(serviceUrl + "/v1"),
