@@ -27,7 +27,7 @@ public class FoundryLocalConnector(AppSettings settings) : LanguageModelConnecto
             throw new InvalidOperationException("Missing configuration: FoundryLocal.");
         }
 
-        if (string.IsNullOrWhiteSpace(settings.ServiceUrl?.Trim()) == true)
+        if (string.IsNullOrWhiteSpace(settings.ServiceUrl?.Trim()))
         {
             throw new InvalidOperationException("Missing configuration: FoundryLocal:ServiceUrl.");
         }
