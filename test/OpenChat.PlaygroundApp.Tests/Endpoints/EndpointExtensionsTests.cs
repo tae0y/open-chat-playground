@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
+using OpenChat.PlaygroundApp.Abstractions;
 using OpenChat.PlaygroundApp.Endpoints;
 using OpenChat.PlaygroundApp.Services;
 
@@ -148,10 +149,14 @@ public partial class EndpointExtensionsTests
         // Arrange
         var builder = WebApplication.CreateBuilder();
         var chatService = Substitute.For<IChatService>();
+        var chatClientFactory = Substitute.For<IChatClientFactory>();
         var logger = Substitute.For<ILogger<ChatResponseEndpoint>>();
-        
+        var connectorLogger = Substitute.For<ILogger<ConnectorEndpoint>>();
+
         builder.Services.AddSingleton(chatService);
+        builder.Services.AddSingleton(chatClientFactory);
         builder.Services.AddSingleton(logger);
+        builder.Services.AddSingleton(connectorLogger);
         builder.Services.AddEndpoints(typeof(ChatResponseEndpoint).Assembly);
         var app = builder.Build();
 
@@ -170,10 +175,14 @@ public partial class EndpointExtensionsTests
         // Arrange
         var builder = WebApplication.CreateBuilder();
         var chatService = Substitute.For<IChatService>();
+        var chatClientFactory = Substitute.For<IChatClientFactory>();
         var logger = Substitute.For<ILogger<ChatResponseEndpoint>>();
-        
+        var connectorLogger = Substitute.For<ILogger<ConnectorEndpoint>>();
+
         builder.Services.AddSingleton(chatService);
+        builder.Services.AddSingleton(chatClientFactory);
         builder.Services.AddSingleton(logger);
+        builder.Services.AddSingleton(connectorLogger);
         builder.Services.AddEndpoints(typeof(ChatResponseEndpoint).Assembly);
         var app = builder.Build();
         var group = app.MapGroup("/api");

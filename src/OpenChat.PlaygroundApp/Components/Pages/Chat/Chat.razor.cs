@@ -1,11 +1,14 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.AI;
 
+using OpenChat.PlaygroundApp.Abstractions;
 using OpenChat.PlaygroundApp.Services;
 
 namespace OpenChat.PlaygroundApp.Components.Pages.Chat;
 
+#pragma warning disable IDISP025 // Class with no virtual dispose method should be sealed - Blazor partial class cannot be sealed
 public partial class Chat : ComponentBase, IDisposable
+#pragma warning restore IDISP025
 {
     private const string SystemPrompt = @"
         You are an assistant who answers questions about anything.
@@ -21,13 +24,19 @@ public partial class Chat : ComponentBase, IDisposable
 
     [Inject]
     public required IChatService ChatService { get; set; }
-    
+
     [Inject]
     public required NavigationManager Nav { get; set; }
 
-    protected override void OnInitialized()
+    [Inject]
+    public required IConnectorStateManager ConnectorStateManager { get; set; }
+
+    protected override async Task OnInitializedAsync()
     {
         messages.Add(new(ChatRole.System, SystemPrompt));
+
+        // Initialize with default connector
+        await ConnectorStateManager.EnsureInitializedAsync();
     }
 
     private async Task AddUserMessageAsync(ChatMessage userMessage)

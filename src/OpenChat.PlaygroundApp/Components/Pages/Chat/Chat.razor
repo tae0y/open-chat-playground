@@ -2,6 +2,10 @@
 
 <PageTitle>OpenChat Playground</PageTitle>
 
+<div class="chat-header">
+    <ConnectorSelector />
+</div>
+
 <ChatHeader OnNewChat="@ResetConversationAsync" />
 
 <ChatMessageList Messages="@messages" InProgressMessage="@currentResponseMessage">
