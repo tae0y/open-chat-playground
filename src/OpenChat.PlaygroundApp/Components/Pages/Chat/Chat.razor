@@ -15,6 +15,6 @@
 </ChatMessageList>
 
 <div class="chat-container">
-    <ChatInput OnSend="@AddUserMessageAsync" @ref="@chatInput" />
+    <ChatInput OnSend="@AddUserMessageAsync" Disabled="@IsInputDisabled" @ref="@chatInput" />
     <SurveyPrompt /> @* Remove this line to eliminate the template survey message *@
 </div>

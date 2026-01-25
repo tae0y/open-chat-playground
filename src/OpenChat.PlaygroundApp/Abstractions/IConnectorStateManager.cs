@@ -20,9 +20,20 @@ public interface IConnectorStateManager
     IChatClient? CurrentChatClient { get; }
 
     /// <summary>
+    /// Gets whether a connector switch is currently in progress.
+    /// While this is true, chat requests should be blocked.
+    /// </summary>
+    bool IsSwitching { get; }
+
+    /// <summary>
     /// Event raised when the connector changes.
     /// </summary>
     event EventHandler<ConnectorType>? OnConnectorChanged;
+
+    /// <summary>
+    /// Event raised when the switching state changes.
+    /// </summary>
+    event EventHandler<bool>? OnSwitchingStateChanged;
 
     /// <summary>
     /// Ensures the state manager is initialized with the default connector.

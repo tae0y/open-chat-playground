@@ -31,7 +31,9 @@ public partial class ConnectorSelector : ComponentBase, IDisposable
     {
         Connectors = Factory.GetAllConnectors();
         SelectedConnector = StateManager.CurrentConnectorType;
+        IsLoading = StateManager.IsSwitching;
         StateManager.OnConnectorChanged += HandleConnectorChanged;
+        StateManager.OnSwitchingStateChanged += HandleSwitchingStateChanged;
     }
 
     private async Task OnConnectorChangedAsync()
@@ -70,8 +72,15 @@ public partial class ConnectorSelector : ComponentBase, IDisposable
         InvokeAsync(StateHasChanged);
     }
 
+    private void HandleSwitchingStateChanged(object? sender, bool isSwitching)
+    {
+        IsLoading = isSwitching;
+        InvokeAsync(StateHasChanged);
+    }
+
     public void Dispose()
     {
         StateManager.OnConnectorChanged -= HandleConnectorChanged;
+        StateManager.OnSwitchingStateChanged -= HandleSwitchingStateChanged;
     }
 }

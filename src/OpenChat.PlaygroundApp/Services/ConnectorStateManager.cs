@@ -26,7 +26,13 @@ public class ConnectorStateManager(
     public IChatClient? CurrentChatClient { get; private set; }
 
     /// <inheritdoc/>
+    public bool IsSwitching { get; private set; }
+
+    /// <inheritdoc/>
     public event EventHandler<ConnectorType>? OnConnectorChanged;
+
+    /// <inheritdoc/>
+    public event EventHandler<bool>? OnSwitchingStateChanged;
 
     /// <inheritdoc/>
     public async Task EnsureInitializedAsync(CancellationToken cancellationToken = default)
@@ -78,6 +84,9 @@ public class ConnectorStateManager(
         _logger.LogInformation("Switching connector from {OldType} to {NewType}",
             CurrentConnectorType, type);
 
+        // Set switching state to block chat requests
+        SetSwitchingState(true);
+
         try
         {
             // Lazy Loading: Create IChatClient on first request
@@ -94,6 +103,21 @@ public class ConnectorStateManager(
         {
             _logger.LogError(ex, "Failed to switch to connector {Type}", type);
             throw;
+        }
+        finally
+        {
+            // Always reset switching state
+            SetSwitchingState(false);
+        }
+    }
+
+    private void SetSwitchingState(bool isSwitching)
+    {
+        if (IsSwitching != isSwitching)
+        {
+            IsSwitching = isSwitching;
+            OnSwitchingStateChanged?.Invoke(this, isSwitching);
+            _logger.LogDebug("Switching state changed to {IsSwitching}", isSwitching);
         }
     }
 }

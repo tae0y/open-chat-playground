@@ -159,6 +159,69 @@ public class ChatServiceTests
     }
 
     [Trait("Category", "UnitTest")]
+    [Fact]
+    public void Given_IsSwitching_True_When_GetStreamingResponseAsync_Invoked_Then_It_Should_Throw()
+    {
+        // Arrange
+        var chatClient = Substitute.For<IChatClient>();
+        var stateManager = Substitute.For<IConnectorStateManager>();
+        stateManager.CurrentChatClient.Returns(chatClient);
+        stateManager.CurrentConnectorType.Returns(ConnectorType.Ollama);
+        stateManager.IsSwitching.Returns(true);
+
+        var logger = Substitute.For<ILogger<ChatService>>();
+        var chatService = new ChatService(stateManager, logger);
+
+        var messages = new List<ChatMessage>
+        {
+            new(ChatRole.System, "You are a helpful assistant."),
+            new(ChatRole.User, "Why is the sky blue?")
+        };
+
+        // Act
+        Action action = () => chatService.GetStreamingResponseAsync(messages);
+
+        // Assert
+        action.ShouldThrow<InvalidOperationException>()
+              .Message.ShouldContain("Cannot send chat requests while connector is being switched");
+    }
+
+    [Trait("Category", "UnitTest")]
+    [Fact]
+    public async Task Given_IsSwitching_False_When_GetStreamingResponseAsync_Invoked_Then_It_Should_Proceed()
+    {
+        // Arrange
+        var responseMessages = new[] { "Hello, ", "how ", "can ", "I help?" };
+        IEnumerable<ChatResponseUpdate> responses = responseMessages.Select(m => new ChatResponseUpdate(ChatRole.Assistant, m));
+
+        var chatClient = Substitute.For<IChatClient>();
+        chatClient.GetStreamingResponseAsync(Arg.Any<IEnumerable<ChatMessage>>(), Arg.Any<ChatOptions?>(), Arg.Any<CancellationToken>())
+                  .Returns(responses.ToAsyncEnumerable());
+
+        var stateManager = Substitute.For<IConnectorStateManager>();
+        stateManager.CurrentChatClient.Returns(chatClient);
+        stateManager.CurrentConnectorType.Returns(ConnectorType.Ollama);
+        stateManager.IsSwitching.Returns(false);
+
+        var logger = Substitute.For<ILogger<ChatService>>();
+        var chatService = new ChatService(stateManager, logger);
+
+        var messages = new List<ChatMessage>
+        {
+            new(ChatRole.System, "You are a helpful assistant."),
+            new(ChatRole.User, "Hello")
+        };
+
+        // Act
+        var result = chatService.GetStreamingResponseAsync(messages);
+        var count = await result.CountAsync();
+
+        // Assert
+        result.ShouldNotBeNull();
+        count.ShouldBe(responseMessages.Length);
+    }
+
+    [Trait("Category", "UnitTest")]
     [Theory]
     [InlineData("This ")]
     [InlineData("This ", "is ")]

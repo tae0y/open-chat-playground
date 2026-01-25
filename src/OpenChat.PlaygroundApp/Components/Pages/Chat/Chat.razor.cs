@@ -21,6 +21,7 @@ public partial class Chat : ComponentBase, IDisposable
     private CancellationTokenSource? currentResponseCancellation;
     private ChatMessage? currentResponseMessage;
     private ChatInput? chatInput;
+    private bool isSwitchingConnector;
 
     [Inject]
     public required IChatService ChatService { get; set; }
@@ -31,9 +32,17 @@ public partial class Chat : ComponentBase, IDisposable
     [Inject]
     public required IConnectorStateManager ConnectorStateManager { get; set; }
 
+    /// <summary>
+    /// Gets whether the chat input should be disabled.
+    /// </summary>
+    public bool IsInputDisabled => isSwitchingConnector;
+
     protected override async Task OnInitializedAsync()
     {
         messages.Add(new(ChatRole.System, SystemPrompt));
+
+        // Subscribe to switching state changes
+        ConnectorStateManager.OnSwitchingStateChanged += HandleSwitchingStateChanged;
 
         // Initialize with default connector
         await ConnectorStateManager.EnsureInitializedAsync();
@@ -86,6 +95,15 @@ public partial class Chat : ComponentBase, IDisposable
         await chatInput!.FocusAsync();
     }
 
+    private void HandleSwitchingStateChanged(object? sender, bool isSwitching)
+    {
+        isSwitchingConnector = isSwitching;
+        InvokeAsync(StateHasChanged);
+    }
+
     public void Dispose()
-        => currentResponseCancellation?.Cancel();
+    {
+        currentResponseCancellation?.Cancel();
+        ConnectorStateManager.OnSwitchingStateChanged -= HandleSwitchingStateChanged;
+    }
 }

@@ -38,6 +38,12 @@ public class ChatService(
         ChatOptions? options = null,
         CancellationToken cancellationToken = default)
     {
+        // Block chat requests during connector switching
+        if (_stateManager.IsSwitching)
+        {
+            throw new InvalidOperationException("Cannot send chat requests while connector is being switched. Please wait for the switch to complete.");
+        }
+
         var chats = messages.ToList();
 
         if (chats.Count < 2)
