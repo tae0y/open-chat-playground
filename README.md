@@ -155,6 +155,7 @@ Open Chat Playground (OCP) is a web UI that is able to connect virtually any LLM
 1. Make sure you are at the repository root.
 
     ```bash
+    REPOSITORY_ROOT=$(git rev-parse --show-toplevel)
     cd $REPOSITORY_ROOT
     ```
 
