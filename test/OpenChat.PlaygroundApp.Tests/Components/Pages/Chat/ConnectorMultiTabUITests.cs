@@ -50,16 +50,12 @@ public class ConnectorMultiTabUITests : PageTest
 
         // Act - Select different connectors in each tab
         await selector1.SelectOptionAsync(connectors[0]);
-        await page1.WaitForFunctionAsync(
-            "() => !document.querySelector('textarea[aria-label=\"User Message Textarea\"]').disabled",
-            options: new() { Timeout = TimeoutMs }
-        );
+        var textArea1 = page1.GetByRole(AriaRole.Textbox, new() { Name = "User Message Textarea" });
+        await Expect(textArea1).Not.ToBeDisabledAsync(new() { Timeout = TimeoutMs });
 
         await selector2.SelectOptionAsync(connectors[1]);
-        await page2.WaitForFunctionAsync(
-            "() => !document.querySelector('textarea[aria-label=\"User Message Textarea\"]').disabled",
-            options: new() { Timeout = TimeoutMs }
-        );
+        var textArea2 = page2.GetByRole(AriaRole.Textbox, new() { Name = "User Message Textarea" });
+        await Expect(textArea2).Not.ToBeDisabledAsync(new() { Timeout = TimeoutMs });
 
         // Assert - Each tab should have its own selected connector
         var value1 = await selector1.InputValueAsync();
@@ -182,10 +178,7 @@ public class ConnectorMultiTabUITests : PageTest
         // Act - Switch connector in first tab only
         await selector1.SelectOptionAsync(otherConnector);
 
-        await page1.WaitForFunctionAsync(
-            "() => !document.querySelector('textarea[aria-label=\"User Message Textarea\"]').disabled",
-            options: new() { Timeout = TimeoutMs }
-        );
+        await Expect(textArea1).Not.ToBeDisabledAsync(new() { Timeout = TimeoutMs });
 
         // Assert - Second tab should still have original connector
         var tab2CurrentConnector = await selector2.InputValueAsync();

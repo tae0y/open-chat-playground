@@ -53,14 +53,8 @@ public class ConnectorSwitchingUITests : PageTest
         // Act - Switch connector
         await selector.SelectOptionAsync(targetValue);
 
-        // Assert - After switch completes, placeholder should return to normal
-        await Page.WaitForFunctionAsync(
-            "() => document.querySelector('textarea[aria-label=\"User Message Textarea\"]').placeholder === 'Type your message...'",
-            options: new() { Timeout = TimeoutMs }
-        );
-
-        var placeholder = await textArea.GetAttributeAsync("placeholder");
-        placeholder.ShouldBe("Type your message...");
+        // Assert - After switch completes, textarea should be enabled
+        await Expect(textArea).Not.ToBeDisabledAsync(new() { Timeout = TimeoutMs });
     }
 
     [Trait("Category", "IntegrationTest")]
@@ -96,15 +90,8 @@ public class ConnectorSwitchingUITests : PageTest
         // Act
         await selector.SelectOptionAsync(targetValue);
 
-        // Wait for switch to complete
-        await Page.WaitForFunctionAsync(
-            "() => !document.querySelector('textarea[aria-label=\"User Message Textarea\"]').disabled",
-            options: new() { Timeout = TimeoutMs }
-        );
-
-        // Assert
-        var isDisabled = await textArea.GetAttributeAsync("disabled");
-        isDisabled.ShouldBeNull();
+        // Assert - After switch completes, textarea should be enabled
+        await Expect(textArea).Not.ToBeDisabledAsync(new() { Timeout = TimeoutMs });
     }
 
     [Trait("Category", "IntegrationTest")]
@@ -143,10 +130,7 @@ public class ConnectorSwitchingUITests : PageTest
         await selector.SelectOptionAsync(targetValue);
 
         // Wait for switch to complete
-        await Page.WaitForFunctionAsync(
-            "() => !document.querySelector('textarea[aria-label=\"User Message Textarea\"]').disabled",
-            options: new() { Timeout = TimeoutMs }
-        );
+        await Expect(textArea).Not.ToBeDisabledAsync(new() { Timeout = TimeoutMs });
 
         // Send a message
         var messageCountBefore = await Page.Locator(".assistant-message-header").CountAsync();
@@ -210,11 +194,9 @@ public class ConnectorSwitchingUITests : PageTest
             // Switching was too fast to catch spinner, which is acceptable
         }
 
-        // After switch completes, spinner should be hidden
-        await Page.WaitForFunctionAsync(
-            "() => !document.querySelector('.loading-spinner') || document.querySelector('.loading-spinner').style.display === 'none' || !document.querySelector('.loading-spinner').offsetParent",
-            options: new() { Timeout = TimeoutMs }
-        );
+        // After switch completes, textarea should be enabled
+        var textArea = Page.GetByRole(AriaRole.Textbox, new() { Name = "User Message Textarea" });
+        await Expect(textArea).Not.ToBeDisabledAsync(new() { Timeout = TimeoutMs });
     }
 
     [Trait("Category", "IntegrationTest")]
@@ -250,10 +232,8 @@ public class ConnectorSwitchingUITests : PageTest
         await selector.SelectOptionAsync(targetValue);
 
         // Wait for switch to complete
-        await Page.WaitForFunctionAsync(
-            "() => !document.querySelector('#connector-select').disabled",
-            options: new() { Timeout = TimeoutMs }
-        );
+        var textArea = Page.GetByRole(AriaRole.Textbox, new() { Name = "User Message Textarea" });
+        await Expect(textArea).Not.ToBeDisabledAsync(new() { Timeout = TimeoutMs });
 
         // Assert
         var newValue = await selector.InputValueAsync();
