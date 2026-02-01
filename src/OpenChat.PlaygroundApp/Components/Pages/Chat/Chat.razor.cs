@@ -1,11 +1,14 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.AI;
 
+using OpenChat.PlaygroundApp.Abstractions;
 using OpenChat.PlaygroundApp.Services;
 
 namespace OpenChat.PlaygroundApp.Components.Pages.Chat;
 
+#pragma warning disable IDISP025 // Class with no virtual dispose method should be sealed - Blazor partial class cannot be sealed
 public partial class Chat : ComponentBase, IDisposable
+#pragma warning restore IDISP025
 {
     private const string SystemPrompt = @"
         You are an assistant who answers questions about anything.
@@ -18,16 +21,31 @@ public partial class Chat : ComponentBase, IDisposable
     private CancellationTokenSource? currentResponseCancellation;
     private ChatMessage? currentResponseMessage;
     private ChatInput? chatInput;
+    private bool isSwitchingConnector;
 
     [Inject]
     public required IChatService ChatService { get; set; }
-    
+
     [Inject]
     public required NavigationManager Nav { get; set; }
 
-    protected override void OnInitialized()
+    [Inject]
+    public required IConnectorStateManager ConnectorStateManager { get; set; }
+
+    /// <summary>
+    /// Gets whether the chat input should be disabled.
+    /// </summary>
+    public bool IsInputDisabled => isSwitchingConnector;
+
+    protected override async Task OnInitializedAsync()
     {
         messages.Add(new(ChatRole.System, SystemPrompt));
+
+        // Subscribe to switching state changes
+        ConnectorStateManager.OnSwitchingStateChanged += HandleSwitchingStateChanged;
+
+        // Initialize with default connector
+        await ConnectorStateManager.EnsureInitializedAsync();
     }
 
     private async Task AddUserMessageAsync(ChatMessage userMessage)
@@ -77,6 +95,15 @@ public partial class Chat : ComponentBase, IDisposable
         await chatInput!.FocusAsync();
     }
 
+    private void HandleSwitchingStateChanged(object? sender, bool isSwitching)
+    {
+        isSwitchingConnector = isSwitching;
+        InvokeAsync(StateHasChanged);
+    }
+
     public void Dispose()
-        => currentResponseCancellation?.Cancel();
+    {
+        currentResponseCancellation?.Cancel();
+        ConnectorStateManager.OnSwitchingStateChanged -= HandleSwitchingStateChanged;
+    }
 }

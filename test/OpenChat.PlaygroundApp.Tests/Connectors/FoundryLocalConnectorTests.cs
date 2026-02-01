@@ -1,3 +1,4 @@
+using Microsoft.AI.Foundry.Local;
 using Microsoft.Extensions.AI;
 
 using OpenChat.PlaygroundApp.Abstractions;
@@ -9,7 +10,7 @@ namespace OpenChat.PlaygroundApp.Tests.Connectors;
 public class FoundryLocalConnectorTests
 {
     private const string Alias = "phi-4-mini";
-    private const string ServiceUrl = "http://localhost:55588";
+    private const string ServiceUrl = "http://localhost:52230";
 
     private static AppSettings BuildAppSettings(string? serviceUrl = ServiceUrl, string? alias = Alias)
     {
@@ -200,10 +201,10 @@ public class FoundryLocalConnectorTests
     [Trait("Category", "IgnoreGitHubActions")]
     [Theory]
     [InlineData(null, typeof(NullReferenceException), "Object reference not set to an instance of an object")]
-    [InlineData("", typeof(InvalidOperationException), "Model not found")]
-    [InlineData("   ", typeof(InvalidOperationException), "Model not found")]
-    [InlineData("\t\r\n", typeof(InvalidOperationException), "Model not found")]
-    [InlineData("not-a-model", typeof(InvalidOperationException), "Model not found")]
+    [InlineData("", typeof(FoundryLocalException), "not found")]
+    [InlineData("   ", typeof(FoundryLocalException), "not found")]
+    [InlineData("\t\r\n", typeof(FoundryLocalException), "not found")]
+    [InlineData("not-a-model", typeof(FoundryLocalException), "not found")]
     public void Given_Invalid_Alias_When_GetChatClient_Invoked_Then_It_Should_Throw(string? alias, Type expected, string message)
     {
         // Arrange

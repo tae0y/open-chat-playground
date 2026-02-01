@@ -1,5 +1,3 @@
-using Microsoft.Extensions.AI;
-
 using OpenChat.PlaygroundApp.Abstractions;
 using OpenChat.PlaygroundApp.Components;
 using OpenChat.PlaygroundApp.Endpoints;
@@ -22,11 +20,11 @@ builder.Services.AddSingleton(settings!);
 builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-var chatClient = await LanguageModelConnector.CreateChatClientAsync(settings);
-
-builder.Services.AddChatClient(chatClient)
-                .UseFunctionInvocation()
-                .UseLogging();
+// Register ChatClientFactory as Singleton + IHostedService for lazy-loaded IChatClient
+builder.Services.AddSingleton<ChatClientFactory>();
+builder.Services.AddSingleton<IChatClientFactory>(sp => sp.GetRequiredService<ChatClientFactory>());
+builder.Services.AddHostedService(sp => sp.GetRequiredService<ChatClientFactory>());
+builder.Services.AddScoped<IConnectorStateManager, ConnectorStateManager>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddOpenApi("openapi", options =>
