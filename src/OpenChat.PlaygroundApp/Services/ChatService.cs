@@ -1,5 +1,7 @@
 using Microsoft.Extensions.AI;
 
+using OpenChat.PlaygroundApp.Abstractions;
+
 namespace OpenChat.PlaygroundApp.Services;
 
 /// <summary>
@@ -21,13 +23,13 @@ public interface IChatService
 }
 
 /// <summary>
-/// This represents the service entity for chat operations.
+/// This represents the chat service entity.
 /// </summary>
-/// <param name="chatClient">The <see cref="IChatClient"/>.</param>
-/// <param name="logger">The <see cref="ILogger{ChatService}"/>.</param>
-public class ChatService(IChatClient chatClient, ILogger<ChatService> logger) : IChatService
+public class ChatService(
+    IConnectorStateManager stateManager,
+    ILogger<ChatService> logger) : IChatService
 {
-    private readonly IChatClient _chatClient = chatClient ?? throw new ArgumentNullException(nameof(chatClient));
+    private readonly IConnectorStateManager _stateManager = stateManager ?? throw new ArgumentNullException(nameof(stateManager));
     private readonly ILogger<ChatService> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
     /// <inheritdoc/>
@@ -36,7 +38,14 @@ public class ChatService(IChatClient chatClient, ILogger<ChatService> logger) : 
         ChatOptions? options = null,
         CancellationToken cancellationToken = default)
     {
+        // Block chat requests during connector switching
+        if (_stateManager.IsSwitching)
+        {
+            throw new InvalidOperationException("Cannot send chat requests while connector is being switched. Please wait for the switch to complete.");
+        }
+
         var chats = messages.ToList();
+
         if (chats.Count < 2)
         {
             throw new ArgumentException("At least two messages are required", nameof(messages));
@@ -52,8 +61,13 @@ public class ChatService(IChatClient chatClient, ILogger<ChatService> logger) : 
             throw new ArgumentException("The second message must be a user message", nameof(messages));
         }
 
-        this._logger.LogInformation("Requesting chat response with {MessageCount} messages", chats.Count);
+        var currentClient = _stateManager.CurrentChatClient
+            ?? throw new InvalidOperationException("No chat client is currently initialized. Call EnsureInitializedAsync first.");
 
-        return this._chatClient.GetStreamingResponseAsync(chats, options, cancellationToken);
+        _logger.LogInformation(
+            "Requesting chat response with {MessageCount} messages using connector {ConnectorType}",
+            chats.Count, _stateManager.CurrentConnectorType);
+
+        return currentClient.GetStreamingResponseAsync(chats, options, cancellationToken);
     }
 }

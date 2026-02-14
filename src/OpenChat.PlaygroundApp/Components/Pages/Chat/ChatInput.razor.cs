@@ -13,6 +13,9 @@ public partial class ChatInput : ComponentBase
     [Parameter]
     public EventCallback<ChatMessage> OnSend { get; set; }
 
+    [Parameter]
+    public bool Disabled { get; set; }
+
     [Inject]
     public required IJSRuntime JS { get; set; }
 
@@ -21,6 +24,12 @@ public partial class ChatInput : ComponentBase
 
     private async Task SendMessageAsync()
     {
+        // Block sending when disabled (e.g., during connector switching)
+        if (Disabled)
+        {
+            return;
+        }
+
         if (messageText is { Length: > 0 } rawText)
         {
             var trimmedText = rawText.Trim();

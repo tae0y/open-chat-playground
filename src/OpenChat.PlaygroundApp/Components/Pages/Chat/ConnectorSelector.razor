@@ -1,0 +1,55 @@
+@namespace OpenChat.PlaygroundApp.Components.Pages.Chat
+@using OpenChat.PlaygroundApp.Connectors
+
+<div class="connector-selector">
+    <label for="connector-select">Connector:</label>
+    <select id="connector-select"
+            @bind="SelectedConnector"
+            @bind:after="OnConnectorChangedAsync"
+            disabled="@IsLoading">
+        @foreach (var connector in Connectors)
+        {
+            <option value="@connector.Type"
+                    disabled="@(connector.State == ConnectorState.NotConfigured || connector.State == ConnectorState.Failed)">
+                @connector.Name
+                @if (connector.State == ConnectorState.NotConfigured)
+                {
+                    @(" (Not Configured)")
+                }
+                else if (connector.State == ConnectorState.Failed)
+                {
+                    @(" (Failed)")
+                }
+                else if (connector.State == ConnectorState.Active)
+                {
+                    @(" ●")
+                }
+            </option>
+        }
+    </select>
+    @if (IsLoading)
+    {
+        <span class="loading-spinner">Switching...</span>
+    }
+    @if (!string.IsNullOrEmpty(ErrorMessage))
+    {
+        <span class="error-message">@ErrorMessage</span>
+    }
+</div>
+
+<style>
+    .connector-selector {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px;
+    }
+    .loading-spinner {
+        color: #666;
+        font-style: italic;
+    }
+    .error-message {
+        color: red;
+        font-size: 0.9em;
+    }
+</style>
